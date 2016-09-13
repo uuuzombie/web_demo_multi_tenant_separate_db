@@ -6,12 +6,14 @@ import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.AnLogForm;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.AnLogInsertRequest;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.AnLogQueryRequest;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.AnLogUpdateRequest;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by rg on 2015/6/11.
  */
+@Service
 public interface AnLogService {
 
     AnLogForm query(long id);

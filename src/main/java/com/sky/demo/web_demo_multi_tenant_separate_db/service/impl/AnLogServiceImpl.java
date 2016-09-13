@@ -1,30 +1,30 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import javax.annotation.Resource;
 
-import com.sky.demo.web_demo_multi_tenant_separate_db.base.Pager;
-import com.sky.demo.web_demo_multi_tenant_separate_db.dao.AnLogDao;
-import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.*;
-import com.sky.demo.web_demo_multi_tenant_separate_db.model.AnLog;
-import com.sky.demo.web_demo_multi_tenant_separate_db.model.ActionType;
-import com.sky.demo.web_demo_multi_tenant_separate_db.model.FeatureType;
-import com.sky.demo.web_demo_multi_tenant_separate_db.service.AnLogService;
-import com.sky.demo.web_demo_multi_tenant_separate_db.util.HttpUtil;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.util.*;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.sky.demo.web_demo_multi_tenant_separate_db.base.Pager;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dao.AnLogDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.*;
+import com.sky.demo.web_demo_multi_tenant_separate_db.model.ActionType;
+import com.sky.demo.web_demo_multi_tenant_separate_db.model.AnLog;
+import com.sky.demo.web_demo_multi_tenant_separate_db.model.FeatureType;
+import com.sky.demo.web_demo_multi_tenant_separate_db.service.AnLogService;
+import com.sky.demo.web_demo_multi_tenant_separate_db.util.HttpUtil;
+import com.sky.demo.web_demo_multi_tenant_separate_db.util.json.JsonUtil;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -38,7 +38,6 @@ public class AnLogServiceImpl implements AnLogService {
     @Resource
     private AnLogDao anLogDao;
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final int QUERY_DAY = -60;
 
@@ -55,14 +54,8 @@ public class AnLogServiceImpl implements AnLogService {
             anLogForm.setActionName(ActionType.getActionTypeByCode((int) map.get("actionType")).getDesc());
             anLogForm.setFeatureName(FeatureType.getFeatureTypeByCode((int) map.get("featureType")).getDesc());
 
-            List<BaseAnActionInfo> actionInfo = Lists.newArrayList();
             String info = (String) map.get("actionInfo");
-            try {
-                JavaType javaType = objectMapper.getTypeFactory().constructParametrizedType(List.class, List.class, BaseAnActionInfo.class);
-                actionInfo = objectMapper.readValue(info, javaType);
-            } catch (IOException e) {
-                logger.error("deserialize error,actionInfo:" + info, e);
-            }
+            List<BaseAnActionInfo> actionInfo = JsonUtil.readValue(info, List.class, List.class, BaseAnActionInfo.class);
             anLogForm.setActionInfo(actionInfo);
             return anLogForm;
         }
@@ -80,12 +73,7 @@ public class AnLogServiceImpl implements AnLogService {
             log.setActionType(request.getActionType());
             log.setFeatureType(request.getFeatureType());
 
-            String actionInfo = "";
-            try {
-                actionInfo = objectMapper.writeValueAsString(request.getActionInfo());
-            } catch (JsonProcessingException e) {
-                logger.error("serialize error,actionInfo:" + request.getActionInfo(), e);
-            }
+            String actionInfo = JsonUtil.writeValueAsString(request.getActionInfo());
             log.setActionInfo(actionInfo);
             return log;
         }
@@ -99,12 +87,7 @@ public class AnLogServiceImpl implements AnLogService {
             log.setActionType(request.getActionType());
             log.setFeatureType(request.getFeatureType());
 
-            String actionInfo = "";
-            try {
-                actionInfo = objectMapper.writeValueAsString(request.getActionInfo());
-            } catch (JsonProcessingException e) {
-                logger.error("serialize error",e);
-            }
+            String actionInfo = JsonUtil.writeValueAsString(request.getActionInfo());
             log.setActionInfo(actionInfo);
             return log;
         }

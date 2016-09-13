@@ -37,7 +37,6 @@ public class AnLogController {
     @Resource
     private AnLogService anLogService;
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @RequestMapping("/query/{id}")
     @ResponseBody

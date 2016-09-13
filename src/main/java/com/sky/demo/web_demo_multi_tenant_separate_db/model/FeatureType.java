@@ -44,11 +44,11 @@ public enum FeatureType {
     UPDATE_CONTENT(7040,"修改自定义类别内容"),
     DELETE_CONTENT(7050,"删除自定义类别内容"),
 
-    INSERT_FILETYPE(7060,"新增文件类型"),
-    DELETE_FILETYPE(7070,"删除文件类型"),
+    INSERT_FILE_TYPE(7060,"新增文件类型"),
+    DELETE_FILE_TYPE(7070,"删除文件类型"),
 
-    INSERT_EXTNAME(7080,"新增扩展名"),
-    DELETE_EXTNAME(7090,"删除扩展名"),
+    INSERT_EXT_NAME(7080,"新增扩展名"),
+    DELETE_EXT_NAME(7090,"删除扩展名"),
 
     INSERT_FILENAME(7100,"新增文件名"),
     DELETE_FILENAME(7110,"删除文件名"),
