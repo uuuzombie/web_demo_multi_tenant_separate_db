@@ -15,7 +15,7 @@
         <!--<result column="action_info" property="actionInfo" jdbcType="TEXT"/>-->
     <!--</resultMap>-->
 
-    <sql id="Base_Column_List" >
+    <sql id="base_column_list" >
         tba.id ,
         create_time as createTime,
         user_name as userName,
@@ -30,7 +30,7 @@
     <!--resultMap="BaseResultMap"  or  resultType="com.sky.demo.model.AnLog"-->
     <select id="selectById" parameterType="java.lang.Long" resultType="AnLogForm">
         select
-            <include refid="Base_Column_List" />
+            <include refid="base_column_list" />
         from an_log tba, account tbb, role tbc
         <where>
             tba.user_id = tbb.id and tba.role_id = tbc.id
@@ -43,7 +43,7 @@
     <select id="selectList" parameterType="java.util.Map" resultType="AnLogForm">
         <![CDATA[
         select
-            <include refid="Base_Column_List" />
+            <include refid="base_column_list" />
         from an_log tba, account tbb, role tbc
         <where>
             tba.user_id = tbb.id and tba.role_id = tbc.id

@@ -1,6 +1,16 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.base.Preconditions;
 import com.sky.demo.web_demo_multi_tenant_separate_db.base.Pager;
@@ -12,24 +22,13 @@ import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.AnLogQueryReques
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.AnLogUpdateRequest;
 import com.sky.demo.web_demo_multi_tenant_separate_db.service.AnLogService;
 import com.sky.demo.web_demo_multi_tenant_separate_db.util.RetUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.List;
 
 
 /**
  * Created by rg on 2015/6/11.
  */
-@Controller
 @RequestMapping("/anLog")
+@Controller
 public class AnLogController {
 
     private static final Logger logger = LoggerFactory.getLogger(AnLogController.class);

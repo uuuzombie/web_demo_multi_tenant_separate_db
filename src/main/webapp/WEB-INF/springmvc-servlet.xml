@@ -2,12 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:beans="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-               http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
-               http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd"
-       default-autowire="byName" default-lazy-init="false">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+               http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+               http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+       default-autowire="byName" >
 
     <mvc:annotation-driven >
         <mvc:message-converters>
@@ -34,14 +33,12 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <context:component-scan base-package="com.sky.demo.web_demo_multi_tenant_separate_db.controller" />
-
-    <bean id="SpringContextUtil" class="com.sky.demo.web_demo_multi_tenant_separate_db.util.SpringUtil"/>
-
     <!-- 静态资源 -->
     <mvc:resources mapping="/css/**" location="css/"/>
     <mvc:resources mapping="/js/**" location="js/"/>
     <mvc:resources mapping="/images/**" location="images/"/>
+    <!-- 当要访问的静态资源不包括在上面的配置中时，则根据此配置来访问 -->
+    <mvc:default-servlet-handler/>
 
     <!-- 拦截器 -->
     <!--<mvc:interceptors>-->
@@ -59,19 +56,56 @@
         <!--</mvc:interceptor>-->
     <!--</mvc:interceptors>-->
 
+
+    <!--扫描Controller层-->
+    <context:component-scan base-package="com.sky.demo.web_demo_multi_tenant_separate_db.controller" />
+
+    <!--Bean适配-->
+    <bean id="SpringContextUtil" class="com.sky.demo.web_demo_multi_tenant_separate_db.util.SpringUtil"/>
+
+    <!--1.jsp viewResolver-->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
-        <property name="prefix" value="/"></property>
-        <property name="suffix" value=".jsp"></property>
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
         <property name="contentType" value="text/html; charset=utf-8" />
     </bean>
 
+    <!--2.Velocity Resolver-->
+    <!--<bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">-->
+        <!--<property name="resourceLoaderPath">-->
+            <!--<value>/WEB-INF/vm/</value>-->
+        <!--</property>-->
+        <!--<property name="velocityProperties">-->
+            <!--<props>-->
+                <!--<prop key="input.encoding">UTF-8</prop>-->
+                <!--<prop key="output.encoding">UTF-8</prop>-->
+                <!--<prop key="velocimacro.library">/macro/macro.vm</prop>-->
+                <!--<prop key="velocimacro.library.autoreload">true</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">-->
+        <!--<property name="cache" value="true" />-->
+        <!--<property name="suffix" value=".vm" />-->
+        <!--<property name="contentType" value="text/html;charset=utf-8" />-->
+        <!--<property name="layoutUrl" value="layout/layout.vm" />-->
+        <!--<property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml" />-->
+    <!--</bean>-->
+
+    <!--<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+        <!--<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />-->
+        <!--<property name="prefix" value="/WEB-INF/jsp/" />-->
+        <!--<property name="suffix" value=".jsp" />-->
+    <!--</bean>-->
+
     <bean id="customMapper" class="com.sky.demo.web_demo_multi_tenant_separate_db.util.json.CustomObjectMapper" />
 
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="defaultEncoding" value="utf-8"></property>
-        <property name="maxUploadSize" value="10485760000"></property>
-        <property name="maxInMemorySize" value="40960"></property>
-    </bean>
+    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+        <!--<property name="defaultEncoding" value="utf-8"></property>-->
+        <!--<property name="maxUploadSize" value="10485760000"></property>-->
+        <!--<property name="maxInMemorySize" value="40960"></property>-->
+    <!--</bean>-->
 
 </beans>

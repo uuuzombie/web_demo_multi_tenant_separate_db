@@ -51,7 +51,7 @@
     <tx:annotation-driven/>
 
     <!-- 加载Dao -->
-    <context:component-scan base-package="com.sky.demo.web_demo_multi_tenant_separate_db.dao.*" />
+    <context:component-scan base-package="com.sky.demo.web_demo_multi_tenant_separate_db.dao" />
 
     <!-- 1.Spring JdbcTemplate方式 -->
     <!--<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
