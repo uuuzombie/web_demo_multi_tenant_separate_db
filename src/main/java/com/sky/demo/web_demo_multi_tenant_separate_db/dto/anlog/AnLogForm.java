@@ -12,9 +12,8 @@ import com.google.common.base.Objects;
 public class AnLogForm implements Serializable{
 
     private static final long serialVersionUID = 7461284851274244644L;
-
     private long id;
-    private Date createTime;
+    private String createTime;
     private String userName;
     private String roleName;
     private String serverIp;
@@ -31,11 +30,11 @@ public class AnLogForm implements Serializable{
         this.id = id;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

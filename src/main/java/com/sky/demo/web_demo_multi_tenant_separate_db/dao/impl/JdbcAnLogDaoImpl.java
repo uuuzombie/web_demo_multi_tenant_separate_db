@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dao.JdbcAnLogDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.AnLogDto;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.AnLog;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -34,13 +35,17 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
     private static final String INSERT_COLUMN = "create_time, user_id, role_id, server_ip, client_ip, action_type," +
             " feature_type, action_info";
 
+    private static final String QUERY_COLUMN = "tba.id as id, create_time as createTime, user_name as userName, role_name as roleName," +
+            " server_ip as serverIp, client_ip as clientIp, action_type as actionType, feature_type as featureType, action_info as actionInfo";
+
 
     @Override
-    public AnLog select(Map<String, Object> condition) {
+    public AnLogDto select(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select ").append(TABLE_COLUMN)
-                .append("from ").append(TABLE_NAME)
-                .append(" where 1 = 1 ");
+        sql.append("select ").append(QUERY_COLUMN)
+                .append("from ").append(TABLE_NAME).append(" as tba, account as tbb, role as tbc ")
+                .append(" where 1 = 1 ")
+                .append("and tba.user_id = tbb.id and tba.role_id = tbc.id ");
 
         List<Object> params = Lists.newArrayList();
         Long id = (Long) condition.get("id");
@@ -62,8 +67,8 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
         }
 
         //方式一
-        RowMapper<AnLog> rowMapper = BeanPropertyRowMapper.newInstance(AnLog.class);
-        AnLog result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
+        RowMapper<AnLogDto> rowMapper = BeanPropertyRowMapper.newInstance(AnLogDto.class);
+        AnLogDto result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
 
         //方式二
 //        AnLog result = getJdbcTemplate().queryForObject(sql.toString(), new ParameterizedRowMapper<AnLog>() {
@@ -101,11 +106,12 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
     }
 
     @Override
-    public List<AnLog> selectList(Map<String, Object> condition) {
+    public List<AnLogDto> selectList(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select ").append(TABLE_COLUMN)
-                .append("from ").append(TABLE_NAME)
-                .append(" where 1 = 1 ");
+        sql.append("select ").append(QUERY_COLUMN)
+                .append("from ").append(TABLE_NAME).append(" as tba, account as tbb, role as tbc ")
+                .append(" where 1 = 1 ")
+                .append("and tba.user_id = tbb.id and tba.role_id = tbc.id ");
 
         List<Object> params = Lists.newArrayList();
         String beginTime = (String) condition.get("beginTime");
@@ -135,8 +141,8 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
         logger.info("select * params:" + params);
 
         // 方式一
-        RowMapper<AnLog> rowMapper = BeanPropertyRowMapper.newInstance(AnLog.class);
-        List<AnLog> result = getJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
+        RowMapper<AnLogDto> rowMapper = BeanPropertyRowMapper.newInstance(AnLogDto.class);
+        List<AnLogDto> result = getJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
 
         //方式二
 //        List<AnLog> result = Lists.newArrayList();

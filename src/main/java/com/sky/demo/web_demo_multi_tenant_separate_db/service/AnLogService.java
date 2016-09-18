@@ -18,11 +18,9 @@ public interface AnLogService {
 
     AnLogForm query(long id);
 
+    List<AnLogForm> queryList(List<Long> ids);
+
     Pager<AnLogForm> queryList(AnLogQueryRequest record);
-
-    boolean delete(long id);
-
-    boolean deleteList(List<Long> ids);
 
     boolean add(AnLogInsertRequest record);
 
@@ -32,4 +30,7 @@ public interface AnLogService {
 
     boolean updateList(List<AnLogUpdateRequest> records);
 
+    boolean delete(long id);
+
+    boolean deleteList(List<Long> ids);
 }

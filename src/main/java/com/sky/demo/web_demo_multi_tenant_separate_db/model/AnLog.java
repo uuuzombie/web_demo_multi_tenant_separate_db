@@ -1,5 +1,6 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.google.common.base.Objects;
@@ -7,8 +8,9 @@ import com.google.common.base.Objects;
 /**
  * Created by rg on 2015/7/6.
  */
-public class AnLog {
+public class AnLog implements Serializable{
 
+    private static final long serialVersionUID = 6634289032243880318L;
     private long id;            //主键id
     private Date createTime;    //创建时间
     private int userId;         //用户id

@@ -14,7 +14,6 @@ public class TenantUser implements Serializable {
     private int id;
     private int tenantId;
     private String userName;
-    private String password;
     private Date createTime;
     private int status;
 
@@ -42,14 +41,6 @@ public class TenantUser implements Serializable {
         this.userName = userName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -72,7 +63,6 @@ public class TenantUser implements Serializable {
                 .add("id", id)
                 .add("tenantId", tenantId)
                 .add("userName", userName)
-                .add("password", password)
                 .add("createTime", createTime)
                 .add("status", status)
                 .toString();

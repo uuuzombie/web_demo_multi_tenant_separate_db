@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.google.common.base.Joiner;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ import org.springframework.stereotype.Service;
 /**
  * Created by rg on 2015/7/6.
  */
-@Service
+//@Service  //for MyBatis
 public class AnLogServiceImpl implements AnLogService {
 
     private static final Logger logger = LoggerFactory.getLogger(AnLogServiceImpl.class);
@@ -46,7 +47,7 @@ public class AnLogServiceImpl implements AnLogService {
         public AnLogForm apply(Map<String, Object> map) {
             AnLogForm anLogForm = new AnLogForm();
             anLogForm.setId((long) map.get("id"));
-            anLogForm.setCreateTime((Date) map.get("createTime"));
+            anLogForm.setCreateTime((String) map.get("createTime"));
             anLogForm.setUserName((String) map.get("userName"));
             anLogForm.setRoleName((String) map.get("roleName"));
             anLogForm.setServerIp((String) map.get("serverIp"));
@@ -102,6 +103,16 @@ public class AnLogServiceImpl implements AnLogService {
     }
 
     @Override
+    public List<AnLogForm> queryList(List<Long> ids) {
+        Map<String, Object> condition = Maps.newHashMap();
+        String strIds = Joiner.on(",").skipNulls().join(ids);
+        condition.put("ids", strIds);
+
+        List<AnLogForm> anLogForms = anLogDao.selectList(condition);
+        return anLogForms;
+    }
+
+    @Override
     public Pager<AnLogForm> queryList(AnLogQueryRequest request) {
         Map<String, Object> condition = Maps.newHashMap();
         condition.put("beginTime", request.getBeginDate() + " 00:00:00");
@@ -111,8 +122,8 @@ public class AnLogServiceImpl implements AnLogService {
         Pager<AnLogForm> ret = new Pager<AnLogForm>(totalRecord, request.getPageNo(), request.getPageSize());
 
         int limit = ret.getPageSize();
-        int offset = (ret.getPageNo() - 1) * ret.getPageSize();
-        List<AnLogForm> anLogForms = anLogDao.selectList(condition, new RowBounds(offset, limit));
+        long offset = (ret.getPageNumber() - 1) * ret.getPageSize();
+        List<AnLogForm> anLogForms = anLogDao.selectList(condition, new RowBounds(new Long(offset).intValue(), limit));  //maybe wrong
 
         ret.setRows(anLogForms);
         return ret;

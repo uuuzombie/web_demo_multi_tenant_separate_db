@@ -147,7 +147,6 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         List<Object> params = Lists.newArrayList();
         params.add(record.getTenantId());
         params.add(record.getUserName());
-        params.add(record.getPassword());
         params.add(record.getCreateTime());
         params.add(record.getStatus());
 
@@ -170,7 +169,6 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         List<Object> params = Lists.newArrayList();
         params.add(record.getTenantId());
         params.add(record.getUserName());
-        params.add(record.getPassword());
         params.add(record.getStatus());
 
         sql.append("and id = ? ");

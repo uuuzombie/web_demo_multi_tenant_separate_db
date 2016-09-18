@@ -1,5 +1,7 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.dao;
 
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.AnLogDto;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.AnLogForm;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.AnLog;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,9 +13,9 @@ import java.util.Map;
  */
 public interface JdbcAnLogDao {
 
-    AnLog select(Map<String, Object> condition);
+    AnLogDto select(Map<String, Object> condition);
 
-    List<AnLog> selectList(Map<String, Object> condition);
+    List<AnLogDto> selectList(Map<String, Object> condition);
 
     long selectCount(Map<String, Object> condition);
 

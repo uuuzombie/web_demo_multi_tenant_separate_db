@@ -20,6 +20,8 @@ public interface AnLogDao {
 
     AnLogForm selectById(@Param("id") final Long id);
 
+    List<AnLogForm> selectList(Map<String, Object> condition);  //for MyBatis
+
     List<AnLogForm> selectList(Map<String, Object> condition, RowBounds rowBounds);  //for MyBatis
 
     int selectCount(Map<String, Object> condition);
