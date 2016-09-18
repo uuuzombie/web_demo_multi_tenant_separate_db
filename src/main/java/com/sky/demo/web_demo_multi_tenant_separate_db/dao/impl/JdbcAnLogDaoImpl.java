@@ -1,44 +1,72 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.dao.impl;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dao.JdbcAnLogDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.model.AnLog;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import com.sky.demo.web_demo_multi_tenant_separate_db.model.AnLog;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Param;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementSetter;
-
-import com.google.common.collect.Lists;
 
 /**
  * 使用JdbcTemplate实现
  * Created by rg on 15/6/30.
  */
-//@Repository
-public class JdbcAnLogDaoImpl {//implements AnLogDao {
+@Repository
+public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcAnLogDaoImpl.class);
 
-    //@Resource
-    private JdbcTemplate jdbcTemplate;
-
-    private static final String INSERT_AN_LOG_COLUMN = "create_time, user_id, role_id, server_ip, client_ip, action_type," +
+    private static final String TABLE_NAME = "an_log";
+    private static final String TABLE_COLUMN = "id, create_time, user_id, role_id, server_ip, client_ip, action_type," +
+            " feature_type, action_info";
+    private static final String INSERT_COLUMN = "create_time, user_id, role_id, server_ip, client_ip, action_type," +
             " feature_type, action_info";
 
 
-    //@Override
-    public AnLog selectById(@Param("id") Long id) {
-        AnLog anLog = new AnLog();
+    @Override
+    public AnLog select(Map<String, Object> condition) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select ").append(TABLE_COLUMN)
+                .append("from ").append(TABLE_NAME)
+                .append(" where 1 = 1 ");
 
-//        String sql = "select * from an_log where id = ?";
-//        anLog = jdbcTemplate.queryForObject(sql,new ParameterizedRowMapper<AnLog>() {
+        List<Object> params = Lists.newArrayList();
+        Long id = (Long) condition.get("id");
+        if (id != null) {
+            sql.append("and id = ? ");
+            params.add(id);
+        }
+
+        String beginTime = (String) condition.get("beginTime");
+        if (StringUtils.isNotEmpty(beginTime)) {
+            sql.append("and create_time >= ? ");
+            params.add(Timestamp.valueOf(beginTime));
+        }
+
+        String endTime = (String) condition.get("endTime");
+        if (StringUtils.isNotEmpty(endTime)) {
+            sql.append("and create_time < ? ");
+            params.add(Timestamp.valueOf(endTime));
+        }
+
+        //方式一
+        RowMapper<AnLog> rowMapper = BeanPropertyRowMapper.newInstance(AnLog.class);
+        AnLog result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
+
+        //方式二
+//        AnLog result = getJdbcTemplate().queryForObject(sql.toString(), new ParameterizedRowMapper<AnLog>() {
 //            @Override
 //            public AnLog mapRow(ResultSet resultSet, int i) throws SQLException {
 //                AnLog log = new AnLog();
@@ -55,78 +83,79 @@ public class JdbcAnLogDaoImpl {//implements AnLogDao {
 //            }
 //        }, id);
 
-//        RowMapper<AnLog> rowMapper = ParameterizedBeanPropertyRowMapper.newInstance(AnLog.class);
-//        AnLog anLog = jdbcTemplate.queryForObject(sql, new Object[]{id}, rowMapper);
+        //方式三
+//        String sql = "select * from an_log where id = ?";
+//        Map<String,Object> aMap = getJdbcTemplate().queryForMap(sql,new Object[]{id});
 //
-//        String sql = "select * from an_log where id = " + String.valueOf(id);
-//        Map<String,Object> aMap = jdbcTemplate.queryForMap(sql);
+//        anLog.setId((Long) aMap.get("id"));
+//        anLog.setCreateTime((Date) aMap.get("create_time"));
+//        anLog.setUserId((Integer) aMap.get("user_id"));
+//        anLog.setRoleId((Integer) aMap.get("role_id"));
+//        anLog.setServerIp((String) aMap.get("server_ip"));
+//        anLog.setClientIp((String) aMap.get("client_ip"));
+//        anLog.setActionType((Integer) aMap.get("action_type"));
+//        anLog.setFeatureType((Integer) aMap.get("feature_type"));
+//        anLog.setActionInfo(aMap.get("action_info").toString());
 
-        String sql = "select * from an_log where id = ?";
-        Map<String,Object> aMap = jdbcTemplate.queryForMap(sql,new Object[]{id});
-
-        anLog.setId((Long) aMap.get("id"));
-        anLog.setCreateTime((Date) aMap.get("create_time"));
-        anLog.setUserId((Integer) aMap.get("user_id"));
-        anLog.setRoleId((Integer) aMap.get("role_id"));
-        anLog.setServerIp((String) aMap.get("server_ip"));
-        anLog.setClientIp((String) aMap.get("client_ip"));
-        anLog.setActionType((Integer) aMap.get("action_type"));
-        anLog.setFeatureType((Integer) aMap.get("feature_type"));
-        anLog.setActionInfo(aMap.get("action_info").toString());
-
-        return anLog;
+        return result;
     }
 
-    //@Override
-    public List<AnLog> selectList(Map<String, Object> map, int limit, long offset) {
+    @Override
+    public List<AnLog> selectList(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select * from an_log ");
+        sql.append("select ").append(TABLE_COLUMN)
+                .append("from ").append(TABLE_NAME)
+                .append(" where 1 = 1 ");
 
-        List<AnLog> result = Lists.newArrayList();
-
-        String beginTime = (String) map.get("beginTime");
-        String endTime = (String) map.get("endTime");
-
-
-        // 方式一，参数
         List<Object> params = Lists.newArrayList();
-        if (StringUtils.isNotEmpty(beginTime) && StringUtils.isNotEmpty(endTime)) {
-            sql.append("where create_time between ? and ? ");
+        String beginTime = (String) condition.get("beginTime");
+        if (StringUtils.isNotEmpty(beginTime)) {
+            sql.append("and create_time >= ? ");
             params.add(Timestamp.valueOf(beginTime));
+        }
+
+        String endTime = (String) condition.get("endTime");
+        if (StringUtils.isNotEmpty(endTime)) {
+            sql.append("and create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
         }
-        sql.append("limit ? offset ?");
-        params.add(limit);
-        params.add(offset);
-        logger.info("select * params:" + params);
-        List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(sql.toString(), params.toArray());
 
-        for (Map<String,Object> aMap : queryForList) {
-            AnLog log = new AnLog();
-            log.setId((Long) aMap.get("id"));
-            log.setCreateTime((Date) aMap.get("create_time"));
-            log.setUserId((Integer) aMap.get("user_id"));
-            log.setRoleId((Integer) aMap.get("role_id"));
-            log.setServerIp((String) aMap.get("server_ip"));
-            log.setClientIp((String) aMap.get("client_ip"));
-            log.setActionType((Integer) aMap.get("action_type"));
-            log.setFeatureType((Integer) aMap.get("feature_type"));
-            log.setActionInfo(aMap.get("action_info").toString());
-
-            result.add(log);
+        Integer limit = (Integer) condition.get(LIMIT);
+        if (limit != null) {
+            sql.append("limit ? ");
+            params.add(limit);
         }
 
+        Long offset = (Long) condition.get(OFFSET);
+        if (offset != null) {
+            sql.append("offset ? ");
+            params.add(offset);
+        }
 
+        logger.info("select * params:" + params);
 
-//        if (StringUtils.isNotEmpty(beginTime) && StringUtils.isNotEmpty(endTime)) {
-//            sql.append("where create_time between '").append(beginTime).append("' and '").append(endTime).append("'");
-//        }
-//        sql.append(" limit ").append(limit);
-//        sql.append(" offset ").append(offset);
+        // 方式一
+        RowMapper<AnLog> rowMapper = BeanPropertyRowMapper.newInstance(AnLog.class);
+        List<AnLog> result = getJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
 
         //方式二
-        //List<Map<String, Object>> queryForList = jdbcTemplate.queryForList(sql.toString());
-
+//        List<AnLog> result = Lists.newArrayList();
+//        List<Map<String, Object>> queryForList = getJdbcTemplate().queryForList(sql.toString(), params.toArray());
+//
+//        for (Map<String,Object> aMap : queryForList) {
+//            AnLog log = new AnLog();
+//            log.setId((Long) aMap.get("id"));
+//            log.setCreateTime((Date) aMap.get("create_time"));
+//            log.setUserId((Integer) aMap.get("user_id"));
+//            log.setRoleId((Integer) aMap.get("role_id"));
+//            log.setServerIp((String) aMap.get("server_ip"));
+//            log.setClientIp((String) aMap.get("client_ip"));
+//            log.setActionType((Integer) aMap.get("action_type"));
+//            log.setFeatureType((Integer) aMap.get("feature_type"));
+//            log.setActionInfo(aMap.get("action_info").toString());
+//
+//            result.add(log);
+//        }
 
 
         /*方式三
@@ -170,71 +199,67 @@ public class JdbcAnLogDaoImpl {//implements AnLogDao {
     }
 
 
-    //@Override
-    public long selectCount(Map<String, Object> map) {
+    @Override
+    public long selectCount(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select count(*) from an_log ");
+        sql.append("select count(*) ")
+                .append("from ").append(TABLE_NAME)
+                .append(" where 1 = 1 ");
 
-        String beginTime = (String) map.get("beginTime");
-        String endTime = (String) map.get("endTime");
 
-        // 方式一，参数
         List<Object> params = Lists.newArrayList();
-        if (StringUtils.isNotEmpty(beginTime) && StringUtils.isNotEmpty(endTime)) {
-            sql.append("where create_time between ? and ? ");
+        String beginTime = (String) condition.get("beginTime");
+        if (StringUtils.isNotEmpty(beginTime)) {
+            sql.append("and create_time >= ? ");
             params.add(Timestamp.valueOf(beginTime));
+        }
+
+        String endTime = (String) condition.get("endTime");
+        if (StringUtils.isNotEmpty(endTime)) {
+            sql.append("and create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
         }
-        logger.info("select count(*) params:" + params);
-        long count = jdbcTemplate.queryForLong(sql.toString(), params.toArray());
 
-        //方式二
-//        if (StringUtils.isNotEmpty(beginTime) && StringUtils.isNotEmpty(endTime)) {
-//            sql.append("where create_time between '").append(beginTime).append("' and '").append(endTime).append("'");
-//        }
-//        long count = jdbcTemplate.queryForLong(sql.toString());
+        Integer limit = (Integer) condition.get(LIMIT);
+        if (limit != null) {
+            sql.append("limit ? ");
+            params.add(limit);
+        }
 
+        Long offset = (Long) condition.get(OFFSET);
+        if (offset != null) {
+            sql.append("offset ? ");
+            params.add(offset);
+        }
+
+        long count = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Long.class);
         return count;
     }
 
-    //@Override
-    public int deleteById(@Param("id") final Long id) {
-        String sql = "delete from an_log where id = ?";
-        int row = jdbcTemplate.update(sql,new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setObject(1,id);
-            }
-        });
 
-        //int row =  jdbcTemplate.update(sql,new Object[]{id});
-        return row;
-    }
-
-    //@Override
-    public long update(final AnLog record) {
-        String sql = "update an_log set action_type = ?,feature_type = ?,action_info = ? where id = ?";
-        int row = jdbcTemplate.update(sql, new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps) throws SQLException {
-                ps.setInt(1, record.getActionType());
-                ps.setInt(2, record.getFeatureType());
-                ps.setString(3, record.getActionInfo());
-                ps.setLong(4, record.getId());
-            }
-        });
-
-        //int row = jdbcTemplate.update(sql, new Object[] {record.getActionType(),record.getFeatureType(),record.getActionInfo(),record.getId()});
-        return row;
-    }
-
-    //@Override
-    public long insert(final AnLog record) {
+    @Override
+    public int insert(final AnLog record) {
         StringBuilder sql = new StringBuilder();
-        String param = StringUtils.repeat("?", ",", INSERT_AN_LOG_COLUMN.split(",").length);
-        sql.append("insert into an_log (").append(INSERT_AN_LOG_COLUMN).append(") ");
-        sql.append("values (").append(param).append(")");
+        String param = StringUtils.repeat("?", ",", INSERT_COLUMN.split(",").length);
 
+        sql.append("insert into ").append(TABLE_NAME)
+                .append(" (").append(INSERT_COLUMN).append(") ")
+                .append("values (").append(param).append(") ");
+
+        List<Object> params = Lists.newArrayList();
+        params.add(record.getCreateTime());
+        params.add(record.getUserId());
+        params.add(record.getRoleId());
+        params.add(record.getServerIp());
+        params.add(record.getClientIp());
+        params.add(record.getActionType());
+        params.add(record.getFeatureType());
+        params.add(record.getActionInfo());
+
+        //方式一
+        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+
+        //方式二
 //        int row = jdbcTemplate.update(sql.toString(), new PreparedStatementSetter() {
 //            @Override
 //            public void setValues(PreparedStatement ps) throws SQLException {
@@ -250,8 +275,6 @@ public class JdbcAnLogDaoImpl {//implements AnLogDao {
 //        });
 
 
-        int row = jdbcTemplate.update(sql.toString(), new Object[] {record.getCreateTime(),record.getUserId(),record.getRoleId(),
-                record.getServerIp(),record.getClientIp(),record.getActionType(),record.getFeatureType(),record.getActionInfo()});
 
         //返回自增主键
 //        KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -273,7 +296,6 @@ public class JdbcAnLogDaoImpl {//implements AnLogDao {
 //        long generateKey = keyHolder.getKey().longValue();
 //        logger.info("generate key : " + generateKey);
 //        return generateKey;
-
 
 
 //        Object[] args = new Object[]{
@@ -305,52 +327,157 @@ public class JdbcAnLogDaoImpl {//implements AnLogDao {
         return row;
     }
 
-    //@Override
-    public long batchInsert(final List<AnLog> recordList) {
-
+    @Override
+    public int batchInsert(final List<AnLog> recordList) {
         StringBuilder sql = new StringBuilder();
-        String param = StringUtils.repeat("?", ",", INSERT_AN_LOG_COLUMN.split(",").length);
-        sql.append("insert into an_log (").append(INSERT_AN_LOG_COLUMN).append(") ");
-        sql.append("values (").append(param).append(")");
+        String param = StringUtils.repeat("?", ",", INSERT_COLUMN.split(",").length);
 
-//        int[] rows = jdbcTemplate.batchUpdate(sql.toString(), new BatchPreparedStatementSetter() {
-//            @Override
-//            public void setValues(PreparedStatement ps, int i) throws SQLException {
-//                ps.setTimestamp(1, new Timestamp(recordList.get(i).getCreateTime().getTime()));
-//                ps.setInt(2, recordList.get(i).getUserId());
-//                ps.setInt(3, recordList.get(i).getRoleId());
-//                ps.setString(4, recordList.get(i).getServerIp());
-//                ps.setString(5, recordList.get(i).getClientIp());
-//                ps.setInt(6, recordList.get(i).getActionType());
-//                ps.setInt(7, recordList.get(i).getFeatureType());
-//                ps.setString(8, recordList.get(i).getActionInfo());
-//            }
-//
-//            @Override
-//            public int getBatchSize() {
-//                return recordList.size();
-//            }
-//        });
-
-        //NamedParameterJdbcTemplate.batchUpdate();
+        sql.append("insert into ").append(TABLE_NAME)
+                .append(" (").append(INSERT_COLUMN).append(") ")
+                .append("values (").append(param).append(") ");
 
 
-        List<Object[]> args = Lists.newArrayList();
-        for (AnLog record : recordList) {
-            Object[] obj = new Object[] {
-                    new Timestamp(record.getCreateTime().getTime()),
-                    record.getUserId(),
-                    record.getRoleId(),
-                    record.getServerIp(),
-                    record.getClientIp(),
-                    record.getActionType(),
-                    record.getFeatureType(),
-                    record.getActionInfo()
-            };
-            args.add(obj);
-        }
-        int[] rows = jdbcTemplate.batchUpdate(sql.toString(),args);
+        //方式一
+        BatchPreparedStatementSetter setter = new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setTimestamp(1, new Timestamp(recordList.get(i).getCreateTime().getTime()));
+                ps.setInt(2, recordList.get(i).getUserId());
+                ps.setInt(3, recordList.get(i).getRoleId());
+                ps.setString(4, recordList.get(i).getServerIp());
+                ps.setString(5, recordList.get(i).getClientIp());
+                ps.setInt(6, recordList.get(i).getActionType());
+                ps.setInt(7, recordList.get(i).getFeatureType());
+                ps.setString(8, recordList.get(i).getActionInfo());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return recordList.size();
+            }
+        };
+
+        int[] rows = getJdbcTemplate().batchUpdate(sql.toString(), setter);
+
+
+        //方式二
+//        List<Object[]> args = Lists.newArrayList();
+//        for (AnLog record : recordList) {
+//            Object[] obj = new Object[] {
+//                    new Timestamp(record.getCreateTime().getTime()),
+//                    record.getUserId(),
+//                    record.getRoleId(),
+//                    record.getServerIp(),
+//                    record.getClientIp(),
+//                    record.getActionType(),
+//                    record.getFeatureType(),
+//                    record.getActionInfo()
+//            };
+//            args.add(obj);
+//        }
+//        int[] rows = getJdbcTemplate().batchUpdate(sql.toString(),args);
 
         return rows.length;
     }
+
+    @Override
+    public int update(final AnLog record) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("update ").append(TABLE_NAME)
+                .append("set action_type = ?,feature_type = ?,action_info = ? ")
+                .append(" where 1 = 1 ");
+
+        List<Object> params = Lists.newArrayList();
+        params.add(record.getActionType());
+        params.add(record.getFeatureType());
+        params.add(record.getActionInfo());
+
+        sql.append("and id = ? ");
+        params.add(record.getId());
+
+        //方式一
+        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+
+        //方式二
+//        int row = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
+//            @Override
+//            public void setValues(PreparedStatement ps) throws SQLException {
+//                ps.setInt(1, record.getActionType());
+//                ps.setInt(2, record.getFeatureType());
+//                ps.setString(3, record.getActionInfo());
+//                ps.setLong(4, record.getId());
+//            }
+//        });
+
+        return row;
+    }
+
+    @Override
+    public int batchUpdate(List<AnLog> records) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("update ").append(TABLE_NAME)
+                .append("set action_type = ?,feature_type = ?,action_info = ? ")
+                .append(" where 1 = 1 ");
+
+        BatchPreparedStatementSetter setter = new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setTimestamp(1, new Timestamp(records.get(i).getCreateTime().getTime()));
+                ps.setInt(2, records.get(i).getUserId());
+                ps.setInt(3, records.get(i).getRoleId());
+                ps.setString(4, records.get(i).getServerIp());
+                ps.setString(5, records.get(i).getClientIp());
+                ps.setInt(6, records.get(i).getActionType());
+                ps.setInt(7, records.get(i).getFeatureType());
+                ps.setString(8, records.get(i).getActionInfo());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return records.size();
+            }
+        };
+
+        int[] rows = getJdbcTemplate().batchUpdate(sql.toString(), setter);
+        return rows.length;
+    }
+
+
+    @Override
+    public int delete(final Long id) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("delete from ").append(TABLE_NAME)
+                .append(" where 1 = 1 ");
+
+        List<Object> params = Lists.newArrayList();
+        sql.append("and id = ? ");
+        params.add(id);
+
+        //方式一
+        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+
+        //方式二
+//        int row = getJdbcTemplate().update(sql,new PreparedStatementSetter() {
+//            @Override
+//            public void setValues(PreparedStatement ps) throws SQLException {
+//                ps.setObject(1,id);
+//            }
+//        });
+
+        return row;
+    }
+
+    @Override
+    public int batchDelete(List<Long> ids) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("delete from ").append(TABLE_NAME)
+                .append(" where 1 = 1 ");
+
+        String strIds = Joiner.on(",").skipNulls().join(ids);
+        sql.append("and id in (").append(strIds).append(") ");
+
+        int row = getJdbcTemplate().update(sql.toString());
+        return row;
+    }
+
 }

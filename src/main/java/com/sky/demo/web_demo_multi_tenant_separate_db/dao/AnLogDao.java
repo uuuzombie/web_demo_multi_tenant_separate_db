@@ -15,14 +15,12 @@ import com.sky.demo.web_demo_multi_tenant_separate_db.model.AnLog;
 /**
  * Created by rg on 2015/6/11.
  */
-@Repository
+//@Repository   //for MyBatis
 public interface AnLogDao {
 
     AnLogForm selectById(@Param("id") final Long id);
 
     List<AnLogForm> selectList(Map<String, Object> condition, RowBounds rowBounds);  //for MyBatis
-
-    //List<Map<String,Object>> selectList(Map<String, Object> condition, int limit, long offset); //for JdbcTemplate
 
     int selectCount(Map<String, Object> condition);
 
