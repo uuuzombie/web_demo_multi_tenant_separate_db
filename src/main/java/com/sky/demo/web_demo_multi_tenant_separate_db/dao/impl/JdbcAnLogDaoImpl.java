@@ -50,19 +50,19 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
         List<Object> params = Lists.newArrayList();
         Long id = (Long) condition.get("id");
         if (id != null) {
-            sql.append("and id = ? ");
+            sql.append("and tba.id = ? ");
             params.add(id);
         }
 
         String beginTime = (String) condition.get("beginTime");
         if (StringUtils.isNotEmpty(beginTime)) {
-            sql.append("and create_time >= ? ");
+            sql.append("and tba.create_time >= ? ");
             params.add(Timestamp.valueOf(beginTime));
         }
 
         String endTime = (String) condition.get("endTime");
         if (StringUtils.isNotEmpty(endTime)) {
-            sql.append("and create_time < ? ");
+            sql.append("and tba.create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
         }
 
