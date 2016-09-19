@@ -106,5 +106,14 @@ public class TenantUser implements Serializable {
                     .add("desc", desc)
                     .toString();
         }
+
+        public static Status getStatusByCode(int code) {
+            for (Status status : Status.values()) {
+                if (code == status.getCode()) {
+                    return status;
+                }
+            }
+            return null;
+        }
     }
 }

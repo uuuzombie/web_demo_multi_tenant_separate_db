@@ -117,12 +117,12 @@ public class JdbcAnLogServiceImpl implements AnLogService {
         Map<String, Object> condition = Maps.newHashMap();
         condition.put("id", id);
 
-        AnLogForm anLogForm = null;
+        AnLogForm result = null;
         AnLogDto anLogDto = anLogDao.select(condition);
         if (anLogDto != null) {
-            anLogForm = transfer2Form.apply(anLogDto);
+            result = transfer2Form.apply(anLogDto);
         }
-        return anLogForm;
+        return result;
     }
 
     @Override
@@ -132,26 +132,26 @@ public class JdbcAnLogServiceImpl implements AnLogService {
         String strIds = Joiner.on(",").skipNulls().join(ids);
         condition.put("ids", strIds);
 
-        List<AnLogForm> anLogForms = Lists.newArrayList();
+        List<AnLogForm> result = Lists.newArrayList();
         List<AnLogDto> anLogDtos = anLogDao.selectList(condition);
         if (CollectionUtils.isNotEmpty(anLogDtos)) {
             for (AnLogDto anLogDto : anLogDtos) {
                 AnLogForm anLogForm = transfer2Form.apply(anLogDto);
-                anLogForms.add(anLogForm);
+                result.add(anLogForm);
             }
         }
 
-        return anLogForms;
+        return result;
     }
 
     @Override
-    public Pager<AnLogForm> queryList(AnLogQueryRequest request) {
+    public Pager<AnLogForm> queryList(AnLogQueryRequest queryRequest) {
         Map<String, Object> condition = Maps.newHashMap();
-        condition.put("beginTime", request.getBeginDate() + " 00:00:00");
-        condition.put("endTime", request.getEndDate() + " 23:59:59");
+        condition.put("beginTime", queryRequest.getBeginDate() + " 00:00:00");
+        condition.put("endTime", queryRequest.getEndDate() + " 23:59:59");
 
         long totalRecord = anLogDao.selectCount(condition);
-        Pager<AnLogForm> ret = new Pager<AnLogForm>(totalRecord, request.getPageNo(), request.getPageSize());
+        Pager<AnLogForm> ret = new Pager<AnLogForm>(totalRecord, queryRequest.getPageNumber(), queryRequest.getPageSize());
 
         int limit = ret.getPageSize();
         long offset = (ret.getPageNumber() - 1) * ret.getPageSize();
@@ -172,6 +172,51 @@ public class JdbcAnLogServiceImpl implements AnLogService {
     }
 
     @Override
+    public boolean add(AnLogInsertRequest insertRequest) {
+        int row = 0;
+        try {
+            AnLog log = transferInsertReq2AnLog.apply(insertRequest);
+            row = anLogDao.insert(log);
+        } catch (Exception e) {
+            logger.error(insertRequest.toString(), e);
+        }
+        return row > 0;
+    }
+
+    @Override
+    public boolean addList(List<AnLogInsertRequest> insertRequests) {
+        int row = 0;
+        List<AnLog> anLogs = Lists.newArrayList();
+        try {
+            AnLog log = null;
+            for (AnLogInsertRequest request : insertRequests) {
+                log = transferInsertReq2AnLog.apply(request);
+                anLogs.add(log);
+            }
+            row = anLogDao.batchInsert(anLogs);
+        } catch (Exception e) {
+            logger.error(insertRequests.toString(), e);
+        }
+        return row > 0;
+    }
+
+    @Override
+    public boolean update(AnLogUpdateRequest updateRequest) {
+        AnLog log = transferUpdateReq2AnLog.apply(updateRequest);
+        int row = anLogDao.update(log);
+        return row > 0;
+    }
+
+    @Override
+    public boolean updateList(List<AnLogUpdateRequest> updateRequests) {
+//        Map<String,Object> params = Maps.newHashMap();
+//        AnLog log = transferUpdateReq2AnLog.apply(queryRequest);
+//        int row = anLogDao.batchUpdate(ids, log);
+        return false; //row > 0;
+    }
+
+
+    @Override
     public boolean delete(long id) {
         int row = anLogDao.delete(id);
         return row > 0;
@@ -182,52 +227,5 @@ public class JdbcAnLogServiceImpl implements AnLogService {
         int row = anLogDao.batchDelete(ids);
         return row > 0;
     }
-
-    @Override
-    public boolean add(AnLogInsertRequest request) {
-        int row = 0;
-        try {
-            AnLog log = transferInsertReq2AnLog.apply(request);
-            row = anLogDao.insert(log);
-        } catch (Exception e) {
-            logger.error(request.toString(), e);
-        }
-        return row > 0;
-
-    }
-
-    @Override
-    public boolean addList(List<AnLogInsertRequest> requests) {
-        int row = 0;
-        List<AnLog> anLogs = Lists.newArrayList();
-        try {
-            AnLog log = null;
-            for (AnLogInsertRequest request : requests) {
-                log = transferInsertReq2AnLog.apply(request);
-                anLogs.add(log);
-            }
-            row = anLogDao.batchInsert(anLogs);
-        } catch (Exception e) {
-            logger.error(requests.toString(), e);
-        }
-        return row > 0;
-    }
-
-    @Override
-    public boolean update(AnLogUpdateRequest request) {
-        AnLog log = transferUpdateReq2AnLog.apply(request);
-        int row = anLogDao.update(log);
-        return row > 0;
-    }
-
-    @Override
-    public boolean updateList(List<AnLogUpdateRequest> records) {
-//        Map<String,Object> params = Maps.newHashMap();
-//        AnLog log = transferUpdateReq2AnLog.apply(request);
-//        int row = anLogDao.batchUpdate(ids, log);
-        return false; //row > 0;
-    }
-
-
 }
 

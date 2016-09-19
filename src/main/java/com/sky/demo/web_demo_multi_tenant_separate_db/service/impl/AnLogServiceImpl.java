@@ -32,11 +32,11 @@ import org.springframework.stereotype.Service;
  * Created by rg on 2015/7/6.
  */
 //@Service  //for MyBatis
-public class AnLogServiceImpl implements AnLogService {
+public class AnLogServiceImpl { //implements AnLogService {
 
     private static final Logger logger = LoggerFactory.getLogger(AnLogServiceImpl.class);
 
-    @Resource
+    //@Resource
     private AnLogDao anLogDao;
 
 
@@ -96,13 +96,13 @@ public class AnLogServiceImpl implements AnLogService {
 
 
 
-    @Override
+    //@Override
     public AnLogForm query(long id) {
         AnLogForm anLogForm = anLogDao.selectById(id);
         return anLogForm;
     }
 
-    @Override
+    //@Override
     public List<AnLogForm> queryList(List<Long> ids) {
         Map<String, Object> condition = Maps.newHashMap();
         String strIds = Joiner.on(",").skipNulls().join(ids);
@@ -112,14 +112,14 @@ public class AnLogServiceImpl implements AnLogService {
         return anLogForms;
     }
 
-    @Override
+    //@Override
     public Pager<AnLogForm> queryList(AnLogQueryRequest request) {
         Map<String, Object> condition = Maps.newHashMap();
         condition.put("beginTime", request.getBeginDate() + " 00:00:00");
         condition.put("endTime", request.getEndDate() + " 23:59:59");
 
         int totalRecord = anLogDao.selectCount(condition);
-        Pager<AnLogForm> ret = new Pager<AnLogForm>(totalRecord, request.getPageNo(), request.getPageSize());
+        Pager<AnLogForm> ret = new Pager<AnLogForm>(totalRecord, request.getPageNumber(), request.getPageSize());
 
         int limit = ret.getPageSize();
         long offset = (ret.getPageNumber() - 1) * ret.getPageSize();
@@ -129,19 +129,19 @@ public class AnLogServiceImpl implements AnLogService {
         return ret;
     }
 
-    @Override
+    //@Override
     public boolean delete(long id) {
         int row = anLogDao.deleteById(id);
         return row > 0;
     }
 
-    @Override
+    //@Override
     public boolean deleteList(List<Long> ids) {
         int row = anLogDao.batchDelete(ids);
         return row > 0;
     }
 
-    @Override
+    //@Override
     public boolean add(AnLogInsertRequest request) {
         int row = 0;
         try {
@@ -154,7 +154,7 @@ public class AnLogServiceImpl implements AnLogService {
 
     }
 
-    @Override
+    //@Override
     public boolean addList(List<AnLogInsertRequest> requests) {
         int row = 0;
         List<AnLog> anLogs = Lists.newArrayList();
@@ -171,14 +171,14 @@ public class AnLogServiceImpl implements AnLogService {
         return row > 0;
     }
 
-    @Override
+    //@Override
     public boolean update(AnLogUpdateRequest request) {
         AnLog log = transferUpdateReq2AnLog.apply(request);
         int row = anLogDao.update(log);
         return row > 0;
     }
 
-    @Override
+    //@Override
     public boolean updateList(List<AnLogUpdateRequest> records) {
 //        Map<String,Object> params = Maps.newHashMap();
 //        AnLog log = transferUpdateReq2AnLog.apply(request);

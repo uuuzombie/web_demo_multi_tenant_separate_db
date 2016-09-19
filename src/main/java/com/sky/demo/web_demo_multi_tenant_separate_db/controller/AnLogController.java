@@ -39,7 +39,7 @@ public class AnLogController {
 
     @RequestMapping("/query/{id}")
     @ResponseBody
-    public RetData<AnLogForm> queryLog(@PathVariable long id) {
+    public RetData<AnLogForm> query(@PathVariable long id) {
         RetData<AnLogForm> result = null;
         try {
             AnLogForm anLogForm = anLogService.query(id);
@@ -54,11 +54,11 @@ public class AnLogController {
 
     @RequestMapping("/queryList")
     @ResponseBody
-    public RetData<Pager<AnLogForm>> queryLog(@RequestBody AnLogQueryRequest request) {
+    public RetData<Pager<AnLogForm>> queryList(@RequestBody AnLogQueryRequest queryRequest) {
 
         RetData<Pager<AnLogForm>> result = null;
         try {
-            Pager<AnLogForm> ret  = anLogService.queryList(request);
+            Pager<AnLogForm> ret  = anLogService.queryList(queryRequest);
             result = RetUtil.buildSuccessRet(ret);
         } catch (Exception e) {
             logger.error("query log error",e);
@@ -67,9 +67,60 @@ public class AnLogController {
         return result;
     }
 
+
+    @RequestMapping("/add")
+    @ResponseBody
+    public RetData<String> add(@RequestBody AnLogInsertRequest insertRequest) {
+        RetData<String> result = null;
+        try {
+            boolean isAdd = anLogService.add(insertRequest);
+            Preconditions.checkArgument(isAdd, "add error");
+
+            result = RetUtil.buildSuccessRet("success");
+
+        } catch (Exception e) {
+            logger.error("add log error",e);
+            result = RetUtil.buildErrorRet(RetStatus.INSERT_ERROR);
+        }
+        return result;
+    }
+
+    @RequestMapping("/addList")
+    @ResponseBody
+    public RetData<String> addList(@RequestBody List<AnLogInsertRequest> insertRequests) {
+        RetData<String> result = null;
+        try {
+            boolean isAdd = anLogService.addList(insertRequests);
+            Preconditions.checkArgument(isAdd, "add error");
+
+            result = RetUtil.buildSuccessRet("success");
+
+        } catch (Exception e) {
+            logger.error("add log error",e);
+            result = RetUtil.buildErrorRet(RetStatus.INSERT_ERROR);
+        }
+        return result;
+    }
+
+    @RequestMapping("/update")
+    @ResponseBody
+    public RetData<String> update(@RequestBody AnLogUpdateRequest updateRequest) {
+        RetData<String> result = null;
+        try {
+            boolean isUpdate = anLogService.update(updateRequest);
+            Preconditions.checkArgument(isUpdate, "update error");
+
+            result = RetUtil.buildSuccessRet("success");
+        } catch (Exception e) {
+            logger.error("update log error",e);
+            result = RetUtil.buildErrorRet(RetStatus.UPDATE_ERROR);
+        }
+        return result;
+    }
+
     @RequestMapping("/delete/{id}")
     @ResponseBody
-    public RetData<String> deleteLog(@PathVariable long id) {
+    public RetData<String> delete(@PathVariable long id) {
         RetData<String> result = null;
         try {
             boolean isDelete = anLogService.delete(id);
@@ -82,55 +133,4 @@ public class AnLogController {
         }
         return result;
     }
-
-    @RequestMapping("/update")
-    @ResponseBody
-    public RetData<String> updateLog(@RequestBody AnLogUpdateRequest request) {
-        RetData<String> result = null;
-        try {
-            boolean isUpdate = anLogService.update(request);
-            Preconditions.checkArgument(isUpdate, "update error");
-
-            result = RetUtil.buildSuccessRet("success");
-        } catch (Exception e) {
-            logger.error("update log error",e);
-            result = RetUtil.buildErrorRet(RetStatus.UPDATE_ERROR);
-        }
-        return result;
-    }
-
-    @RequestMapping("/insert")
-    @ResponseBody
-    public RetData<String> insertLog(@RequestBody AnLogInsertRequest request) {
-        RetData<String> result = null;
-        try {
-            boolean isInsert = anLogService.add(request);
-            Preconditions.checkArgument(isInsert, "insert error");
-
-            result = RetUtil.buildSuccessRet("success");
-
-        } catch (Exception e) {
-            logger.error("insert log error",e);
-            result = RetUtil.buildErrorRet(RetStatus.INSERT_ERROR);
-        }
-        return result;
-    }
-
-    @RequestMapping("/insertList")
-    @ResponseBody
-    public RetData<String> batchInsertLog(@RequestBody List<AnLogInsertRequest> requests) {
-        RetData<String> result = null;
-        try {
-            boolean isInsert = anLogService.addList(requests);
-            Preconditions.checkArgument(isInsert, "insert error");
-
-            result = RetUtil.buildSuccessRet("success");
-
-        } catch (Exception e) {
-            logger.error("insert log error",e);
-            result = RetUtil.buildErrorRet(RetStatus.INSERT_ERROR);
-        }
-        return result;
-    }
-
 }

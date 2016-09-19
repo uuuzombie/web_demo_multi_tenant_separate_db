@@ -2,8 +2,8 @@ package com.sky.demo.web_demo_multi_tenant_separate_db.dao.impl;
 
 import com.google.common.collect.Lists;
 import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDao;
-import com.sky.demo.web_demo_multi_tenant_separate_db.dao.TenantDao;
-import com.sky.demo.web_demo_multi_tenant_separate_db.model.Tenant;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dao.AccountDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.model.Account;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,72 +11,59 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by user on 16/9/18.
+ * Created by user on 16/9/19.
  */
 @Repository
-public class TenantDaoImpl extends BaseDao implements TenantDao {
+public class AccountDaoImpl extends BaseDao implements AccountDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(TenantDaoImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccountDaoImpl.class);
 
-    private static final String TABLE_NAME = "tenant";
-    private static final String TABLE_COLUMN = "id, name, db_name, create_time, status";
-    private static final String INSERT_COLUMN = "name, db_name, create_time, status";
+    private static final String TABLE_NAME = "account";
+    private static final String TABLE_COLUMN = "id, user_name, password";
+    private static final String INSERT_COLUMN = "user_name, password";
 
     @Override
-    public Tenant select(Map<String, Object> condition) {
+    public Account select(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
         sql.append("select ").append(TABLE_COLUMN)
                 .append("from ").append(TABLE_NAME)
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();
-        Integer id = (Integer) condition.get("id");
+        Long id = (Long) condition.get("id");
         if (id != null) {
             sql.append("and id = ? ");
             params.add(id);
         }
 
-        String beginTime = (String) condition.get("beginTime");
-        if (StringUtils.isNotEmpty(beginTime)) {
-            sql.append("and create_time >= ? ");
-            params.add(Timestamp.valueOf(beginTime));
+        String userName = (String) condition.get("userName");
+        if (StringUtils.isNotEmpty(userName)) {
+            sql.append("and user_name >= ? ");
+            params.add(userName);
         }
 
-        String endTime = (String) condition.get("endTime");
-        if (StringUtils.isNotEmpty(endTime)) {
-            sql.append("and create_time < ? ");
-            params.add(Timestamp.valueOf(endTime));
-        }
-
-        RowMapper<Tenant> rowMapper = BeanPropertyRowMapper.newInstance(Tenant.class);
-        Tenant result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
+        RowMapper<Account> rowMapper = BeanPropertyRowMapper.newInstance(Account.class);
+        Account result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
 
         return result;
     }
 
     @Override
-    public List<Tenant> selectList(Map<String, Object> condition) {
+    public List<Account> selectList(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
         sql.append("select ").append(TABLE_COLUMN)
                 .append("from ").append(TABLE_NAME)
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();
-        String beginTime = (String) condition.get("beginTime");
-        if (StringUtils.isNotEmpty(beginTime)) {
-            sql.append("and create_time >= ? ");
-            params.add(Timestamp.valueOf(beginTime));
-        }
-
-        String endTime = (String) condition.get("endTime");
-        if (StringUtils.isNotEmpty(endTime)) {
-            sql.append("and create_time < ? ");
-            params.add(Timestamp.valueOf(endTime));
+        String userName = (String) condition.get("userName");
+        if (StringUtils.isNotEmpty(userName)) {
+            sql.append("and user_name >= ? ");
+            params.add(userName);
         }
 
         Integer limit = (Integer) condition.get(LIMIT);
@@ -91,10 +78,8 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
             params.add(offset);
         }
 
-        logger.info("select * params:" + params);
-
-        RowMapper<Tenant> rowMapper = BeanPropertyRowMapper.newInstance(Tenant.class);
-        List<Tenant> result = getJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
+        RowMapper<Account> rowMapper = BeanPropertyRowMapper.newInstance(Account.class);
+        List<Account> result = getJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
 
         return result;
     }
@@ -108,24 +93,13 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
 
 
         List<Object> params = Lists.newArrayList();
-        String beginTime = (String) condition.get("beginTime");
-        if (StringUtils.isNotEmpty(beginTime)) {
-            sql.append("and create_time >= ? ");
-            params.add(Timestamp.valueOf(beginTime));
-        }
-
-        String endTime = (String) condition.get("endTime");
-        if (StringUtils.isNotEmpty(endTime)) {
-            sql.append("and create_time < ? ");
-            params.add(Timestamp.valueOf(endTime));
-        }
 
         int count = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Integer.class);
         return count;
     }
 
     @Override
-    public int insert(Tenant record) {
+    public int insert(Account record) {
         StringBuilder sql = new StringBuilder();
         String param = StringUtils.repeat("?", ",", INSERT_COLUMN.split(",").length);
 
@@ -134,31 +108,28 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
                 .append("values (").append(param).append(") ");
 
         List<Object> params = Lists.newArrayList();
-        params.add(record.getName());
-        params.add(record.getDbName());
-        params.add(record.getCreateTime());
-        params.add(record.getStatus());
+        params.add(record.getUserName());
+        params.add(record.getPassword());
 
         int row = getJdbcTemplate().update(sql.toString(), params.toArray());
         return row;
     }
 
     @Override
-    public int batchInsert(List<Tenant> records) {
+    public int batchInsert(List<Account> records) {
         return 0;
     }
 
     @Override
-    public int update(Tenant record) {
+    public int update(Account record) {
         StringBuilder sql = new StringBuilder();
         sql.append("update ").append(TABLE_NAME)
-                .append("set name = ?,db_name = ?,status = ? ")
+                .append("set user_name = ?, password = ? ")
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();
-        params.add(record.getName());
-        params.add(record.getDbName());
-        params.add(record.getStatus());
+        params.add(record.getUserName());
+        params.add(record.getPassword());
 
         sql.append("and id = ? ");
         params.add(record.getId());
@@ -168,7 +139,7 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
     }
 
     @Override
-    public int batchUpdate(List<Tenant> records) {
+    public int batchUpdate(List<Account> records) {
         return 0;
     }
 

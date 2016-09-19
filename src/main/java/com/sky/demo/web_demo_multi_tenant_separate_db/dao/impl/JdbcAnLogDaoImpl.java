@@ -43,7 +43,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
     public AnLogDto select(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
         sql.append("select ").append(QUERY_COLUMN)
-                .append("from ").append(TABLE_NAME).append(" as tba, account as tbb, role as tbc ")
+                .append(" from ").append(TABLE_NAME).append(" as tba, account as tbb, role as tbc ")
                 .append(" where 1 = 1 ")
                 .append("and tba.user_id = tbb.id and tba.role_id = tbc.id ");
 
@@ -109,7 +109,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
     public List<AnLogDto> selectList(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
         sql.append("select ").append(QUERY_COLUMN)
-                .append("from ").append(TABLE_NAME).append(" as tba, account as tbb, role as tbc ")
+                .append(" from ").append(TABLE_NAME).append(" as tba, account as tbb, role as tbc ")
                 .append(" where 1 = 1 ")
                 .append("and tba.user_id = tbb.id and tba.role_id = tbc.id ");
 

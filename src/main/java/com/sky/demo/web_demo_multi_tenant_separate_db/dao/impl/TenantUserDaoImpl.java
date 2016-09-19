@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Map;
 /**
  * Created by user on 16/9/18.
  */
+@Repository
 public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
 
     private static final Logger logger = LoggerFactory.getLogger(TenantUserDaoImpl.class);
@@ -34,11 +36,18 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();
-        Long id = (Long) condition.get("id");
+        Integer id = (Integer) condition.get("id");
         if (id != null) {
             sql.append("and id = ? ");
             params.add(id);
         }
+
+        String userName = (String) condition.get("userName");
+        if (StringUtils.isNotBlank(userName)) {
+            sql.append("and user_name = ? ");
+            params.add(userName);
+        }
+
 
         String beginTime = (String) condition.get("beginTime");
         if (StringUtils.isNotEmpty(beginTime)) {
@@ -52,7 +61,6 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
             params.add(Timestamp.valueOf(endTime));
         }
 
-        //方式一
         RowMapper<TenantUser> rowMapper = BeanPropertyRowMapper.newInstance(TenantUser.class);
         TenantUser result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
         return result;
@@ -105,7 +113,6 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
                 .append("from ").append(TABLE_NAME)
                 .append(" where 1 = 1 ");
 
-
         List<Object> params = Lists.newArrayList();
         String beginTime = (String) condition.get("beginTime");
         if (StringUtils.isNotEmpty(beginTime)) {
@@ -117,18 +124,6 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         if (StringUtils.isNotEmpty(endTime)) {
             sql.append("and create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
-        }
-
-        Integer limit = (Integer) condition.get(LIMIT);
-        if (limit != null) {
-            sql.append("limit ? ");
-            params.add(limit);
-        }
-
-        Long offset = (Long) condition.get(OFFSET);
-        if (offset != null) {
-            sql.append("offset ? ");
-            params.add(offset);
         }
 
         int count = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Integer.class);

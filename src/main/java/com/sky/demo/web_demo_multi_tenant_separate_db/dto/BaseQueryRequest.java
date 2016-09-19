@@ -11,15 +11,15 @@ public class BaseQueryRequest implements Serializable{
 
     private static final long serialVersionUID = -6458680899002899804L;
 
-    private int pageNo = 1;
+    private int pageNumber = 1;
     private int pageSize = 10;
 
-    public int getPageNo() {
-        return pageNo;
+    public int getPageNumber() {
+        return pageNumber;
     }
 
-    public void setPageNo(int pageNo) {
-        this.pageNo = pageNo;
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
     }
 
     public int getPageSize() {
@@ -33,7 +33,7 @@ public class BaseQueryRequest implements Serializable{
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-                .add("pageNo", pageNo)
+                .add("pageNumber", pageNumber)
                 .add("pageSize", pageSize)
                 .toString();
     }

@@ -13,22 +13,21 @@ import java.util.List;
 /**
  * Created by rg on 2015/6/11.
  */
-@Service
 public interface AnLogService {
 
     AnLogForm query(long id);
 
     List<AnLogForm> queryList(List<Long> ids);
 
-    Pager<AnLogForm> queryList(AnLogQueryRequest record);
+    Pager<AnLogForm> queryList(AnLogQueryRequest queryRequest);
 
-    boolean add(AnLogInsertRequest record);
+    boolean add(AnLogInsertRequest insertRequest);
 
-    boolean addList(List<AnLogInsertRequest> records);
+    boolean addList(List<AnLogInsertRequest> insertRequests);
 
-    boolean update(AnLogUpdateRequest record);
+    boolean update(AnLogUpdateRequest updateRequest);
 
-    boolean updateList(List<AnLogUpdateRequest> records);
+    boolean updateList(List<AnLogUpdateRequest> updateRequests);
 
     boolean delete(long id);
 

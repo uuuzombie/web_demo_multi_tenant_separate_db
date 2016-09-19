@@ -6,6 +6,9 @@ package com.sky.demo.web_demo_multi_tenant_separate_db.model;
 public enum FeatureType {
 
     NOTHING(0,""),
+    LOGIN(1, "LOGIN"),
+    LOGOFF(2, "LOGOFF"),
+    REGISTRY(3, "REGISTRY"),
 
     //====================1000
 
