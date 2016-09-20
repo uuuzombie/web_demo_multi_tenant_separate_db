@@ -7,6 +7,9 @@
        default-autowire="byName">
 
     <!-- 加载Service -->
-    <context:component-scan base-package="com.sky.demo.web_demo_multi_tenant_separate_db.service"/>
+    <context:component-scan base-package="com.sky.demo.web_demo_multi_tenant_separate_db">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+    </context:component-scan>
 
 </beans>

@@ -58,7 +58,9 @@
 
 
     <!--扫描Controller层-->
-    <context:component-scan base-package="com.sky.demo.web_demo_multi_tenant_separate_db.controller" />
+    <context:component-scan base-package="com.sky.demo.web_demo_multi_tenant_separate_db" >
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
 
     <!--Bean适配-->
     <bean id="SpringContextUtil" class="com.sky.demo.web_demo_multi_tenant_separate_db.util.SpringUtil"/>

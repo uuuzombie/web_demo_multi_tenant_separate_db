@@ -6,7 +6,7 @@
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
        default-autowire="byName">
 
-    <context:property-placeholder location="classpath*:app.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath*:app_config.properties" ignore-unresolvable="true"/>
     <!--挂载tomcat配置文件-->
     <!--<context:property-placeholder location="file:${CATALINA_HOME}/conf/config.properties" ignore-unresolvable="true" />-->
 

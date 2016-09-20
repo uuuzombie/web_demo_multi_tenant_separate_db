@@ -56,7 +56,7 @@ public class CommonDataSourceCache {
                     logger.error("load tenant error", e);
                 }
             }
-        }, 5, 5, TimeUnit.MINUTES);
+        }, 1, 1, TimeUnit.MINUTES);
 
     }
 
@@ -148,10 +148,17 @@ public class CommonDataSourceCache {
         return tenantJdbcTemplates.get(tenant);
     }
 
+    public Map<String, JdbcTemplate> getAllJdbcTemplate() {
+        return tenantJdbcTemplates;
+    }
+
     public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate(String tenant) {
         return tenantNamedParameterJdbcTemplates.get(tenant);
     }
 
+    public Map<String, NamedParameterJdbcTemplate> getAllNamedParameterJdbcTemplate() {
+        return tenantNamedParameterJdbcTemplates;
+    }
 
     private List<TenantForm> getNeedAddTenants(List<TenantForm> allTenants) {
         List<TenantForm> needAddTenants = Lists.newArrayList();
