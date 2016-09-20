@@ -390,7 +390,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
     public int update(final AnLog record) {
         StringBuilder sql = new StringBuilder();
         sql.append("update ").append(TABLE_NAME)
-                .append("set action_type = ?,feature_type = ?,action_info = ? ")
+                .append(" set action_type = ?,feature_type = ?,action_info = ? ")
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();
@@ -422,7 +422,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
     public int batchUpdate(List<AnLog> records) {
         StringBuilder sql = new StringBuilder();
         sql.append("update ").append(TABLE_NAME)
-                .append("set action_type = ?,feature_type = ?,action_info = ? ")
+                .append(" set action_type = ?,feature_type = ?,action_info = ? ")
                 .append(" where 1 = 1 ");
 
         BatchPreparedStatementSetter setter = new BatchPreparedStatementSetter() {

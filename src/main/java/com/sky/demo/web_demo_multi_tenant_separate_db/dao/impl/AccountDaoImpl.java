@@ -124,7 +124,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
     public int update(Account record) {
         StringBuilder sql = new StringBuilder();
         sql.append("update ").append(TABLE_NAME)
-                .append("set user_name = ?, password = ? ")
+                .append(" set user_name = ?, password = ? ")
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();

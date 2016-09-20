@@ -152,7 +152,7 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
     public int update(Tenant record) {
         StringBuilder sql = new StringBuilder();
         sql.append("update ").append(TABLE_NAME)
-                .append("set name = ?,db_name = ?,status = ? ")
+                .append(" set name = ?,db_name = ?,status = ? ")
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();

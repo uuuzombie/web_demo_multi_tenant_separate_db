@@ -3,6 +3,8 @@ package com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog;
 import java.util.List;
 
 import com.google.common.base.Objects;
+import com.sky.demo.web_demo_multi_tenant_separate_db.model.ActionType;
+import com.sky.demo.web_demo_multi_tenant_separate_db.model.FeatureType;
 
 /**
  * Created by rg on 2015/6/30.
@@ -10,8 +12,8 @@ import com.google.common.base.Objects;
 public class AnLogUpdateRequest {
 
     private long id;
-    private int actionType;
-    private int featureType;
+    private ActionType actionType;
+    private FeatureType featureType;
     private List<BaseAnActionInfo> actionInfo;
 
     public long getId() {
@@ -22,20 +24,20 @@ public class AnLogUpdateRequest {
         this.id = id;
     }
 
-    public int getActionType() {
-        return actionType;
-    }
-
-    public void setActionType(int actionType) {
-        this.actionType = actionType;
-    }
-
-    public int getFeatureType() {
+    public FeatureType getFeatureType() {
         return featureType;
     }
 
-    public void setFeatureType(int featureType) {
+    public void setFeatureType(FeatureType featureType) {
         this.featureType = featureType;
+    }
+
+    public ActionType getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(ActionType actionType) {
+        this.actionType = actionType;
     }
 
     public List<BaseAnActionInfo> getActionInfo() {

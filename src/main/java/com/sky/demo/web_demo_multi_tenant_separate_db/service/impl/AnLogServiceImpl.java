@@ -81,8 +81,8 @@ public class AnLogServiceImpl { //implements AnLogService {
         public AnLog apply(AnLogUpdateRequest request) {
             AnLog log = new AnLog();
             log.setId(request.getId());
-            log.setActionType(request.getActionType());
-            log.setFeatureType(request.getFeatureType());
+            log.setActionType(request.getActionType().getCode());
+            log.setFeatureType(request.getFeatureType().getCode());
 
             String actionInfo = JsonUtil.writeValueAsString(request.getActionInfo());
             log.setActionInfo(actionInfo);
