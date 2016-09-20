@@ -62,6 +62,20 @@ public class TenantServiceImpl implements TenantService {
         }
     };
 
+    private static final Function<TenantForm, Tenant> transfer2UpdateTenant = new Function<TenantForm, Tenant>() {
+        @Override
+        public Tenant apply(TenantForm input) {
+            Tenant tenant = new Tenant();
+            tenant.setId(input.getId());
+            tenant.setName(input.getName());
+            tenant.setDbName(input.getDbName());
+            tenant.setCreateTime(new Date());
+            tenant.setStatus(input.getStatus() == null ? Tenant.Status.NORMAL.getCode() : input.getStatus().getCode());
+
+            return tenant;
+        }
+    };
+
     @Override
     public TenantForm query(int id) {
         Map<String, Object> condition = Maps.newHashMap();
@@ -140,7 +154,7 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public boolean update(TenantForm record) {
-        Tenant tenant = transfer2Tenant.apply(record);
+        Tenant tenant = transfer2UpdateTenant.apply(record);
         int row = tenantDao.update(tenant);
         return row > 0;
     }

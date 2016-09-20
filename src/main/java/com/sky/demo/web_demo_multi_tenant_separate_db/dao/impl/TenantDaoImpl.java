@@ -79,6 +79,11 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
             params.add(Timestamp.valueOf(endTime));
         }
 
+        String ids = (String) condition.get("ids");
+        if (StringUtils.isNotBlank(ids)) {
+            sql.append("and id in (").append(ids).append(") ");
+        }
+
         Integer limit = (Integer) condition.get(LIMIT);
         if (limit != null) {
             sql.append("limit ? ");
@@ -118,6 +123,11 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
         if (StringUtils.isNotEmpty(endTime)) {
             sql.append("and create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
+        }
+
+        String ids = (String) condition.get("ids");
+        if (StringUtils.isNotBlank(ids)) {
+            sql.append("and id in (").append(ids).append(") ");
         }
 
         int count = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Integer.class);

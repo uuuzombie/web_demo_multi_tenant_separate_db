@@ -19,7 +19,7 @@ COMMENT ON COLUMN tenant_user.create_time IS '创建时间';
 COMMENT ON COLUMN tenant_user.status IS '状态 1-正常 2-删除';
 
 create index idx_tenant_user_tenant_id on tenant_user(tenant_id);
-create index idx_tenant_user_user_name on tenant_user(user_name);
+create unique index unique_idx_tenant_user_user_name on tenant_user(user_name);
 
 
 

@@ -66,6 +66,11 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
             params.add(userName);
         }
 
+        String ids = (String) condition.get("ids");
+        if (StringUtils.isNotBlank(ids)) {
+            sql.append("and id in (").append(ids).append(") ");
+        }
+
         Integer limit = (Integer) condition.get(LIMIT);
         if (limit != null) {
             sql.append("limit ? ");
@@ -91,8 +96,17 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
                 .append(" from ").append(TABLE_NAME)
                 .append(" where 1 = 1 ");
 
-
         List<Object> params = Lists.newArrayList();
+        String userName = (String) condition.get("userName");
+        if (StringUtils.isNotEmpty(userName)) {
+            sql.append("and user_name >= ? ");
+            params.add(userName);
+        }
+
+        String ids = (String) condition.get("ids");
+        if (StringUtils.isNotBlank(ids)) {
+            sql.append("and id in (").append(ids).append(") ");
+        }
 
         int count = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Integer.class);
         return count;

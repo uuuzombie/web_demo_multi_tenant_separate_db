@@ -60,6 +60,19 @@ public class TenantUserServiceImpl implements TenantUserService {
         }
     };
 
+    private static final Function<TenantUserForm, TenantUser> transfer2UpdateTenantUser = new Function<TenantUserForm, TenantUser>() {
+        @Override
+        public TenantUser apply(TenantUserForm input) {
+            TenantUser tenantUser = new TenantUser();
+            tenantUser.setId(input.getId());
+            tenantUser.setTenantId(input.getTenantId());
+            tenantUser.setUserName(input.getUserName());
+            tenantUser.setCreateTime(new Date());
+            tenantUser.setStatus(input.getStatus() == null ? TenantUser.Status.NORMAL.getCode() : input.getStatus().getCode());
+            return tenantUser;
+        }
+    };
+
     @Override
     public TenantUserForm query(int id) {
         Map<String, Object> condition = Maps.newHashMap();
@@ -108,6 +121,7 @@ public class TenantUserServiceImpl implements TenantUserService {
     @Override
     public Pager<TenantUserForm> queryList(TenantUserQueryRequest request) {
         Map<String, Object> condition = Maps.newHashMap();
+        condition.put("userName", request.getUserName());
         condition.put("beginTime", request.getBeginDate() + " 00:00:00");
         condition.put("endTime", request.getEndDate() + " 23:59:59");
 
@@ -151,7 +165,7 @@ public class TenantUserServiceImpl implements TenantUserService {
 
     @Override
     public boolean update(TenantUserForm record) {
-        TenantUser tenantUser = transfer2TenantUser.apply(record);
+        TenantUser tenantUser = transfer2UpdateTenantUser.apply(record);
         int row = tenantUserDao.update(tenantUser);
         return row > 0;
     }

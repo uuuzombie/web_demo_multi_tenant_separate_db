@@ -126,6 +126,11 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
             params.add(Timestamp.valueOf(endTime));
         }
 
+        String ids = (String) condition.get("ids");
+        if (StringUtils.isNotBlank(ids)) {
+            sql.append("and id in (").append(ids).append(") ");
+        }
+
         Integer limit = (Integer) condition.get(LIMIT);
         if (limit != null) {
             sql.append("limit ? ");
@@ -224,6 +229,11 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
         if (StringUtils.isNotEmpty(endTime)) {
             sql.append("and create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
+        }
+
+        String ids = (String) condition.get("ids");
+        if (StringUtils.isNotBlank(ids)) {
+            sql.append("and id in (").append(ids).append(") ");
         }
 
         Integer limit = (Integer) condition.get(LIMIT);

@@ -1,8 +1,8 @@
 
 create table tenant(
 	id serial not null primary key,
-	name varchar(255) not null,
-	db_name varchar(255) not null,
+	name varchar(255) not null unique,
+	db_name varchar(255) not null unique,
 	create_time timestamp not null,
 	status smallint not null default 1
 );

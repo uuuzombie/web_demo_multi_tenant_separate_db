@@ -11,10 +11,7 @@ import com.sky.demo.web_demo_multi_tenant_separate_db.util.RetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -47,9 +44,9 @@ public class TenantUserController {
         return result;
     }
 
-    @RequestMapping("/queryByUserName/{userName}")
+    @RequestMapping("/queryByUserName")
     @ResponseBody
-    public RetData<TenantUserForm> queryByUserName(@PathVariable String userName) {
+    public RetData<TenantUserForm> queryByUserName(@RequestParam String userName) {
         RetData<TenantUserForm> result = null;
         try {
             TenantUserForm TenantUserForm = tenantUserService.queryByUserName(userName);
