@@ -80,6 +80,7 @@ public class TenantServiceImpl implements TenantService {
     public TenantForm query(int id) {
         Map<String, Object> condition = Maps.newHashMap();
         condition.put("id", id);
+        condition.put("status", Tenant.Status.NORMAL.getCode());
 
         TenantForm result = null;
         Tenant tenant = tenantDao.select(condition);
@@ -92,9 +93,12 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public List<TenantForm> queryList(List<Integer> ids) {
         Map<String, Object> condition = Maps.newHashMap();
+        condition.put("status", Tenant.Status.NORMAL.getCode());
 
-        String strIds = Joiner.on(",").skipNulls().join(ids);
-        condition.put("ids", strIds);
+        if (CollectionUtils.isNotEmpty(ids)) {
+            String strIds = Joiner.on(",").skipNulls().join(ids);
+            condition.put("ids", strIds);
+        }
 
         List<TenantForm> result = Lists.newArrayList();
         List<Tenant> tenants = tenantDao.selectList(condition);
@@ -113,6 +117,7 @@ public class TenantServiceImpl implements TenantService {
         Map<String, Object> condition = Maps.newHashMap();
         condition.put("beginTime", queryRequest.getBeginDate() + " 00:00:00");
         condition.put("endTime", queryRequest.getEndDate() + " 23:59:59");
+        condition.put("status", Tenant.Status.NORMAL.getCode());
 
         long totalRecord = tenantDao.selectCount(condition);
         Pager<TenantForm> ret = new Pager<TenantForm>(totalRecord, queryRequest.getPageNumber(), queryRequest.getPageSize());

@@ -60,6 +60,12 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
             params.add(Timestamp.valueOf(endTime));
         }
 
+        Integer status = (Integer) condition.get("status");
+        if (status != null) {
+            sql.append("and status = ? ");
+            params.add(status);
+        }
+
         RowMapper<TenantUser> rowMapper = BeanPropertyRowMapper.newInstance(TenantUser.class);
         TenantUser result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
         return result;
@@ -89,6 +95,12 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         if (StringUtils.isNotEmpty(endTime)) {
             sql.append("and create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
+        }
+
+        Integer status = (Integer) condition.get("status");
+        if (status != null) {
+            sql.append("and status = ? ");
+            params.add(status);
         }
 
         String ids = (String) condition.get("ids");
@@ -140,6 +152,12 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         if (StringUtils.isNotEmpty(endTime)) {
             sql.append("and create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
+        }
+
+        Integer status = (Integer) condition.get("status");
+        if (status != null) {
+            sql.append("and status = ? ");
+            params.add(status);
         }
 
         String ids = (String) condition.get("ids");

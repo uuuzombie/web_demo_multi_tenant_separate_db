@@ -77,6 +77,7 @@ public class TenantUserServiceImpl implements TenantUserService {
     public TenantUserForm query(int id) {
         Map<String, Object> condition = Maps.newHashMap();
         condition.put("id", id);
+        condition.put("status", Tenant.Status.NORMAL.getCode());
 
         TenantUserForm result = null;
         TenantUser tenantUser = tenantUserDao.select(condition);
@@ -90,6 +91,7 @@ public class TenantUserServiceImpl implements TenantUserService {
     public TenantUserForm queryByUserName(String userName) {
         Map<String, Object> condition = Maps.newHashMap();
         condition.put("userName", userName);
+        condition.put("status", Tenant.Status.NORMAL.getCode());
 
         TenantUserForm result = null;
         TenantUser tenantUser = tenantUserDao.select(condition);
@@ -102,6 +104,7 @@ public class TenantUserServiceImpl implements TenantUserService {
     @Override
     public List<TenantUserForm> queryList(List<Integer> ids) {
         Map<String, Object> condition = Maps.newHashMap();
+        condition.put("status", Tenant.Status.NORMAL.getCode());
 
         String strIds = Joiner.on(",").skipNulls().join(ids);
         condition.put("ids", strIds);
@@ -124,6 +127,7 @@ public class TenantUserServiceImpl implements TenantUserService {
         condition.put("userName", request.getUserName());
         condition.put("beginTime", request.getBeginDate() + " 00:00:00");
         condition.put("endTime", request.getEndDate() + " 23:59:59");
+        condition.put("status", Tenant.Status.NORMAL.getCode());
 
         long totalRecord = tenantUserDao.selectCount(condition);
         Pager<TenantUserForm> ret = new Pager<TenantUserForm>(totalRecord, request.getPageNumber(), request.getPageSize());

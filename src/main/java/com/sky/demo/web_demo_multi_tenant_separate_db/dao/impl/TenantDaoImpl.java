@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
 
 /**
  * Created by user on 16/9/18.
@@ -53,6 +54,12 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
             params.add(Timestamp.valueOf(endTime));
         }
 
+        Integer status = (Integer) condition.get("status");
+        if (status != null) {
+            sql.append("and status = ? ");
+            params.add(status);
+        }
+
         RowMapper<Tenant> rowMapper = BeanPropertyRowMapper.newInstance(Tenant.class);
         Tenant result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
 
@@ -77,6 +84,12 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
         if (StringUtils.isNotEmpty(endTime)) {
             sql.append("and create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
+        }
+
+        Integer status = (Integer) condition.get("status");
+        if (status != null) {
+            sql.append("and status = ? ");
+            params.add(status);
         }
 
         String ids = (String) condition.get("ids");
@@ -123,6 +136,12 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
         if (StringUtils.isNotEmpty(endTime)) {
             sql.append("and create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
+        }
+
+        Integer status = (Integer) condition.get("status");
+        if (status != null) {
+            sql.append("and status = ? ");
+            params.add(status);
         }
 
         String ids = (String) condition.get("ids");
