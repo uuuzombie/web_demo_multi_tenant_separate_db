@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
 import com.google.common.base.Joiner;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.ibatis.session.RowBounds;
@@ -22,10 +20,8 @@ import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.*;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.ActionType;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.AnLog;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.FeatureType;
-import com.sky.demo.web_demo_multi_tenant_separate_db.service.AnLogService;
 import com.sky.demo.web_demo_multi_tenant_separate_db.util.HttpUtil;
 import com.sky.demo.web_demo_multi_tenant_separate_db.util.json.JsonUtil;
-import org.springframework.stereotype.Service;
 
 
 /**
@@ -64,17 +60,17 @@ public class AnLogServiceImpl { //implements AnLogService {
 
     private static final Function<AnLogInsertRequest, AnLog> transferInsertReq2AnLog = new Function<AnLogInsertRequest, AnLog>() {
         @Override
-        public AnLog apply(AnLogInsertRequest request) {
+        public AnLog apply(AnLogInsertRequest input) {
             AnLog log = new AnLog();
             log.setCreateTime(new Date());
-            log.setUserId(request.getUserId());
-            log.setRoleId(request.getRoleId());
+            log.setUserId(input.getUserId());
+            log.setRoleId(input.getRoleId());
             log.setServerIp(HttpUtil.getLocalIp());
-            log.setClientIp(request.getClientIp());
-            log.setActionType(request.getActionType());
-            log.setFeatureType(request.getFeatureType());
+            log.setClientIp(input.getClientIp());
+            log.setActionType(input.getActionType().getCode());
+            log.setFeatureType(input.getFeatureType().getCode());
 
-            String actionInfo = JsonUtil.writeValueAsString(request.getActionInfo());
+            String actionInfo = JsonUtil.writeValueAsString(input.getActionInfo());
             log.setActionInfo(actionInfo);
             return log;
         }
@@ -181,7 +177,7 @@ public class AnLogServiceImpl { //implements AnLogService {
     //@Override
     public boolean updateList(List<AnLogUpdateRequest> records) {
 //        Map<String,Object> params = Maps.newHashMap();
-//        AnLog log = transferUpdateReq2AnLog.apply(request);
+//        AnLog log = transferUpdateReq2AnLog.apply(input);
 //        int row = anLogDao.batchUpdate(ids, log);
         return false; //row > 0;
     }

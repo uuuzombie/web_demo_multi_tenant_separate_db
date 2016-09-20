@@ -31,7 +31,7 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
     public Tenant select(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
         sql.append("select ").append(TABLE_COLUMN)
-                .append("from ").append(TABLE_NAME)
+                .append(" from ").append(TABLE_NAME)
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();
@@ -63,7 +63,7 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
     public List<Tenant> selectList(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
         sql.append("select ").append(TABLE_COLUMN)
-                .append("from ").append(TABLE_NAME)
+                .append(" from ").append(TABLE_NAME)
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();

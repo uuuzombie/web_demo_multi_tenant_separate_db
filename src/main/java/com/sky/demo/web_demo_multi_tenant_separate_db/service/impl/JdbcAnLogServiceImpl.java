@@ -80,17 +80,17 @@ public class JdbcAnLogServiceImpl implements AnLogService {
 
     private static final Function<AnLogInsertRequest, AnLog> transferInsertReq2AnLog = new Function<AnLogInsertRequest, AnLog>() {
         @Override
-        public AnLog apply(AnLogInsertRequest request) {
+        public AnLog apply(AnLogInsertRequest input) {
             AnLog log = new AnLog();
             log.setCreateTime(new Date());
-            log.setUserId(request.getUserId());
-            log.setRoleId(request.getRoleId());
+            log.setUserId(input.getUserId());
+            log.setRoleId(input.getRoleId());
             log.setServerIp(HttpUtil.getLocalIp());
-            log.setClientIp(request.getClientIp());
-            log.setActionType(request.getActionType());
-            log.setFeatureType(request.getFeatureType());
+            log.setClientIp(input.getClientIp());
+            log.setActionType(input.getActionType().getCode());
+            log.setFeatureType(input.getFeatureType().getCode());
 
-            String actionInfo = JsonUtil.writeValueAsString(request.getActionInfo());
+            String actionInfo = JsonUtil.writeValueAsString(input.getActionInfo());
             log.setActionInfo(actionInfo);
             return log;
         }

@@ -30,11 +30,11 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
     public Account select(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
         sql.append("select ").append(TABLE_COLUMN)
-                .append("from ").append(TABLE_NAME)
+                .append(" from ").append(TABLE_NAME)
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();
-        Long id = (Long) condition.get("id");
+        Integer id = (Integer) condition.get("id");
         if (id != null) {
             sql.append("and id = ? ");
             params.add(id);
@@ -56,7 +56,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
     public List<Account> selectList(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
         sql.append("select ").append(TABLE_COLUMN)
-                .append("from ").append(TABLE_NAME)
+                .append(" from ").append(TABLE_NAME)
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();
@@ -88,7 +88,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
     public int selectCount(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
         sql.append("select count(*) ")
-                .append("from ").append(TABLE_NAME)
+                .append(" from ").append(TABLE_NAME)
                 .append(" where 1 = 1 ");
 
 
