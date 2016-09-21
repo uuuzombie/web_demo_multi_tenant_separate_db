@@ -47,4 +47,20 @@ public class CommonDataSourceCacheController {
         }
         return result;
     }
+
+    @RequestMapping("/reloadDataSource")
+    @ResponseBody
+    public RetData<Boolean> reloadDataSource() {
+        RetData<Boolean> result = null;
+
+        try {
+            commonDataSourceCache.loadTenants();
+
+            result = RetUtil.buildSuccessRet(Boolean.TRUE);
+        } catch (Exception e) {
+            logger.error("query all jdbcTemplate error", e);
+            result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
+        }
+        return result;
+    }
 }

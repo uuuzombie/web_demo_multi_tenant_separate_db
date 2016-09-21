@@ -3,15 +3,16 @@ package com.sky.demo.web_demo_multi_tenant_separate_db.cache;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantForm;
-import com.sky.demo.web_demo_multi_tenant_separate_db.model.Tenant;
 import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantService;
 import com.sky.demo.web_demo_multi_tenant_separate_db.util.AppConfig;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -99,11 +100,21 @@ public class CommonDataSourceCache {
         for (TenantForm tenantForm : needAddTenants) {
             DataSource dataSource = buildDataSource(tenantForm);
 
-            JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-            tenantJdbcTemplates.put(tenantForm.getName(), jdbcTemplate);
+            boolean isConnected = false;
+            try {
+                DataSourceUtils.getConnection(dataSource);
+                isConnected = true;
+            } catch (CannotGetJdbcConnectionException e) {
+                logger.error("get db connection failed", e);
+            }
 
-            NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-            tenantNamedParameterJdbcTemplates.put(tenantForm.getName(), namedParameterJdbcTemplate);
+            if (isConnected) {
+                JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+                tenantJdbcTemplates.put(tenantForm.getName(), jdbcTemplate);
+
+                NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+                tenantNamedParameterJdbcTemplates.put(tenantForm.getName(), namedParameterJdbcTemplate);
+            }
         }
     }
 
