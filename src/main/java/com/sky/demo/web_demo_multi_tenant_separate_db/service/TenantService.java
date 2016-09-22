@@ -13,6 +13,10 @@ public interface TenantService {
 
     TenantForm query(int id);
 
+    TenantForm queryByName(String name);
+
+    TenantForm queryByToken(String token);
+
     List<TenantForm> queryList(List<Integer> ids);
 
     Pager<TenantForm> queryList(TenantQueryRequest queryRequest);

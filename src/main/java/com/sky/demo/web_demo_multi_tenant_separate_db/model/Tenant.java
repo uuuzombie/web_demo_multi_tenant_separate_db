@@ -13,6 +13,7 @@ public class Tenant implements Serializable {
     private static final long serialVersionUID = -1394462897506118206L;
     private int id;
     private String name;
+    private String token;
     private String dbName;
     private Date createTime;
     private int status;
@@ -31,6 +32,14 @@ public class Tenant implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getDbName() {
@@ -62,6 +71,7 @@ public class Tenant implements Serializable {
         return Objects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
+                .add("token", token)
                 .add("dbName", dbName)
                 .add("createTime", createTime)
                 .add("status", status)

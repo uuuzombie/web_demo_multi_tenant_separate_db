@@ -91,6 +91,34 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
+    public TenantForm queryByName(String name) {
+        Map<String, Object> condition = Maps.newHashMap();
+        condition.put("name", name);
+        condition.put("status", Tenant.Status.NORMAL.getCode());
+
+        TenantForm result = null;
+        Tenant tenant = tenantDao.select(condition);
+        if (tenant != null) {
+            result = transfer2Form.apply(tenant);
+        }
+        return result;
+    }
+
+    @Override
+    public TenantForm queryByToken(String token) {
+        Map<String, Object> condition = Maps.newHashMap();
+        condition.put("token", token);
+        condition.put("status", Tenant.Status.NORMAL.getCode());
+
+        TenantForm result = null;
+        Tenant tenant = tenantDao.select(condition);
+        if (tenant != null) {
+            result = transfer2Form.apply(tenant);
+        }
+        return result;
+    }
+
+    @Override
     public List<TenantForm> queryList(List<Integer> ids) {
         Map<String, Object> condition = Maps.newHashMap();
         condition.put("status", Tenant.Status.NORMAL.getCode());

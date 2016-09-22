@@ -11,10 +11,7 @@ import com.sky.demo.web_demo_multi_tenant_separate_db.util.RetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -38,6 +35,36 @@ public class TenantController {
         RetData<TenantForm> result = null;
         try {
             TenantForm TenantForm = tenantService.query(id);
+
+            result = RetUtil.buildSuccessRet(TenantForm);
+        } catch (Exception e) {
+            logger.error("query log error",e);
+            result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
+        }
+        return result;
+    }
+
+    @RequestMapping("/queryByName")
+    @ResponseBody
+    public RetData<TenantForm> queryByName(@RequestParam String name) {
+        RetData<TenantForm> result = null;
+        try {
+            TenantForm TenantForm = tenantService.queryByName(name);
+
+            result = RetUtil.buildSuccessRet(TenantForm);
+        } catch (Exception e) {
+            logger.error("query log error",e);
+            result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
+        }
+        return result;
+    }
+
+    @RequestMapping("/queryByToken")
+    @ResponseBody
+    public RetData<TenantForm> queryByToken(@RequestParam String token) {
+        RetData<TenantForm> result = null;
+        try {
+            TenantForm TenantForm = tenantService.queryByToken(token);
 
             result = RetUtil.buildSuccessRet(TenantForm);
         } catch (Exception e) {

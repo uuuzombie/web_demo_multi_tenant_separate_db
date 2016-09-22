@@ -130,7 +130,7 @@
     <input type="hidden" name="flightDate" value="">
     <input type="hidden" name="searchPolicyType" value="">
     <input type="hidden" name="status" value="1">
-    <input type="hidden" name="operator" value="qunaradmin">
+    <input type="hidden" name="operator" value="admin">
     <input type="hidden" name="src" value="">
     <input name="currentPage" id="currentPage" value="" type="hidden">
     <input name="pageSize" id="pageSize" value="" type="hidden">
@@ -229,7 +229,7 @@
 </div>
 <div class="footer">
     <div class="container">
-        <p>Copyright ©2015 Qunar.com</p>
+        <p>Copyright ©2015 </p>
     </div>
 </div>
 <script src="/static/js/pages/jquery-1.7.2.min.js"></script>

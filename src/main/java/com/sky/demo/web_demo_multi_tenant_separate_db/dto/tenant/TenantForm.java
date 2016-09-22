@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.Tenant;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by user on 16/9/18.
@@ -13,6 +14,7 @@ public class TenantForm implements Serializable {
     private static final long serialVersionUID = 5802983685287791418L;
     private int id;
     private String name;
+    private String token;
     private String dbName;
     private String createTime;
     private Tenant.Status status;
@@ -31,6 +33,14 @@ public class TenantForm implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getDbName() {
@@ -62,9 +72,17 @@ public class TenantForm implements Serializable {
         return Objects.toStringHelper(this)
                 .add("id", id)
                 .add("name", name)
+                .add("token", token)
                 .add("dbName", dbName)
                 .add("createTime", createTime)
                 .add("status", status)
                 .toString();
+    }
+
+    public static void main(String[] args) {
+
+        for (int i = 0; i < 5 ; ++i) {
+            System.out.println(UUID.randomUUID().toString());
+        }
     }
 }

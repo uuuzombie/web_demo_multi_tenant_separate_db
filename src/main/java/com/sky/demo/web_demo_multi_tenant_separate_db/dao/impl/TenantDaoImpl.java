@@ -25,8 +25,8 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
     private static final Logger logger = LoggerFactory.getLogger(TenantDaoImpl.class);
 
     private static final String TABLE_NAME = "tenant";
-    private static final String TABLE_COLUMN = "id, name, db_name, create_time, status";
-    private static final String INSERT_COLUMN = "name, db_name, create_time, status";
+    private static final String TABLE_COLUMN = "id, name, token, db_name, create_time, status";
+    private static final String INSERT_COLUMN = "name, token, db_name, create_time, status";
 
     @Override
     public Tenant select(Map<String, Object> condition) {
@@ -40,6 +40,18 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
         if (id != null) {
             sql.append("and id = ? ");
             params.add(id);
+        }
+
+        String name = (String) condition.get("name");
+        if (StringUtils.isNotBlank(name)) {
+            sql.append("and name = ? ");
+            params.add(name);
+        }
+
+        String token = (String) condition.get("token");
+        if (StringUtils.isNotBlank(token)) {
+            sql.append("and token = ? ");
+            params.add(token);
         }
 
         String beginTime = (String) condition.get("beginTime");
@@ -74,6 +86,18 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();
+        String name = (String) condition.get("name");
+        if (StringUtils.isNotBlank(name)) {
+            sql.append("and name = ? ");
+            params.add(name);
+        }
+
+        String token = (String) condition.get("token");
+        if (StringUtils.isNotBlank(token)) {
+            sql.append("and token = ? ");
+            params.add(token);
+        }
+
         String beginTime = (String) condition.get("beginTime");
         if (StringUtils.isNotEmpty(beginTime)) {
             sql.append("and create_time >= ? ");
@@ -124,8 +148,19 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
                 .append("from ").append(TABLE_NAME)
                 .append(" where 1 = 1 ");
 
-
         List<Object> params = Lists.newArrayList();
+        String name = (String) condition.get("name");
+        if (StringUtils.isNotBlank(name)) {
+            sql.append("and name = ? ");
+            params.add(name);
+        }
+
+        String token = (String) condition.get("token");
+        if (StringUtils.isNotBlank(token)) {
+            sql.append("and token = ? ");
+            params.add(token);
+        }
+
         String beginTime = (String) condition.get("beginTime");
         if (StringUtils.isNotEmpty(beginTime)) {
             sql.append("and create_time >= ? ");
@@ -164,6 +199,7 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
 
         List<Object> params = Lists.newArrayList();
         params.add(record.getName());
+        params.add(record.getToken());
         params.add(record.getDbName());
         params.add(record.getCreateTime());
         params.add(record.getStatus());
@@ -181,11 +217,12 @@ public class TenantDaoImpl extends BaseDao implements TenantDao {
     public int update(Tenant record) {
         StringBuilder sql = new StringBuilder();
         sql.append("update ").append(TABLE_NAME)
-                .append(" set name = ?,db_name = ?,status = ? ")
+                .append(" set name = ?, token = ?, db_name = ?, status = ? ")
                 .append(" where 1 = 1 ");
 
         List<Object> params = Lists.newArrayList();
         params.add(record.getName());
+        params.add(record.getToken());
         params.add(record.getDbName());
         params.add(record.getStatus());
 
