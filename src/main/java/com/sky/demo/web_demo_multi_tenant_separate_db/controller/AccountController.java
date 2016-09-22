@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.sky.demo.web_demo_multi_tenant_separate_db.base.Pager;
 import com.sky.demo.web_demo_multi_tenant_separate_db.base.RetData;
 import com.sky.demo.web_demo_multi_tenant_separate_db.base.RetStatus;
+import com.sky.demo.web_demo_multi_tenant_separate_db.context.AppContext;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.account.AccountQueryRequest;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.Account;
 import com.sky.demo.web_demo_multi_tenant_separate_db.service.AccountService;
@@ -11,10 +12,7 @@ import com.sky.demo.web_demo_multi_tenant_separate_db.util.RetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -34,9 +32,11 @@ public class AccountController {
 
     @RequestMapping("/query/{id}")
     @ResponseBody
-    public RetData<Account> query(@PathVariable int id) {
+    public RetData<Account> query(@PathVariable int id, @RequestParam String userName) {
         RetData<Account> result = null;
         try {
+            AppContext.initAppResourcesByUserName(userName);
+
             Account Account = accountService.query(id);
 
             result = RetUtil.buildSuccessRet(Account);

@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.sql.SQLException;
 
 /**
  * Created by user on 16/9/20.
@@ -100,6 +101,7 @@ public class AppContext implements Serializable {
 
     public static void initAppResourcesByUserName(String userName) {
         Preconditions.checkState(StringUtils.isNotBlank(userName), "userName is blank!!");
+        logger.debug("init App Resources user name = " + userName);
 
         TenantUserService tenantUserService = SpringUtil.getCtx().getBean(TenantUserService.class);
         TenantUserForm tenantUser = tenantUserService.queryByUserName(userName);
@@ -113,10 +115,21 @@ public class AppContext implements Serializable {
         setTenant(tenant);
         setJdbcTemplate();
         setNamedParameterJdbcTemplate();
+
+        try {
+            logger.debug("   ====> init AppResources by userName: " + userName + ", tenantUser=" + getTenantUser().getUserName()
+                    + ", tenant = " + getTenant().getDbName() + ", jdbcTemplate = "
+                    + getJdbcTemplate().getDataSource().getConnection().getMetaData().getURL());
+        } catch (SQLException e) {
+            logger.error("print app resource error");
+        }
+
     }
 
     public static void initAppResourcesByToken(String token) {
         Preconditions.checkState(StringUtils.isNotBlank(token), "token is blank!!");
+        logger.debug("init App Resources token = " + token);
+
         TenantService tenantService = SpringUtil.getCtx().getBean(TenantService.class);
         TenantForm tenant = tenantService.queryByToken(token);
         Preconditions.checkNotNull(tenant, "tenant is null!");
@@ -125,6 +138,13 @@ public class AppContext implements Serializable {
         setJdbcTemplate();
         setNamedParameterJdbcTemplate();
 
+        try {
+            logger.debug("   ====> init AppResources by token: " + token + ", tenantUser=" + getTenantUser().getUserName()
+                    + ", tenant = " + getTenant().getDbName() + ", jdbcTemplate = "
+                    + getJdbcTemplate().getDataSource().getConnection().getMetaData().getURL());
+        } catch (SQLException e) {
+            logger.error("print app resource error");
+        }
     }
 
     /**
