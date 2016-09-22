@@ -47,7 +47,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
         }
 
         RowMapper<Account> rowMapper = BeanPropertyRowMapper.newInstance(Account.class);
-        Account result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
+        Account result = getTenantJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
 
         return result;
     }
@@ -84,7 +84,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
         }
 
         RowMapper<Account> rowMapper = BeanPropertyRowMapper.newInstance(Account.class);
-        List<Account> result = getJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
+        List<Account> result = getTenantJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
 
         return result;
     }
@@ -108,7 +108,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
             sql.append("and id in (").append(ids).append(") ");
         }
 
-        int count = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Integer.class);
+        int count = getTenantJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Integer.class);
         return count;
     }
 
@@ -125,7 +125,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
         params.add(record.getUserName());
         params.add(record.getPassword());
 
-        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+        int row = getTenantJdbcTemplate().update(sql.toString(), params.toArray());
         return row;
     }
 
@@ -148,7 +148,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
         sql.append("and id = ? ");
         params.add(record.getId());
 
-        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+        int row = getTenantJdbcTemplate().update(sql.toString(), params.toArray());
         return row;
     }
 
@@ -167,7 +167,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
         sql.append("and id = ? ");
         params.add(id);
 
-        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+        int row = getTenantJdbcTemplate().update(sql.toString(), params.toArray());
         return row;
     }
 

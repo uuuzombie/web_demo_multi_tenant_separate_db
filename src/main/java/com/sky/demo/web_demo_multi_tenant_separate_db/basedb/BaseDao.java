@@ -1,5 +1,6 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.basedb;
 
+import com.sky.demo.web_demo_multi_tenant_separate_db.context.AppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,12 +20,11 @@ public abstract class BaseDao {
 
 
     @Resource
-    private JdbcTemplate jdbcTemplate;
-
+    private JdbcTemplate jdbcTemplate;          //default_db
     @Resource
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;      //default_db
 
-
+    //default_db
     public JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;
     }
@@ -40,4 +40,18 @@ public abstract class BaseDao {
     public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
+
+
+    //tenant dbs
+    public JdbcTemplate getTenantJdbcTemplate() {
+        return AppContext.getJdbcTemplate();
+    }
+
+    public NamedParameterJdbcTemplate getTenantNamedParameterJdbcTemplate() {
+        return AppContext.getNamedParameterJdbcTemplate();
+    }
+
+
+
+
 }

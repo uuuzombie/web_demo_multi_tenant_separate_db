@@ -1,10 +1,22 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.context;
 
+import com.google.common.base.Preconditions;
+import com.sky.demo.web_demo_multi_tenant_separate_db.cache.CommonDataSourceCache;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantForm;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserForm;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.Tenant;
+import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantService;
+import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantUserService;
+import com.sky.demo.web_demo_multi_tenant_separate_db.util.SpringUtil;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import javax.annotation.Resource;
 import java.io.Serializable;
 
 /**
@@ -14,7 +26,114 @@ public class AppContext implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(AppContext.class);
 
-    private static ThreadLocal<TenantForm> tenant = new ThreadLocal<>();
+    private static ThreadLocal<TenantForm> tenantThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<TenantUserForm> tenantUserThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<JdbcTemplate> jdbcTemplateThreadLocal = new ThreadLocal<>();
+    private static ThreadLocal<NamedParameterJdbcTemplate> namedParameterJdbcTemplateThreadLocal = new ThreadLocal<>();
 
 
+    public static TenantForm getTenant() {
+        return tenantThreadLocal.get();
+    }
+
+    public static void setTenant(TenantForm tenant) {
+        tenantThreadLocal.set(tenant);
+
+        if (tenant != null) {
+            MDC.put("tenant", tenant.getName());
+        }
+    }
+
+    public static void releaseTenant() {
+        tenantThreadLocal.remove();
+    }
+
+    public static TenantUserForm getTenantUser() {
+        return tenantUserThreadLocal.get();
+    }
+
+    public static void setTenantUser(TenantUserForm tenantUser) {
+        tenantUserThreadLocal.set(tenantUser);
+    }
+
+    public static void releaseTenantUser() {
+        tenantUserThreadLocal.remove();
+    }
+
+
+    public static JdbcTemplate getJdbcTemplate() {
+        return jdbcTemplateThreadLocal.get();
+    }
+
+    public static void setJdbcTemplate() {
+        JdbcTemplate jdbcTemplate = null;
+        CommonDataSourceCache commonDataSourceCache = SpringUtil.getCtx().getBean(CommonDataSourceCache.class);
+        if (commonDataSourceCache != null) {
+            TenantForm tenant = getTenant();
+            jdbcTemplate = commonDataSourceCache.getJdbcTemplate(tenant.getName());
+            jdbcTemplateThreadLocal.set(jdbcTemplate);
+        }
+    }
+
+    public static void releaseJdbcTemplate() {
+        jdbcTemplateThreadLocal.remove();
+    }
+
+    public static NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
+        return namedParameterJdbcTemplateThreadLocal.get();
+    }
+
+    public static void setNamedParameterJdbcTemplate() {
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = null;
+        CommonDataSourceCache commonDataSourceCache = SpringUtil.getCtx().getBean(CommonDataSourceCache.class);
+        if (commonDataSourceCache != null) {
+            TenantForm tenant = getTenant();
+            namedParameterJdbcTemplate = commonDataSourceCache.getNamedParameterJdbcTemplate(tenant.getName());
+            namedParameterJdbcTemplateThreadLocal.set(namedParameterJdbcTemplate);
+        }
+    }
+
+    public static void releaseNamedParameterJdbcTemplate() {
+        namedParameterJdbcTemplateThreadLocal.remove();
+    }
+
+
+    public static void initAppResourcesByUserName(String userName) {
+        Preconditions.checkState(StringUtils.isNotBlank(userName), "userName is blank!!");
+
+        TenantUserService tenantUserService = SpringUtil.getCtx().getBean(TenantUserService.class);
+        TenantUserForm tenantUser = tenantUserService.queryByUserName(userName);
+        Preconditions.checkNotNull(tenantUser, "tenant user is null!");
+
+        TenantService tenantService = SpringUtil.getCtx().getBean(TenantService.class);
+        TenantForm tenant = tenantService.query(tenantUser.getTenantId());
+        Preconditions.checkNotNull(tenant, "tenant is null!");
+
+        setTenantUser(tenantUser);
+        setTenant(tenant);
+        setJdbcTemplate();
+        setNamedParameterJdbcTemplate();
+    }
+
+    public static void initAppResourcesByToken(String token) {
+        Preconditions.checkState(StringUtils.isNotBlank(token), "token is blank!!");
+        TenantService tenantService = SpringUtil.getCtx().getBean(TenantService.class);
+        TenantForm tenant = tenantService.queryByToken(token);
+        Preconditions.checkNotNull(tenant, "tenant is null!");
+
+        setTenant(tenant);
+        setJdbcTemplate();
+        setNamedParameterJdbcTemplate();
+
+    }
+
+    /**
+     * 释放AppContext中资源
+     */
+    public static void releaseAppResources() {
+        releaseTenant();
+        releaseTenantUser();
+        releaseJdbcTemplate();
+        releaseNamedParameterJdbcTemplate();
+    }
 }

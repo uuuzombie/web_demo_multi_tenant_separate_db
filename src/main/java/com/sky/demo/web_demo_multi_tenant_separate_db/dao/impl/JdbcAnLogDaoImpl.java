@@ -68,7 +68,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
 
         //方式一
         RowMapper<AnLogDto> rowMapper = BeanPropertyRowMapper.newInstance(AnLogDto.class);
-        AnLogDto result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
+        AnLogDto result = getTenantJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
 
         //方式二
 //        AnLog result = getJdbcTemplate().queryForObject(sql.toString(), new ParameterizedRowMapper<AnLog>() {
@@ -147,7 +147,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
 
         // 方式一
         RowMapper<AnLogDto> rowMapper = BeanPropertyRowMapper.newInstance(AnLogDto.class);
-        List<AnLogDto> result = getJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
+        List<AnLogDto> result = getTenantJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
 
         //方式二
 //        List<AnLog> result = Lists.newArrayList();
@@ -248,7 +248,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
             params.add(offset);
         }
 
-        long count = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Long.class);
+        long count = getTenantJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Long.class);
         return count;
     }
 
@@ -273,7 +273,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
         params.add(record.getActionInfo());
 
         //方式一
-        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+        int row = getTenantJdbcTemplate().update(sql.toString(), params.toArray());
 
         //方式二
 //        int row = jdbcTemplate.update(sql.toString(), new PreparedStatementSetter() {
@@ -373,7 +373,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
             }
         };
 
-        int[] rows = getJdbcTemplate().batchUpdate(sql.toString(), setter);
+        int[] rows = getTenantJdbcTemplate().batchUpdate(sql.toString(), setter);
 
 
         //方式二
@@ -412,7 +412,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
         params.add(record.getId());
 
         //方式一
-        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+        int row = getTenantJdbcTemplate().update(sql.toString(), params.toArray());
 
         //方式二
 //        int row = getJdbcTemplate().update(sql.toString(), new PreparedStatementSetter() {
@@ -454,7 +454,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
             }
         };
 
-        int[] rows = getJdbcTemplate().batchUpdate(sql.toString(), setter);
+        int[] rows = getTenantJdbcTemplate().batchUpdate(sql.toString(), setter);
         return rows.length;
     }
 
@@ -470,7 +470,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
         params.add(id);
 
         //方式一
-        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+        int row = getTenantJdbcTemplate().update(sql.toString(), params.toArray());
 
         //方式二
 //        int row = getJdbcTemplate().update(sql,new PreparedStatementSetter() {
@@ -492,7 +492,7 @@ public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
         String strIds = Joiner.on(",").skipNulls().join(ids);
         sql.append("and id in (").append(strIds).append(") ");
 
-        int row = getJdbcTemplate().update(sql.toString());
+        int row = getTenantJdbcTemplate().update(sql.toString());
         return row;
     }
 
