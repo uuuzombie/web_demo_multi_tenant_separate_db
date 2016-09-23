@@ -96,6 +96,10 @@ public class AppContext implements Serializable {
     }
 
 
+    /**
+     * 初始化tenant，JdbcTemplate信息
+     * @param userName
+     */
     public static void initAppResourcesByUserName(String userName) {
         Preconditions.checkState(StringUtils.isNotBlank(userName), "userName is blank!!");
         logger.debug("init App Resources user name = " + userName);
@@ -119,6 +123,10 @@ public class AppContext implements Serializable {
 
     }
 
+    /**
+     * 初始化tenant，JdbcTemplate信息
+     * @param token
+     */
     public static void initAppResourcesByToken(String token) {
         Preconditions.checkState(StringUtils.isNotBlank(token), "token is blank!!");
         logger.debug("init App Resources token = " + token);

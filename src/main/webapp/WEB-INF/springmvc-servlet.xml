@@ -50,6 +50,12 @@
             </bean>
         </mvc:interceptor>
 
+        <!--DataSource Interceptor-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="dataSourceInterceptor" class="com.sky.demo.web_demo_multi_tenant_separate_db.interceptor.DataSourceInterceptor"/>
+        </mvc:interceptor>
+
         <!--&lt;!&ndash; 登录拦截器 &ndash;&gt;-->
         <!--<mvc:interceptor>-->
             <!--<mvc:mapping path="/**"/>-->
