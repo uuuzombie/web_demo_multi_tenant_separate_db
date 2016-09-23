@@ -12,7 +12,7 @@ public class TenantUserForm implements Serializable {
 
     private static final long serialVersionUID = 69462514897448375L;
     private int id;
-    private int tenantId;
+    private TenantForm tenant;
     private String userName;
     private String createTime;
     private TenantUser.Status status;
@@ -25,12 +25,12 @@ public class TenantUserForm implements Serializable {
         this.id = id;
     }
 
-    public int getTenantId() {
-        return tenantId;
+    public TenantForm getTenant() {
+        return tenant;
     }
 
-    public void setTenantId(int tenantId) {
-        this.tenantId = tenantId;
+    public void setTenant(TenantForm tenant) {
+        this.tenant = tenant;
     }
 
     public String getUserName() {
@@ -61,7 +61,7 @@ public class TenantUserForm implements Serializable {
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("id", id)
-                .add("tenantId", tenantId)
+                .add("tenant", tenant)
                 .add("userName", userName)
                 .add("createTime", createTime)
                 .add("status", status)

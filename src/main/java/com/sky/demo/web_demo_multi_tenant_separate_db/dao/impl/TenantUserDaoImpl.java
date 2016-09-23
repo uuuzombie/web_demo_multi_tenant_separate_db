@@ -3,6 +3,7 @@ package com.sky.demo.web_demo_multi_tenant_separate_db.dao.impl;
 import com.google.common.collect.Lists;
 import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dao.TenantUserDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserDto;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.TenantUser;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -26,14 +27,16 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
     private static final String TABLE_NAME = "tenant_user";
     private static final String TABLE_COLUMN = "id, tenant_id, user_name, create_time, status";
     private static final String INSERT_COLUMN = "tenant_id, user_name, create_time, status";
-
+    private static final String QUERY_COLUMN = "tba.id as id, tenant_id as tenantId, user_name as userName, create_time as createTime, status, "
+            + "tbb.name as tenantName, tbb.token as tenantToken, tbb.db_name as tenantDbName, tbb.create_time as tenantCreateTime, tbb.status as tenantStatus";
 
     @Override
-    public TenantUser select(Map<String, Object> condition) {
+    public TenantUserDto select(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select ").append(TABLE_COLUMN)
-                .append(" from ").append(TABLE_NAME)
-                .append(" where 1 = 1 ");
+        sql.append("select ").append(QUERY_COLUMN)
+                .append(" from ").append(TABLE_NAME).append(" as tba, tenant as tbb ")
+                .append(" where 1 = 1 ")
+                .append(" and tba.tenant_id = tbb.id ");
 
         List<Object> params = Lists.newArrayList();
         Integer id = (Integer) condition.get("id");
@@ -66,17 +69,18 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
             params.add(status);
         }
 
-        RowMapper<TenantUser> rowMapper = BeanPropertyRowMapper.newInstance(TenantUser.class);
-        TenantUser result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
+        RowMapper<TenantUserDto> rowMapper = BeanPropertyRowMapper.newInstance(TenantUserDto.class);
+        TenantUserDto result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
         return result;
     }
 
     @Override
-    public List<TenantUser> selectList(Map<String, Object> condition) {
+    public List<TenantUserDto> selectList(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select ").append(TABLE_COLUMN)
-                .append(" from ").append(TABLE_NAME)
-                .append(" where 1 = 1 ");
+        sql.append("select ").append(QUERY_COLUMN)
+                .append(" from ").append(TABLE_NAME).append(" as tba, tenant as tbb ")
+                .append(" where 1 = 1 ")
+                .append(" and tba.tenant_id = tbb.id ");
 
         List<Object> params = Lists.newArrayList();
         String userName = (String) condition.get("userName");
@@ -122,8 +126,8 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
 
         logger.info("select * params:" + params);
 
-        RowMapper<TenantUser> rowMapper = BeanPropertyRowMapper.newInstance(TenantUser.class);
-        List<TenantUser> result = getJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
+        RowMapper<TenantUserDto> rowMapper = BeanPropertyRowMapper.newInstance(TenantUserDto.class);
+        List<TenantUserDto> result = getJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
 
         return result;
     }
@@ -131,9 +135,10 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
     @Override
     public int selectCount(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select count(*) ")
-                .append(" from ").append(TABLE_NAME)
-                .append(" where 1 = 1 ");
+        sql.append("select ").append(QUERY_COLUMN)
+                .append(" from ").append(TABLE_NAME).append(" as tba, tenant as tbb ")
+                .append(" where 1 = 1 ")
+                .append(" and tba.tenant_id = tbb.id ");
 
         List<Object> params = Lists.newArrayList();
         String userName = (String) condition.get("userName");

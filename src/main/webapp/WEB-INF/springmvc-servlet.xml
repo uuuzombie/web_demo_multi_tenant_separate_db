@@ -41,20 +41,21 @@
     <mvc:default-servlet-handler/>
 
     <!-- 拦截器 -->
-    <!--<mvc:interceptors>-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/**" />-->
-            <!--<bean id="localeChangeInterceptor" class="com.sky.admin.utils.locale.LocaleChangeInterceptor">-->
-                <!--<property name="paramName" value="lang"/>-->
-            <!--</bean>-->
-        <!--</mvc:interceptor>-->
+    <mvc:interceptors>
+        <!--国际化-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+                <property name="paramName" value="lang"/>
+            </bean>
+        </mvc:interceptor>
 
         <!--&lt;!&ndash; 登录拦截器 &ndash;&gt;-->
         <!--<mvc:interceptor>-->
             <!--<mvc:mapping path="/**"/>-->
             <!--<bean id="loginInterceptor" class="com.sky.admin.client.admin.interceptor.LoginInterceptor"/>-->
         <!--</mvc:interceptor>-->
-    <!--</mvc:interceptors>-->
+    </mvc:interceptors>
 
 
     <!--扫描Controller层-->
@@ -102,7 +103,11 @@
         <!--<property name="suffix" value=".jsp" />-->
     <!--</bean>-->
 
-    <bean id="customMapper" class="com.sky.demo.web_demo_multi_tenant_separate_db.util.json.CustomObjectMapper" />
+    <bean id="customMapper" class="com.sky.demo.web_demo_multi_tenant_separate_db.util.json.CustomObjectMapper" >
+        <!--<property name="serializationInclusion">-->
+            <!--<value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>-->
+        <!--</property>-->
+    </bean>
 
     <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
         <!--<property name="defaultEncoding" value="utf-8"></property>-->

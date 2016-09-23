@@ -1,5 +1,6 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.dao;
 
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserDto;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.TenantUser;
 
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.Map;
  */
 public interface TenantUserDao {
 
-    TenantUser select(Map<String, Object> condition);
+    TenantUserDto select(Map<String, Object> condition);
 
-    List<TenantUser> selectList(Map<String, Object> condition);
+    List<TenantUserDto> selectList(Map<String, Object> condition);
 
     int selectCount(Map<String, Object> condition);
 

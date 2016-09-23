@@ -7,6 +7,8 @@ import com.google.common.collect.Maps;
 import com.sky.demo.web_demo_multi_tenant_separate_db.base.Pager;
 import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dao.TenantUserDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantForm;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserDto;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserForm;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserQueryRequest;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.Tenant;
@@ -35,15 +37,24 @@ public class TenantUserServiceImpl implements TenantUserService {
     @Resource
     private TenantUserDao tenantUserDao;
 
-    private static final Function<TenantUser, TenantUserForm> transfer2Form = new Function<TenantUser, TenantUserForm>() {
+    private static final Function<TenantUserDto, TenantUserForm> transfer2Form = new Function<TenantUserDto, TenantUserForm>() {
         @Override
-        public TenantUserForm apply(TenantUser input) {
+        public TenantUserForm apply(TenantUserDto input) {
             TenantUserForm tenantUserForm = new TenantUserForm();
             tenantUserForm.setId(input.getId());
-            tenantUserForm.setTenantId(input.getTenantId());
             tenantUserForm.setUserName(input.getUserName());
             tenantUserForm.setCreateTime(DateFormatUtils.format(input.getCreateTime(), Constants.DATETIME_PATTERN));
             tenantUserForm.setStatus(TenantUser.Status.getStatusByCode(input.getStatus()));
+
+            TenantForm tenantForm = new TenantForm();
+            tenantForm.setId(input.getTenantId());
+            tenantForm.setName(input.getTenantName());
+            tenantForm.setToken(input.getTenantToken());
+            tenantForm.setDbName(input.getTenantDbName());
+            tenantForm.setCreateTime(DateFormatUtils.format(input.getCreateTime(), Constants.DATETIME_PATTERN));
+            tenantForm.setStatus(Tenant.Status.getStatusByCode(input.getTenantStatus()));
+            tenantUserForm.setTenant(tenantForm);
+
             return tenantUserForm;
         }
     };
@@ -52,7 +63,7 @@ public class TenantUserServiceImpl implements TenantUserService {
         @Override
         public TenantUser apply(TenantUserForm input) {
             TenantUser tenantUser = new TenantUser();
-            tenantUser.setTenantId(input.getTenantId());
+            tenantUser.setTenantId(input.getTenant().getId());
             tenantUser.setUserName(input.getUserName());
             tenantUser.setCreateTime(new Date());
             tenantUser.setStatus(TenantUser.Status.NORMAL.getCode());
@@ -65,7 +76,7 @@ public class TenantUserServiceImpl implements TenantUserService {
         public TenantUser apply(TenantUserForm input) {
             TenantUser tenantUser = new TenantUser();
             tenantUser.setId(input.getId());
-            tenantUser.setTenantId(input.getTenantId());
+            tenantUser.setTenantId(input.getTenant().getId());
             tenantUser.setUserName(input.getUserName());
             tenantUser.setCreateTime(new Date());
             tenantUser.setStatus(input.getStatus() == null ? TenantUser.Status.NORMAL.getCode() : input.getStatus().getCode());
@@ -80,7 +91,7 @@ public class TenantUserServiceImpl implements TenantUserService {
         condition.put("status", Tenant.Status.NORMAL.getCode());
 
         TenantUserForm result = null;
-        TenantUser tenantUser = tenantUserDao.select(condition);
+        TenantUserDto tenantUser = tenantUserDao.select(condition);
         if (tenantUser != null) {
             result = transfer2Form.apply(tenantUser);
         }
@@ -94,7 +105,7 @@ public class TenantUserServiceImpl implements TenantUserService {
         condition.put("status", Tenant.Status.NORMAL.getCode());
 
         TenantUserForm result = null;
-        TenantUser tenantUser = tenantUserDao.select(condition);
+        TenantUserDto tenantUser = tenantUserDao.select(condition);
         if (tenantUser != null) {
             result = transfer2Form.apply(tenantUser);
         }
@@ -110,9 +121,9 @@ public class TenantUserServiceImpl implements TenantUserService {
         condition.put("ids", strIds);
 
         List<TenantUserForm> result = Lists.newArrayList();
-        List<TenantUser> tenantUsers = tenantUserDao.selectList(condition);
+        List<TenantUserDto> tenantUsers = tenantUserDao.selectList(condition);
         if (CollectionUtils.isNotEmpty(tenantUsers)) {
-            for (TenantUser tenantUser : tenantUsers) {
+            for (TenantUserDto tenantUser : tenantUsers) {
                 TenantUserForm tenantUserForm = transfer2Form.apply(tenantUser);
                 result.add(tenantUserForm);
             }
@@ -138,9 +149,9 @@ public class TenantUserServiceImpl implements TenantUserService {
         condition.put(BaseDao.OFFSET, offset);
 
         List<TenantUserForm> tenantUserForms = Lists.newArrayList();
-        List<TenantUser> tenantUsers = tenantUserDao.selectList(condition);
+        List<TenantUserDto> tenantUsers = tenantUserDao.selectList(condition);
         if (CollectionUtils.isNotEmpty(tenantUsers)) {
-            for (TenantUser tenantUser : tenantUsers) {
+            for (TenantUserDto tenantUser : tenantUsers) {
                 TenantUserForm tenantUserForm = transfer2Form.apply(tenantUser);
                 tenantUserForms.add(tenantUserForm);
             }

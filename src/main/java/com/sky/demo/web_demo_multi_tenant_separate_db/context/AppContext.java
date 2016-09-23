@@ -4,11 +4,9 @@ import com.google.common.base.Preconditions;
 import com.sky.demo.web_demo_multi_tenant_separate_db.cache.CommonDataSourceCache;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantForm;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserForm;
-import com.sky.demo.web_demo_multi_tenant_separate_db.model.Tenant;
 import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantService;
 import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantUserService;
 import com.sky.demo.web_demo_multi_tenant_separate_db.util.SpringUtil;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +14,6 @@ import org.slf4j.MDC;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import javax.annotation.Resource;
 import java.io.Serializable;
 import java.sql.SQLException;
 
@@ -107,12 +104,8 @@ public class AppContext implements Serializable {
         TenantUserForm tenantUser = tenantUserService.queryByUserName(userName);
         Preconditions.checkNotNull(tenantUser, "tenant user is null!");
 
-        TenantService tenantService = SpringUtil.getCtx().getBean(TenantService.class);
-        TenantForm tenant = tenantService.query(tenantUser.getTenantId());
-        Preconditions.checkNotNull(tenant, "tenant is null!");
-
         setTenantUser(tenantUser);
-        setTenant(tenant);
+        setTenant(tenantUser.getTenant());
         setJdbcTemplate();
         setNamedParameterJdbcTemplate();
 
