@@ -27,7 +27,7 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
     private static final String TABLE_NAME = "tenant_user";
     private static final String TABLE_COLUMN = "id, tenant_id, user_name, create_time, status";
     private static final String INSERT_COLUMN = "tenant_id, user_name, create_time, status";
-    private static final String QUERY_COLUMN = "tba.id as id, tenant_id as tenantId, user_name as userName, create_time as createTime, status, "
+    private static final String QUERY_COLUMN = "tba.id as id, tba.tenant_id as tenantId, tba.user_name as userName, tba.create_time as createTime, tba.status as status, "
             + "tbb.name as tenantName, tbb.token as tenantToken, tbb.db_name as tenantDbName, tbb.create_time as tenantCreateTime, tbb.status as tenantStatus";
 
     @Override
@@ -41,31 +41,31 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         List<Object> params = Lists.newArrayList();
         Integer id = (Integer) condition.get("id");
         if (id != null) {
-            sql.append("and id = ? ");
+            sql.append("and tba.id = ? ");
             params.add(id);
         }
 
         String userName = (String) condition.get("userName");
         if (StringUtils.isNotBlank(userName)) {
-            sql.append("and user_name = ? ");
+            sql.append("and tba.user_name = ? ");
             params.add(userName);
         }
 
         String beginTime = (String) condition.get("beginTime");
         if (StringUtils.isNotEmpty(beginTime)) {
-            sql.append("and create_time >= ? ");
+            sql.append("and tba.create_time >= ? ");
             params.add(Timestamp.valueOf(beginTime));
         }
 
         String endTime = (String) condition.get("endTime");
         if (StringUtils.isNotEmpty(endTime)) {
-            sql.append("and create_time < ? ");
+            sql.append("and tba.create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
         }
 
         Integer status = (Integer) condition.get("status");
         if (status != null) {
-            sql.append("and status = ? ");
+            sql.append("and tba.status = ? ");
             params.add(status);
         }
 
@@ -85,31 +85,31 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         List<Object> params = Lists.newArrayList();
         String userName = (String) condition.get("userName");
         if (StringUtils.isNotBlank(userName)) {
-            sql.append("and user_name = ? ");
+            sql.append("and tba.user_name = ? ");
             params.add(userName);
         }
 
         String beginTime = (String) condition.get("beginTime");
         if (StringUtils.isNotEmpty(beginTime)) {
-            sql.append("and create_time >= ? ");
+            sql.append("and tba.create_time >= ? ");
             params.add(Timestamp.valueOf(beginTime));
         }
 
         String endTime = (String) condition.get("endTime");
         if (StringUtils.isNotEmpty(endTime)) {
-            sql.append("and create_time < ? ");
+            sql.append("and tba.create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
         }
 
         Integer status = (Integer) condition.get("status");
         if (status != null) {
-            sql.append("and status = ? ");
+            sql.append("and tba.status = ? ");
             params.add(status);
         }
 
         String ids = (String) condition.get("ids");
         if (StringUtils.isNotBlank(ids)) {
-            sql.append("and id in (").append(ids).append(") ");
+            sql.append("and tba.id in (").append(ids).append(") ");
         }
 
         Integer limit = (Integer) condition.get(LIMIT);
@@ -135,7 +135,7 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
     @Override
     public int selectCount(Map<String, Object> condition) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select ").append(QUERY_COLUMN)
+        sql.append("select count(*) ")
                 .append(" from ").append(TABLE_NAME).append(" as tba, tenant as tbb ")
                 .append(" where 1 = 1 ")
                 .append(" and tba.tenant_id = tbb.id ");
@@ -143,31 +143,31 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         List<Object> params = Lists.newArrayList();
         String userName = (String) condition.get("userName");
         if (StringUtils.isNotBlank(userName)) {
-            sql.append("and user_name = ? ");
+            sql.append("and tba.user_name = ? ");
             params.add(userName);
         }
 
         String beginTime = (String) condition.get("beginTime");
         if (StringUtils.isNotEmpty(beginTime)) {
-            sql.append("and create_time >= ? ");
+            sql.append("and tba.create_time >= ? ");
             params.add(Timestamp.valueOf(beginTime));
         }
 
         String endTime = (String) condition.get("endTime");
         if (StringUtils.isNotEmpty(endTime)) {
-            sql.append("and create_time < ? ");
+            sql.append("and tba.create_time < ? ");
             params.add(Timestamp.valueOf(endTime));
         }
 
         Integer status = (Integer) condition.get("status");
         if (status != null) {
-            sql.append("and status = ? ");
+            sql.append("and tba.status = ? ");
             params.add(status);
         }
 
         String ids = (String) condition.get("ids");
         if (StringUtils.isNotBlank(ids)) {
-            sql.append("and id in (").append(ids).append(") ");
+            sql.append("and tba.id in (").append(ids).append(") ");
         }
 
         int count = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Integer.class);
