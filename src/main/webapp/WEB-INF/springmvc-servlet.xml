@@ -51,16 +51,16 @@
         </mvc:interceptor>
 
         <!--DataSource Interceptor-->
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <bean id="dataSourceInterceptor" class="com.sky.demo.web_demo_multi_tenant_separate_db.interceptor.DataSourceInterceptor"/>
-        </mvc:interceptor>
-
-        <!--&lt;!&ndash; 登录拦截器 &ndash;&gt;-->
         <!--<mvc:interceptor>-->
             <!--<mvc:mapping path="/**"/>-->
-            <!--<bean id="loginInterceptor" class="com.sky.admin.client.admin.interceptor.LoginInterceptor"/>-->
+            <!--<bean id="dataSourceInterceptor" class="com.sky.demo.web_demo_multi_tenant_separate_db.interceptor.DataSourceInterceptor"/>-->
         <!--</mvc:interceptor>-->
+
+        <!-- 登录拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="loginInterceptor" class="com.sky.demo.web_demo_multi_tenant_separate_db.interceptor.LoginInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
 
 
@@ -73,7 +73,7 @@
     <bean id="SpringContextUtil" class="com.sky.demo.web_demo_multi_tenant_separate_db.util.SpringUtil"/>
 
     <!--1.jsp viewResolver-->
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
@@ -102,12 +102,7 @@
         <!--<property name="layoutUrl" value="layout/layout.vm" />-->
         <!--<property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml" />-->
     <!--</bean>-->
-
-    <!--<bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-        <!--<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />-->
-        <!--<property name="prefix" value="/WEB-INF/jsp/" />-->
-        <!--<property name="suffix" value=".jsp" />-->
-    <!--</bean>-->
+    
 
     <bean id="customMapper" class="com.sky.demo.web_demo_multi_tenant_separate_db.util.json.CustomObjectMapper" >
         <!--<property name="serializationInclusion">-->

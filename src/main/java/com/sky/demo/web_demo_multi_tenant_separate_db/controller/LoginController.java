@@ -65,6 +65,7 @@ public class LoginController {
             logger.error("query log error", e);
             result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
         } finally {
+            //is safe ?
             AppContext.releaseAppResources();
         }
         return result;

@@ -24,13 +24,13 @@ public class DataSourceInterceptor extends HandlerInterceptorAdapter {
 
 
     private static final String AUTHORIZATION = "Authorization";
-    private static final List<String> IGNORE_URLS = Lists.newArrayList();
+    private static final List<String> IGNORE_URIS = Lists.newArrayList();
 
     static {
-        IGNORE_URLS.add("/login.jsp");
-        IGNORE_URLS.add("/login/");
-        IGNORE_URLS.add("/login");
-        IGNORE_URLS.add("/logout");
+        IGNORE_URIS.add("/login.jsp");
+        IGNORE_URIS.add("/login/");
+        IGNORE_URIS.add("/login");
+        IGNORE_URIS.add("/logout");
     }
 
     @Override
