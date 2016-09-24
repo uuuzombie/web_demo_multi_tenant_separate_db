@@ -33,7 +33,12 @@ public class AccountServiceImpl implements AccountService {
         Map<String, Object> condition = Maps.newHashMap();
         condition.put("id", id);
 
-        Account result = accountDao.select(condition);
+        Account result = null;
+        try {
+            result = accountDao.select(condition);
+        } catch (Exception e) {
+            logger.error("query error", e);
+        }
         return result;
     }
 
@@ -44,23 +49,34 @@ public class AccountServiceImpl implements AccountService {
         String strIds = Joiner.on(",").skipNulls().join(ids);
         condition.put("ids", strIds);
 
-        List<Account> result = accountDao.selectList(condition);
+        List<Account> result = null;
+        try {
+            result = accountDao.selectList(condition);
+        } catch (Exception e) {
+            logger.error("query list error", e);
+        }
         return result;
     }
 
     @Override
     public Pager<Account> queryList(AccountQueryRequest queryRequest) {
         Map<String, Object> condition = Maps.newHashMap();
-       
-        long totalRecord = accountDao.selectCount(condition);
-        Pager<Account> ret = new Pager<Account>(totalRecord, queryRequest.getPageNumber(), queryRequest.getPageSize());
 
-        int limit = ret.getPageSize();
-        long offset = (ret.getPageNumber() - 1) * ret.getPageSize();
-        condition.put(BaseDao.LIMIT, limit);
-        condition.put(BaseDao.OFFSET, offset);
+        Pager<Account> ret = null;
+        List<Account> accounts = null;
+        try {
+            long totalRecord = accountDao.selectCount(condition);
+            ret = new Pager<Account>(totalRecord, queryRequest.getPageNumber(), queryRequest.getPageSize());
 
-        List<Account> accounts = accountDao.selectList(condition);
+            int limit = ret.getPageSize();
+            long offset = (ret.getPageNumber() - 1) * ret.getPageSize();
+            condition.put(BaseDao.LIMIT, limit);
+            condition.put(BaseDao.OFFSET, offset);
+
+            accounts = accountDao.selectList(condition);
+        } catch (Exception e) {
+            logger.error("query list error", e);
+        }
 
         ret.setRows(accounts);
         return ret;
@@ -84,7 +100,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean update(Account record) {
-        int row = accountDao.update(record);
+        int row = 0;
+        try {
+            row = accountDao.update(record);
+        } catch (Exception e) {
+            logger.error("update error", e);
+        }
         return row > 0;
     }
 
@@ -95,7 +116,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean delete(int id) {
-        int row = accountDao.delete(id);
+        int row = 0;
+        try {
+            row = accountDao.delete(id);
+        } catch (Exception e) {
+            logger.error("delete error", e);
+        }
         return row > 0;
     }
 

@@ -83,7 +83,13 @@ public class TenantServiceImpl implements TenantService {
         condition.put("status", Tenant.Status.NORMAL.getCode());
 
         TenantForm result = null;
-        Tenant tenant = tenantDao.select(condition);
+        Tenant tenant = null;
+        try {
+            tenant = tenantDao.select(condition);
+        } catch (Exception e) {
+            logger.error("query error", e);
+        }
+
         if (tenant != null) {
             result = transfer2Form.apply(tenant);
         }
@@ -97,7 +103,13 @@ public class TenantServiceImpl implements TenantService {
         condition.put("status", Tenant.Status.NORMAL.getCode());
 
         TenantForm result = null;
-        Tenant tenant = tenantDao.select(condition);
+        Tenant tenant = null;
+        try {
+            tenant = tenantDao.select(condition);
+        } catch (Exception e) {
+            logger.error("query by name error", e);
+        }
+
         if (tenant != null) {
             result = transfer2Form.apply(tenant);
         }
@@ -111,7 +123,13 @@ public class TenantServiceImpl implements TenantService {
         condition.put("status", Tenant.Status.NORMAL.getCode());
 
         TenantForm result = null;
-        Tenant tenant = tenantDao.select(condition);
+        Tenant tenant = null;
+        try {
+            tenant = tenantDao.select(condition);
+        } catch (Exception e) {
+            logger.error("query by token error", e);
+        }
+
         if (tenant != null) {
             result = transfer2Form.apply(tenant);
         }
@@ -129,7 +147,13 @@ public class TenantServiceImpl implements TenantService {
         }
 
         List<TenantForm> result = Lists.newArrayList();
-        List<Tenant> tenants = tenantDao.selectList(condition);
+        List<Tenant> tenants = null;
+        try {
+            tenants = tenantDao.selectList(condition);
+        } catch (Exception e) {
+            logger.error("query list error", e);
+        }
+
         if (CollectionUtils.isNotEmpty(tenants)) {
             for (Tenant tenant : tenants) {
                 TenantForm tenantForm = transfer2Form.apply(tenant);
@@ -147,16 +171,24 @@ public class TenantServiceImpl implements TenantService {
         condition.put("endTime", queryRequest.getEndDate() + " 23:59:59");
         condition.put("status", Tenant.Status.NORMAL.getCode());
 
-        long totalRecord = tenantDao.selectCount(condition);
-        Pager<TenantForm> ret = new Pager<TenantForm>(totalRecord, queryRequest.getPageNumber(), queryRequest.getPageSize());
+        Pager<TenantForm> ret = null;
+        List<TenantForm> tenantForms = null;
+        List<Tenant> tenants = null;
+        try {
+            long totalRecord = tenantDao.selectCount(condition);
+            ret = new Pager<TenantForm>(totalRecord, queryRequest.getPageNumber(), queryRequest.getPageSize());
 
-        int limit = ret.getPageSize();
-        long offset = (ret.getPageNumber() - 1) * ret.getPageSize();
-        condition.put(BaseDao.LIMIT, limit);
-        condition.put(BaseDao.OFFSET, offset);
+            int limit = ret.getPageSize();
+            long offset = (ret.getPageNumber() - 1) * ret.getPageSize();
+            condition.put(BaseDao.LIMIT, limit);
+            condition.put(BaseDao.OFFSET, offset);
 
-        List<TenantForm> tenantForms = Lists.newArrayList();
-        List<Tenant> tenants = tenantDao.selectList(condition);
+            tenantForms = Lists.newArrayList();
+            tenants = tenantDao.selectList(condition);
+        } catch (Exception e) {
+            logger.error("query list error", e);
+        }
+
         if (CollectionUtils.isNotEmpty(tenants)) {
             for (Tenant tenant : tenants) {
                 TenantForm tenantForm = transfer2Form.apply(tenant);
@@ -188,7 +220,12 @@ public class TenantServiceImpl implements TenantService {
     @Override
     public boolean update(TenantForm record) {
         Tenant tenant = transfer2UpdateTenant.apply(record);
-        int row = tenantDao.update(tenant);
+        int row = 0;
+        try {
+            row = tenantDao.update(tenant);
+        } catch (Exception e) {
+            logger.error("update error", e);
+        }
         return row > 0;
     }
 
@@ -199,7 +236,12 @@ public class TenantServiceImpl implements TenantService {
 
     @Override
     public boolean delete(int id) {
-        int row = tenantDao.delete(id);
+        int row = 0;
+        try {
+            row = tenantDao.delete(id);
+        } catch (Exception e) {
+            logger.error("delete error", e);
+        }
         return row > 0;
     }
 

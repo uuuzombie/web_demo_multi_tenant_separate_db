@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
+import org.springframework.beans.BeansException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
@@ -104,14 +105,18 @@ public class AppContext implements Serializable {
         Preconditions.checkState(StringUtils.isNotBlank(userName), "userName is blank!!");
         logger.debug("init App Resources user name = " + userName);
 
-        TenantUserService tenantUserService = SpringUtil.getCtx().getBean(TenantUserService.class);
-        TenantUserForm tenantUser = tenantUserService.queryByUserName(userName);
-        Preconditions.checkNotNull(tenantUser, "tenant user is null!");
+        try {
+            TenantUserService tenantUserService = SpringUtil.getCtx().getBean(TenantUserService.class);
+            TenantUserForm tenantUser = tenantUserService.queryByUserName(userName);
+            Preconditions.checkNotNull(tenantUser, "tenant user is null!");
 
-        setTenantUser(tenantUser);
-        setTenant(tenantUser.getTenant());
-        setJdbcTemplate();
-        setNamedParameterJdbcTemplate();
+            setTenantUser(tenantUser);
+            setTenant(tenantUser.getTenant());
+            setJdbcTemplate();
+            setNamedParameterJdbcTemplate();
+        } catch (BeansException e) {
+            logger.error("init app resources by userName error", e);
+        }
 
         try {
             logger.debug("   ====> init AppResources by userName: " + userName + ", tenantUser=" + getTenantUser().getUserName()
@@ -131,16 +136,20 @@ public class AppContext implements Serializable {
         Preconditions.checkState(StringUtils.isNotBlank(token), "token is blank!!");
         logger.debug("init App Resources token = " + token);
 
-        TenantService tenantService = SpringUtil.getCtx().getBean(TenantService.class);
-        TenantForm tenant = tenantService.queryByToken(token);
-        Preconditions.checkNotNull(tenant, "tenant is null!");
+        try {
+            TenantService tenantService = SpringUtil.getCtx().getBean(TenantService.class);
+            TenantForm tenant = tenantService.queryByToken(token);
+            Preconditions.checkNotNull(tenant, "tenant is null!");
 
-        setTenant(tenant);
-        setJdbcTemplate();
-        setNamedParameterJdbcTemplate();
+            setTenant(tenant);
+            setJdbcTemplate();
+            setNamedParameterJdbcTemplate();
+        } catch (BeansException e) {
+            logger.error("init app resource by token error", e);
+        }
 
         try {
-            logger.debug("   ====> init AppResources by token: " + token + ", tenantUser=" + getTenantUser().getUserName()
+            logger.debug("   ====> init AppResources by token: " + token
                     + ", tenant = " + getTenant().getDbName() + ", jdbcTemplate = "
                     + getJdbcTemplate().getDataSource().getConnection().getMetaData().getURL());
         } catch (SQLException e) {

@@ -118,7 +118,13 @@ public class JdbcAnLogServiceImpl implements AnLogService {
         condition.put("id", id);
 
         AnLogForm result = null;
-        AnLogDto anLogDto = anLogDao.select(condition);
+        AnLogDto anLogDto = null;
+        try {
+            anLogDto = anLogDao.select(condition);
+        } catch (Exception e) {
+            logger.error("query error", e);
+        }
+
         if (anLogDto != null) {
             result = transfer2Form.apply(anLogDto);
         }
@@ -133,7 +139,13 @@ public class JdbcAnLogServiceImpl implements AnLogService {
         condition.put("ids", strIds);
 
         List<AnLogForm> result = Lists.newArrayList();
-        List<AnLogDto> anLogDtos = anLogDao.selectList(condition);
+        List<AnLogDto> anLogDtos = null;
+        try {
+            anLogDtos = anLogDao.selectList(condition);
+        } catch (Exception e) {
+            logger.error("query list error", e);
+        }
+
         if (CollectionUtils.isNotEmpty(anLogDtos)) {
             for (AnLogDto anLogDto : anLogDtos) {
                 AnLogForm anLogForm = transfer2Form.apply(anLogDto);
@@ -150,16 +162,24 @@ public class JdbcAnLogServiceImpl implements AnLogService {
         condition.put("beginTime", queryRequest.getBeginDate() + " 00:00:00");
         condition.put("endTime", queryRequest.getEndDate() + " 23:59:59");
 
-        long totalRecord = anLogDao.selectCount(condition);
-        Pager<AnLogForm> ret = new Pager<AnLogForm>(totalRecord, queryRequest.getPageNumber(), queryRequest.getPageSize());
+        Pager<AnLogForm> ret = null;
+        List<AnLogForm> anLogForms = null;
+        List<AnLogDto> anLogDtos = null;
+        try {
+            long totalRecord = anLogDao.selectCount(condition);
+            ret = new Pager<AnLogForm>(totalRecord, queryRequest.getPageNumber(), queryRequest.getPageSize());
 
-        int limit = ret.getPageSize();
-        long offset = (ret.getPageNumber() - 1) * ret.getPageSize();
-        condition.put(BaseDao.LIMIT, limit);
-        condition.put(BaseDao.OFFSET, offset);
+            int limit = ret.getPageSize();
+            long offset = (ret.getPageNumber() - 1) * ret.getPageSize();
+            condition.put(BaseDao.LIMIT, limit);
+            condition.put(BaseDao.OFFSET, offset);
 
-        List<AnLogForm> anLogForms = Lists.newArrayList();
-        List<AnLogDto> anLogDtos = anLogDao.selectList(condition);
+            anLogForms = Lists.newArrayList();
+            anLogDtos = anLogDao.selectList(condition);
+        } catch (Exception e) {
+            logger.error("query list error", e);
+        }
+
         if (CollectionUtils.isNotEmpty(anLogDtos)) {
             for (AnLogDto anLogDto : anLogDtos) {
                 AnLogForm anLogForm = transfer2Form.apply(anLogDto);
@@ -203,7 +223,12 @@ public class JdbcAnLogServiceImpl implements AnLogService {
     @Override
     public boolean update(AnLogUpdateRequest updateRequest) {
         AnLog log = transferUpdateReq2AnLog.apply(updateRequest);
-        int row = anLogDao.update(log);
+        int row = 0;
+        try {
+            row = anLogDao.update(log);
+        } catch (Exception e) {
+            logger.error("update error", e);
+        }
         return row > 0;
     }
 
@@ -218,13 +243,23 @@ public class JdbcAnLogServiceImpl implements AnLogService {
 
     @Override
     public boolean delete(long id) {
-        int row = anLogDao.delete(id);
+        int row = 0;
+        try {
+            row = anLogDao.delete(id);
+        } catch (Exception e) {
+            logger.error("delete error", e);
+        }
         return row > 0;
     }
 
     @Override
     public boolean deleteList(List<Long> ids) {
-        int row = anLogDao.batchDelete(ids);
+        int row = 0;
+        try {
+            row = anLogDao.batchDelete(ids);
+        } catch (Exception e) {
+            logger.error("delete list error", e);
+        }
         return row > 0;
     }
 }
