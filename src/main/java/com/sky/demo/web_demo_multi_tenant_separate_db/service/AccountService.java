@@ -14,6 +14,8 @@ public interface AccountService {
 
     Account query(int id);
 
+    Account query(String userName, String password);
+
     List<Account> queryList(List<Integer> ids);
 
     Pager<Account> queryList(AccountQueryRequest queryRequest);

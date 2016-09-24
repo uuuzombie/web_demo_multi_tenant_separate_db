@@ -26,5 +26,13 @@ public class RetUtil {
         return retData;
     }
 
+    public static <T> RetData<T> buildErrorRet(RetStatus retStatus, String msg) {
+        RetData<T> retData = new RetData<T>();
+        retData.setCode(retStatus.getCode());
+        retData.setMessage(msg);
+        retData.setData(null);
+
+        return retData;
+    }
 
 }

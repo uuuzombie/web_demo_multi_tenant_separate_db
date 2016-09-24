@@ -43,6 +43,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account query(String userName, String password) {
+        Map<String, Object> condition = Maps.newHashMap();
+        condition.put("userName", userName);
+        condition.put("password", password);
+
+        Account result = null;
+        try {
+            result = accountDao.select(condition);
+        } catch (Exception e) {
+            logger.error("query error", e);
+        }
+        return result;
+    }
+
+    @Override
     public List<Account> queryList(List<Integer> ids) {
         Map<String, Object> condition = Maps.newHashMap();
 

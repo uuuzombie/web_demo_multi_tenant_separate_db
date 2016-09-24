@@ -42,8 +42,14 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
 
         String userName = (String) condition.get("userName");
         if (StringUtils.isNotEmpty(userName)) {
-            sql.append("and user_name >= ? ");
+            sql.append("and user_name = ? ");
             params.add(userName);
+        }
+
+        String password = (String) condition.get("password");
+        if (StringUtils.isNotEmpty(password)) {
+            sql.append("and password = ? ");
+            params.add(password);
         }
 
         RowMapper<Account> rowMapper = BeanPropertyRowMapper.newInstance(Account.class);
@@ -62,8 +68,14 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
         List<Object> params = Lists.newArrayList();
         String userName = (String) condition.get("userName");
         if (StringUtils.isNotEmpty(userName)) {
-            sql.append("and user_name >= ? ");
+            sql.append("and user_name = ? ");
             params.add(userName);
+        }
+
+        String password = (String) condition.get("password");
+        if (StringUtils.isNotEmpty(password)) {
+            sql.append("and password = ? ");
+            params.add(password);
         }
 
         String ids = (String) condition.get("ids");
@@ -99,8 +111,14 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
         List<Object> params = Lists.newArrayList();
         String userName = (String) condition.get("userName");
         if (StringUtils.isNotEmpty(userName)) {
-            sql.append("and user_name >= ? ");
+            sql.append("and user_name = ? ");
             params.add(userName);
+        }
+
+        String password = (String) condition.get("password");
+        if (StringUtils.isNotEmpty(password)) {
+            sql.append("and password = ? ");
+            params.add(password);
         }
 
         String ids = (String) condition.get("ids");
