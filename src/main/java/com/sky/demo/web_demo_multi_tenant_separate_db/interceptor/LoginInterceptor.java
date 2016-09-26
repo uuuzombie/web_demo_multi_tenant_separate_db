@@ -1,5 +1,6 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.interceptor;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.sky.demo.web_demo_multi_tenant_separate_db.context.AppContext;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserForm;
@@ -12,7 +13,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Created by user on 16/9/24.
@@ -30,8 +30,19 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         IGNORE_URIS.add("/logout");
     }
 
-//    private static final Predicate<String>
-
+    private static final Predicate<String> isContainIgnoreUrl = new Predicate<String>() {
+        @Override
+        public boolean apply(String input) {
+            boolean result = false;
+            for (String url : IGNORE_URIS) {
+                if (input.contains(url)) {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+        }
+    };
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -40,7 +51,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         boolean flag = true;
         try {
             String url = request.getRequestURI();
-            if (IGNORE_URIS.contains(url)) {
+            if (isContainIgnoreUrl.apply(url)) {
                 flag = true;
             } else {
                 SessionInfo sessionInfo = SessionUtil.getSessionInfo(request);
@@ -52,6 +63,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
                     TenantUserForm tenantUser = sessionInfo.getTenantUser();
                     AppContext.initAppResourcesByUserName(tenantUser.getUserName());
+
                 }
             }
         } catch (Exception e) {
