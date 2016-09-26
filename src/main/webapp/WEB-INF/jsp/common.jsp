@@ -10,13 +10,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 
-<%--js--%>
+<%-- js --%>
 <script src="/static/js/lib.js"></script>
 <script src="/static/js/business.js"></script>
 <script src="/static/js/plugins.js"></script>
 
 
-<!-- custom css -->
+<!-- css -->
 <link href="/static/css/base.css" rel="stylesheet" type="text/css" />
 <link href="/static/css/mod.css" rel="stylesheet" type="text/css" />
 <link href="/static/css/page.css" rel="stylesheet" type="text/css" />

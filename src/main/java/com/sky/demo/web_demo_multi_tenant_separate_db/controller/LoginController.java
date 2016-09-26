@@ -5,7 +5,6 @@ import com.sky.demo.web_demo_multi_tenant_separate_db.base.RetStatus;
 import com.sky.demo.web_demo_multi_tenant_separate_db.context.AppContext;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserForm;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.Account;
-import com.sky.demo.web_demo_multi_tenant_separate_db.model.SessionInfo;
 import com.sky.demo.web_demo_multi_tenant_separate_db.service.AccountService;
 import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantUserService;
 import com.sky.demo.web_demo_multi_tenant_separate_db.util.RetUtil;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -37,11 +37,10 @@ public class LoginController {
 
 
     @RequestMapping("/login")
-    @ResponseBody
-    public RetData<TenantUserForm> login(@RequestParam String userName, @RequestParam String password,
+    public ModelAndView login(@RequestParam String userName, @RequestParam String password,
                                          HttpServletRequest request, HttpServletResponse response) {
 
-        RetData<TenantUserForm> result = null;
+        ModelAndView modelAndView = new ModelAndView();
         try {
             AppContext.initAppResourcesByUserName(userName);
             TenantUserForm tenantUserForm = tenantUserService.queryByUserName(userName);
@@ -50,26 +49,45 @@ public class LoginController {
                 //validate userName and password
                 Account account = accountService.query(userName, password);
                 if (account == null) {
-                    result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR, "invalid username or password");
+                    modelAndView.setViewName("error");
+
                 } else {
                     //login success
                     SessionUtil.setSessionInfo(request, tenantUserForm);
-
-                    result = RetUtil.buildSuccessRet(tenantUserForm);
+                    modelAndView.addObject("tenantUser", tenantUserForm);
+                    modelAndView.setViewName("welcome");
                 }
             } else {
-                result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR, "invalid username or password");
+                modelAndView.setViewName("error");
             }
 
         } catch (Exception e) {
-            logger.error("query log error", e);
+            logger.error("login error", e);
+            modelAndView.setViewName("error");
+        } finally {
+            AppContext.releaseAppResources();
+        }
+        return modelAndView;
+    }
+
+    @RequestMapping("/logout")
+    @ResponseBody
+    public RetData<String> logout(HttpServletRequest request, HttpServletResponse response) {
+
+        RetData<String> result = null;
+        try {
+            SessionUtil.removeSessionInfo(request);
+
+            result = RetUtil.buildSuccessRet("success");
+
+        } catch (Exception e) {
+            logger.error("logout error", e);
             result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
         } finally {
-            //is safe ?
             AppContext.releaseAppResources();
         }
         return result;
-
     }
+
 
 }

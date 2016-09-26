@@ -28,6 +28,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         IGNORE_URIS.add("/login/");
         IGNORE_URIS.add("/login");
         IGNORE_URIS.add("/logout");
+        IGNORE_URIS.add("/static");
+        IGNORE_URIS.add("/js");
+        IGNORE_URIS.add("/css");
+        IGNORE_URIS.add("/images");
     }
 
     private static final Predicate<String> isContainIgnoreUrl = new Predicate<String>() {
@@ -35,7 +39,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         public boolean apply(String input) {
             boolean result = false;
             for (String url : IGNORE_URIS) {
-                if (input.contains(url)) {
+                if (input.contains(url) || url.contains(input)) {
                     result = true;
                     break;
                 }
