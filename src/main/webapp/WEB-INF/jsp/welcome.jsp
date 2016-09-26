@@ -11,6 +11,8 @@
             <form:input path="userName" type="text" value="${tenantUser.userName}" ></form:input>
 
             <br><br>
+            SessionId:${sessionId}
+            <br><br>
             Tenant<br>
             name : ${tenantUser.tenant.name} <br>
             token : ${tenantUser.tenant.token} <br>

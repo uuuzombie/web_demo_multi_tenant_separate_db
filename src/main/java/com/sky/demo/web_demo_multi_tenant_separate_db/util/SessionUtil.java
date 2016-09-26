@@ -36,4 +36,13 @@ public class SessionUtil {
             session.invalidate();
         }
     }
+
+    public static String getSessionId(HttpServletRequest request) {
+        String id = null;
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            id = session.getId();
+        }
+        return id;
+    }
 }

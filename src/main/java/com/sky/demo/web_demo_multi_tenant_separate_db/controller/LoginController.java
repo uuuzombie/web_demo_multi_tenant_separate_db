@@ -54,6 +54,8 @@ public class LoginController {
                 } else {
                     //login success
                     SessionUtil.setSessionInfo(request, tenantUserForm);
+
+                    modelAndView.addObject("sessionId", SessionUtil.getSessionId(request));
                     modelAndView.addObject("tenantUser", tenantUserForm);
                     modelAndView.setViewName("welcome");
                 }
