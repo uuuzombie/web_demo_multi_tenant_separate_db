@@ -20,25 +20,25 @@ public abstract class BaseDao {
 
 
     @Resource
-    private JdbcTemplate jdbcTemplate;          //default_db
+    private JdbcTemplate defaultJdbcTemplate;          //default_db
     @Resource
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;      //default_db
+    private NamedParameterJdbcTemplate defaultNamedParameterJdbcTemplate;      //default_db
 
     //default_db
-    public JdbcTemplate getJdbcTemplate() {
-        return jdbcTemplate;
+    public JdbcTemplate getDefaultJdbcTemplate() {
+        return defaultJdbcTemplate;
     }
 
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public void setDefaultJdbcTemplate(JdbcTemplate defaultJdbcTemplate) {
+        this.defaultJdbcTemplate = defaultJdbcTemplate;
     }
 
-    public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
-        return namedParameterJdbcTemplate;
+    public NamedParameterJdbcTemplate getDefaultNamedParameterJdbcTemplate() {
+        return defaultNamedParameterJdbcTemplate;
     }
 
-    public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    public void setDefaultNamedParameterJdbcTemplate(NamedParameterJdbcTemplate defaultNamedParameterJdbcTemplate) {
+        this.defaultNamedParameterJdbcTemplate = defaultNamedParameterJdbcTemplate;
     }
 
 

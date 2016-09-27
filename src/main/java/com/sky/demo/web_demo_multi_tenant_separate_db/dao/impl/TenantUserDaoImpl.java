@@ -70,7 +70,7 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         }
 
         RowMapper<TenantUserDto> rowMapper = BeanPropertyRowMapper.newInstance(TenantUserDto.class);
-        TenantUserDto result = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
+        TenantUserDto result = getDefaultJdbcTemplate().queryForObject(sql.toString(), params.toArray(), rowMapper);
         return result;
     }
 
@@ -127,7 +127,7 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         logger.info("select * params:" + params);
 
         RowMapper<TenantUserDto> rowMapper = BeanPropertyRowMapper.newInstance(TenantUserDto.class);
-        List<TenantUserDto> result = getJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
+        List<TenantUserDto> result = getDefaultJdbcTemplate().query(sql.toString(), params.toArray(), rowMapper);
 
         return result;
     }
@@ -170,7 +170,7 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
             sql.append("and tba.id in (").append(ids).append(") ");
         }
 
-        int count = getJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Integer.class);
+        int count = getDefaultJdbcTemplate().queryForObject(sql.toString(), params.toArray(), Integer.class);
         return count;
     }
 
@@ -189,7 +189,7 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         params.add(record.getCreateTime());
         params.add(record.getStatus());
 
-        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+        int row = getDefaultJdbcTemplate().update(sql.toString(), params.toArray());
         return row;
     }
 
@@ -213,7 +213,7 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         sql.append("and id = ? ");
         params.add(record.getId());
 
-        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+        int row = getDefaultJdbcTemplate().update(sql.toString(), params.toArray());
         return row;
     }
 
@@ -232,7 +232,7 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
         sql.append("and id = ? ");
         params.add(id);
 
-        int row = getJdbcTemplate().update(sql.toString(), params.toArray());
+        int row = getDefaultJdbcTemplate().update(sql.toString(), params.toArray());
         return row;
     }
 
