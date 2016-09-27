@@ -1,46 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd ">
 
 
 	<bean id="myShiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
 		<property name="filters">
 			<map>
-				<entry key="headerAuthFilter" value-ref="headerAuthFilter"></entry>
-				<entry key="deviceRegisterHeaderAuthFilter" value-ref="deviceRegisterHeaderAuthFilter"></entry>
+				<entry key="headerAuthFilter" value-ref="headerAuthFilter"/>
+				<!--<entry key="deviceRegisterHeaderAuthFilter" value-ref="deviceRegisterHeaderAuthFilter"/>-->
 			</map>
 		</property>
 		<property name="filterChainDefinitionMap">
 			<map>
-				<entry key="/v1/dlp/device/register" value="noSessionCreation,deviceRegisterHeaderAuthFilter"></entry>
-				<entry key="/v1/dlp/thirdparty/**" value="noSessionCreation,deviceRegisterHeaderAuthFilter"></entry>
-				<entry key="/v1/**" value="noSessionCreation,headerAuthFilter"></entry>
-				<entry key="/**" value="anon"></entry>
+				<!--<entry key="/v1/device/register" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>-->
+				<!--<entry key="/v1/thirdparty/**" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>-->
+				<entry key="/v1/**" value="noSessionCreation,headerAuthFilter"/>
+				<entry key="/**" value="anon"/>
 			</map>
 		</property>
 	</bean>
 
-    <bean id="headerAuthFilter" class="com.skyguard.sps.webservice.filter.HeaderAuthFilter">
-    </bean>
+    <bean id="headerAuthFilter"
+          class="com.sky.demo.web_demo_multi_tenant_separate_db.filter.HeaderAuthFilter"/>
 
     <bean id="deviceRegisterHeaderAuthFilter"
-          class="com.skyguard.sps.webservice.filter.DeviceRegisterHeaderAuthFilter">
-    </bean>
+          class="com.sky.demo.web_demo_multi_tenant_separate_db.filter.DeviceRegisterHeaderAuthFilter" />
 
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realms">
 			<list>
 				<ref bean="headerAuthRealm" />
-				<ref bean="deviceRegisterHeaderAuthRealm" />
+				<!--<ref bean="deviceRegisterHeaderAuthRealm" />-->
 			</list>
 		</property>
 	</bean>
 
-	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <!--得到SecurityManager实例 并绑定给SecurityUtils-->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		<property name="staticMethod"
 			value="org.apache.shiro.SecurityUtils.setSecurityManager">
 		</property>
@@ -48,12 +46,9 @@
 	</bean>
 
 
+	<bean id="headerAuthRealm" class="com.sky.demo.web_demo_multi_tenant_separate_db.filter.HeaderAuthRealm"/>
 
-	<bean id="headerAuthRealm" class="com.skyguard.sps.webservice.filter.HeaderAuthRealm">
-	</bean>
-
-	<bean id="deviceRegisterHeaderAuthRealm" class="com.skyguard.sps.webservice.filter.DeviceRegisterHeaderAuthRealm">
-	</bean>
+	<!--<bean id="deviceRegisterHeaderAuthRealm" class="com.sky.demo.web_demo_multi_tenant_separate_db.filter.DeviceRegisterHeaderAuthRealm"/>-->
 
 
 </beans>

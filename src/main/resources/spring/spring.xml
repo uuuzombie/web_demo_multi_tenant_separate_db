@@ -12,4 +12,5 @@
 
     <import resource="classpath:spring/spring-dao.xml"/>
     <import resource="classpath:spring/spring-service.xml"/>
+    <import resource="classpath:spring/spring-shiro.xml"/>
 </beans>
