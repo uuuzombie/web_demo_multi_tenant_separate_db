@@ -144,7 +144,7 @@ public class CommonDataSourceCache {
                 DataSourceUtils.getConnection(dataSource);
                 isConnected = true;
             } catch (CannotGetJdbcConnectionException e) {
-                logger.error("get db connection failed !!!");
+                logger.error("      ====[WARNING]====  get db connection failed !!! tenant:" + tenantForm.getName(), e);
             }
 
             if (isConnected) {
