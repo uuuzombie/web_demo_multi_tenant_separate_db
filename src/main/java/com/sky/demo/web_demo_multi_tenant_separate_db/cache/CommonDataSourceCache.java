@@ -61,7 +61,10 @@ public class CommonDataSourceCache {
 
     }
 
-
+    /**
+     * 加载租户信息
+     * 根据tenant表，新增或者删除租户信息
+     */
     public void loadTenants() {
         logger.debug("   ====== load tenant ======   ");
 
@@ -80,6 +83,42 @@ public class CommonDataSourceCache {
             addTenants(needAddTenants);
 
             deleteTenants(needDeleteTenants);
+
+            //print connetion
+            for (Map.Entry<String, JdbcTemplate> entry : tenantJdbcTemplates.entrySet()) {
+                DataSource dataSource = (DataSource) entry.getValue().getDataSource();
+                try {
+                    logger.debug("   =====>  tenant :" + entry.getKey() + " , url=" + dataSource.getConnection().getMetaData().getURL());
+                } catch (SQLException e) {
+                    logger.error("get connection error", e);
+                }
+            }
+        } else {
+            throw new RuntimeException("tenants is empty!");
+        }
+    }
+
+
+    /**
+     * 重新加载租户信息
+     */
+    public void reloadAllTenants() {
+        logger.debug("   ====== reload all tenant ======   ");
+
+        tenantJdbcTemplates.clear();
+        tenantNamedParameterJdbcTemplates.clear();
+
+        List<TenantForm> allTenants = null;
+        try {
+            allTenants = tenantService.queryList(Lists.newArrayList());
+        } catch (Exception e) {
+            logger.error("load all tenants error", e);
+            throw new RuntimeException("load all tenants error");
+        }
+
+        if (CollectionUtils.isNotEmpty(allTenants)) {
+
+            addTenants(allTenants);
 
             //print connetion
             for (Map.Entry<String, JdbcTemplate> entry : tenantJdbcTemplates.entrySet()) {
