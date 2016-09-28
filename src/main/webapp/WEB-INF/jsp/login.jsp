@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <form:form action="/login" method="post">
+    <form:form action="login" method="post">
         <div>
             <input type="text" name="userName" placeholder="用户名">
         </div>
