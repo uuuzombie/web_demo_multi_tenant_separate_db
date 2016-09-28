@@ -4,7 +4,7 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>[%d{HH:mm:ss.SSS}][%p][%t][%X{tenant}][%“logger{10}:%L] %m%n</pattern>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%t][%X{tenant}][%logger{10}:%L] %m%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>

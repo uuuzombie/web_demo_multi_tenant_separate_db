@@ -74,22 +74,20 @@ public class LoginController {
     }
 
     @RequestMapping("/logout")
-    @ResponseBody
-    public RetData<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
 
-        RetData<String> result = null;
+        ModelAndView modelAndView = new ModelAndView();
         try {
             SessionUtil.removeSessionInfo(request);
 
-            result = RetUtil.buildSuccessRet("success");
-
+            modelAndView.setViewName("login");
         } catch (Exception e) {
             logger.error("logout error", e);
-            result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
+            modelAndView.setViewName("error");
         } finally {
             AppContext.releaseAppResources();
         }
-        return result;
+        return modelAndView;
     }
 
 
