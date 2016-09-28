@@ -42,6 +42,7 @@ public class LoginController {
 
         ModelAndView modelAndView = new ModelAndView();
         try {
+            logger.info("login user:" + userName);
             AppContext.initAppResourcesByUserName(userName);
             TenantUserForm tenantUserForm = tenantUserService.queryByUserName(userName);
 
@@ -49,8 +50,8 @@ public class LoginController {
                 //validate userName and password
                 Account account = accountService.query(userName, password);
                 if (account == null) {
+                    logger.error("invalid account");
                     modelAndView.setViewName("error");
-
                 } else {
                     //login success
                     SessionUtil.setSessionInfo(request, tenantUserForm);

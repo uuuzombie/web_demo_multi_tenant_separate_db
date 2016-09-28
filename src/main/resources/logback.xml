@@ -4,7 +4,7 @@
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>[%d{HH:mm:ss.SSS}][%p][%t][%X{tenant}][%logger{10}:%L] %m%n</pattern>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%t][%X{tenant}][%“logger{10}:%L] %m%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>
@@ -70,6 +70,26 @@
         <appender-ref ref="AuditLog.ERROR" />
     </logger>
 
+    <!--spring jdbc-->
+    <logger name="org.springframework.jdbc.core.StatementCreatorUtils" additivity="false" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="org.springframework.jdbc.core.JdbcTemplate" additivity="false" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <!--sql-->
+    <logger name="java.sql.Connection" additivity="false" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="java.sql.Statement" additivity="false" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="java.sql.PreparedStatement" additivity="false" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="java.sql.ResultSet" additivity="false" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
 
     <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>

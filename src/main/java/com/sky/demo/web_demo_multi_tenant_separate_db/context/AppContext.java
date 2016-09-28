@@ -165,5 +165,6 @@ public class AppContext implements Serializable {
         releaseTenantUser();
         releaseJdbcTemplate();
         releaseNamedParameterJdbcTemplate();
+        MDC.remove("tenant");
     }
 }
