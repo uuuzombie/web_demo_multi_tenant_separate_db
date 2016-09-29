@@ -1,4 +1,4 @@
-package com.sky.demo.web_demo_multi_tenant_separate_db.filter;
+package com.sky.demo.web_demo_multi_tenant_separate_db.auth.realm;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;

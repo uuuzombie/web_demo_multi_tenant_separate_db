@@ -9,13 +9,13 @@
 		<property name="filters">
 			<map>
 				<entry key="headerAuthFilter" value-ref="headerAuthFilter"/>
-				<!--<entry key="deviceRegisterHeaderAuthFilter" value-ref="deviceRegisterHeaderAuthFilter"/>-->
+				<entry key="deviceRegisterHeaderAuthFilter" value-ref="deviceRegisterHeaderAuthFilter"/>
 			</map>
 		</property>
 		<property name="filterChainDefinitionMap">
 			<map>
-				<!--<entry key="/v1/device/register" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>-->
-				<!--<entry key="/v1/thirdparty/**" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>-->
+				<entry key="/v1/device/register" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>
+				<entry key="/v1/thirdparty/**" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>
 				<entry key="/v1/**" value="noSessionCreation,headerAuthFilter"/>
 				<entry key="/**" value="anon"/>
 			</map>
@@ -32,23 +32,25 @@
 		<property name="realms">
 			<list>
 				<ref bean="headerAuthRealm" />
-				<!--<ref bean="deviceRegisterHeaderAuthRealm" />-->
+				<ref bean="deviceRegisterHeaderAuthRealm" />
 			</list>
 		</property>
 	</bean>
 
     <!--得到SecurityManager实例 并绑定给SecurityUtils-->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="staticMethod"
-			value="org.apache.shiro.SecurityUtils.setSecurityManager">
+		<property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager">
 		</property>
 		<property name="arguments" ref="securityManager" />
 	</bean>
 
 
-	<bean id="headerAuthRealm" class="com.sky.demo.web_demo_multi_tenant_separate_db.filter.HeaderAuthRealm"/>
+	<bean id="headerAuthRealm" class="com.sky.demo.web_demo_multi_tenant_separate_db.auth.realm.HeaderAuthRealm"/>
 
-	<!--<bean id="deviceRegisterHeaderAuthRealm" class="com.sky.demo.web_demo_multi_tenant_separate_db.filter.DeviceRegisterHeaderAuthRealm"/>-->
+	<bean id="deviceRegisterHeaderAuthRealm" class="com.sky.demo.web_demo_multi_tenant_separate_db.auth.realm.DeviceRegisterHeaderAuthRealm"/>
 
+
+    <!-- Shiro生命周期处理器-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
 </beans>

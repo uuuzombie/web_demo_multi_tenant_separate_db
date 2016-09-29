@@ -14,16 +14,19 @@ public class SHAUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(SHAUtil.class);
 
+    private static final String ALGORITHM = "SHA-256";
+    private static final String CHASET = "UTF-8";
+
     public static String encrypt(String str) throws UnsupportedEncodingException {
         MessageDigest sha = null;
         try {
-            sha = MessageDigest.getInstance("SHA-256");
+            sha = MessageDigest.getInstance(ALGORITHM);
         } catch (Exception e) {
             logger.error("MessageDigest get error",e);
             return "";
         }
 
-        byte[] byteArray = str.getBytes("UTF-8");
+        byte[] byteArray = str.getBytes(CHASET);
         byte[] md5Bytes = sha.digest(byteArray);
 
         StringBuffer hexValue = new StringBuffer();
