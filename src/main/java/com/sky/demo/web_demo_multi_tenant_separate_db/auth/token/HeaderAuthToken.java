@@ -8,25 +8,25 @@ import com.google.common.base.Objects;
 public class HeaderAuthToken extends RegisterHeaderAuthToken {
 
     private static final long serialVersionUID = -3943230690614221979L;
-    private String ipAddress;
+    private String deviceId;
 
-    public HeaderAuthToken(String timestamp, String token, String ipAddress) {
+    public HeaderAuthToken(String timestamp, String token, String deviceId) {
         super(timestamp, token);
-        this.ipAddress = ipAddress;
+        this.deviceId = deviceId;
     }
 
-    public String getIpAddress() {
-        return ipAddress;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-                .add("ipAddress", ipAddress)
+                .add("deviceId", deviceId)
                 .toString();
     }
 }

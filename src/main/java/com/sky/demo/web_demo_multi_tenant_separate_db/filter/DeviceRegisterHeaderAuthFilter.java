@@ -2,13 +2,16 @@ package com.sky.demo.web_demo_multi_tenant_separate_db.filter;
 
 import com.sky.demo.web_demo_multi_tenant_separate_db.auth.token.RegisterHeaderAuthToken;
 import com.sky.demo.web_demo_multi_tenant_separate_db.util.CodecUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -28,15 +31,18 @@ public class DeviceRegisterHeaderAuthFilter extends HeaderAuthFilter {
 
     @Override
     protected String[] getPrincipalsAndCredentials(String authorizationHeader, ServletRequest request) {
-        if (authorizationHeader == null) {
+        HttpServletRequest httpRequest = WebUtils.getHttpRequest(request);
+        if (StringUtils.isBlank(authorizationHeader)) {
+            logger.error("authorization list is null ,request url is {}", httpRequest.getRequestURI());
             return null;
         }
 
         try {
             String authorization = CodecUtil.decode(authorizationHeader);
             String[] authorizationList = authorization.split(":");
-            if (authorizationList == null || authorizationList.length != 2) {
-                logger.error("authentication header is null or size is not 2,current header is {}", authorizationList);
+            if (authorizationList.length != 2) {
+                logger.error("authorization list length != 2,current header is {},request url is {}",
+                        authorizationHeader, httpRequest.getRequestURI());
                 return null;
             }
             return authorizationList;

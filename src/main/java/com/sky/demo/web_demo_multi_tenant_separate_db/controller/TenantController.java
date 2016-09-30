@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -31,7 +33,7 @@ public class TenantController {
 
     @RequestMapping("/query/{id}")
     @ResponseBody
-    public RetData<TenantForm> query(@PathVariable int id) {
+    public RetData<TenantForm> query(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
         RetData<TenantForm> result = null;
         try {
             TenantForm TenantForm = tenantService.query(id);
@@ -46,7 +48,7 @@ public class TenantController {
 
     @RequestMapping("/queryByName")
     @ResponseBody
-    public RetData<TenantForm> queryByName(@RequestParam String name) {
+    public RetData<TenantForm> queryByName(@RequestParam String name, HttpServletRequest request, HttpServletResponse response) {
         RetData<TenantForm> result = null;
         try {
             TenantForm TenantForm = tenantService.queryByName(name);
@@ -61,7 +63,7 @@ public class TenantController {
 
     @RequestMapping("/queryByToken")
     @ResponseBody
-    public RetData<TenantForm> queryByToken(@RequestParam String token) {
+    public RetData<TenantForm> queryByToken(@RequestParam String token, HttpServletRequest request, HttpServletResponse response) {
         RetData<TenantForm> result = null;
         try {
             TenantForm TenantForm = tenantService.queryByToken(token);
@@ -76,11 +78,11 @@ public class TenantController {
 
     @RequestMapping("/queryList")
     @ResponseBody
-    public RetData<Pager<TenantForm>> queryList(@RequestBody TenantQueryRequest request) {
+    public RetData<Pager<TenantForm>> queryList(@RequestBody TenantQueryRequest queryRequest, HttpServletRequest request, HttpServletResponse response) {
 
         RetData<Pager<TenantForm>> result = null;
         try {
-            Pager<TenantForm> ret  = tenantService.queryList(request);
+            Pager<TenantForm> ret  = tenantService.queryList(queryRequest);
             result = RetUtil.buildSuccessRet(ret);
         } catch (Exception e) {
             logger.error("query log error",e);
@@ -92,7 +94,7 @@ public class TenantController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public RetData<String> add(@RequestBody TenantForm record) {
+    public RetData<String> add(@RequestBody TenantForm record, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
         try {
             boolean isAdd = tenantService.add(record);
@@ -109,7 +111,7 @@ public class TenantController {
 
     @RequestMapping("/addList")
     @ResponseBody
-    public RetData<String> addList(@RequestBody List<TenantForm> records) {
+    public RetData<String> addList(@RequestBody List<TenantForm> records, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
         try {
             boolean isAdd = tenantService.addList(records);
@@ -126,7 +128,7 @@ public class TenantController {
 
     @RequestMapping("/update")
     @ResponseBody
-    public RetData<String> update(@RequestBody TenantForm record) {
+    public RetData<String> update(@RequestBody TenantForm record, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
         try {
             boolean isUpdate = tenantService.update(record);
@@ -142,7 +144,7 @@ public class TenantController {
 
     @RequestMapping("/delete/{id}")
     @ResponseBody
-    public RetData<String> delete(@PathVariable int id) {
+    public RetData<String> delete(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
         try {
             boolean isDelete = tenantService.delete(id);

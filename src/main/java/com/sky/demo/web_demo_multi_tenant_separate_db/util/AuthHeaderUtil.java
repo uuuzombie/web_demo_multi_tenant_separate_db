@@ -1,10 +1,10 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.util;
 
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -30,10 +30,20 @@ public class AuthHeaderUtil {
 
     private static String generateAuthorization(String id, String token) throws UnsupportedEncodingException {
         String timestamp = String.valueOf(new Date().getTime());
-        String authCode = timestamp + token + id;
+        String authCode = null;
+        if (StringUtils.isNotBlank(id)) {
+            authCode = timestamp + token + id;
+        } else {
+            authCode = timestamp + token;
+        }
 
         String enCodeBySha = SHAUtil.encrypt(authCode);       //SHA-256
-        String code = timestamp + ":" + enCodeBySha + ":" + id;
+        String code = null;
+        if (StringUtils.isNotBlank(id)) {
+            code = timestamp + ":" + enCodeBySha + ":" + id;
+        } else {
+            code = timestamp + ":" + enCodeBySha;
+        }
 
         return CodecUtil.encode(code);      //Base64编码
     }
@@ -47,5 +57,16 @@ public class AuthHeaderUtil {
 
         String auth = generateAuthorization(id, token);
         System.out.println(auth);
+
+        System.out.println("\n=====device auth======");
+        token = "sky";
+        auth = generateAuthorization(null, token);
+        System.out.println(auth);
+
+//        System.out.println("uuids:");
+//        for (int i = 0; i < 5 ; ++i) {
+//            System.out.println(UUID.randomUUID().toString());
+//        }
     }
+
 }

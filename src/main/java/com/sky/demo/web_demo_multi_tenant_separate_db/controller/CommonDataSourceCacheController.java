@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -32,7 +34,7 @@ public class CommonDataSourceCacheController {
 
     @RequestMapping("/getAllJdbcTemplate")
     @ResponseBody
-    public RetData<Map<String, String>> getAllJdbcTemplate() {
+    public RetData<Map<String, String>> getAllJdbcTemplate(HttpServletRequest request, HttpServletResponse response) {
         RetData<Map<String, String>> result = null;
 
         try {
@@ -52,7 +54,7 @@ public class CommonDataSourceCacheController {
 
     @RequestMapping("/getAllNamedParameterJdbcTemplate")
     @ResponseBody
-    public RetData<Map<String, String>> getAllNamedParameterJdbcTemplate() {
+    public RetData<Map<String, String>> getAllNamedParameterJdbcTemplate(HttpServletRequest request, HttpServletResponse response) {
         RetData<Map<String, String>> result = null;
 
         try {
@@ -72,7 +74,7 @@ public class CommonDataSourceCacheController {
 
     @RequestMapping("/getJdbcTemplate")
     @ResponseBody
-    public RetData<String> getJdbcTemplate(@RequestParam String tenant) {
+    public RetData<String> getJdbcTemplate(@RequestParam String tenant, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
 
         try {
@@ -88,7 +90,7 @@ public class CommonDataSourceCacheController {
 
     @RequestMapping("/getNamedParameterJdbcTemplate")
     @ResponseBody
-    public RetData<String> getNamedParameterJdbcTemplate(@RequestParam String tenant) {
+    public RetData<String> getNamedParameterJdbcTemplate(@RequestParam String tenant, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
 
         try {

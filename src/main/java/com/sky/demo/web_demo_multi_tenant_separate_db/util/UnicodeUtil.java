@@ -82,5 +82,9 @@ public class UnicodeUtil {
         for (String str : list) {
             System.out.println(UnicodeUtil.encodeCnToUnicodeWithX(str));
         }
+
+        for (String str : list) {
+            System.out.println(UnicodeUtil.decodeUnicodeToCn(str));
+        }
     }
 }

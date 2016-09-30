@@ -14,7 +14,7 @@
 		</property>
 		<property name="filterChainDefinitionMap">
 			<map>
-				<entry key="/v1/device/register" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>
+				<entry key="/v1/device/registry" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>
 				<entry key="/v1/thirdparty/**" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>
 				<entry key="/v1/**" value="noSessionCreation,headerAuthFilter"/>
 				<entry key="/**" value="anon"/>

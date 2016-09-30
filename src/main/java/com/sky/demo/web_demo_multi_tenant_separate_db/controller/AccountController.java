@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.sky.demo.web_demo_multi_tenant_separate_db.base.Pager;
 import com.sky.demo.web_demo_multi_tenant_separate_db.base.RetData;
 import com.sky.demo.web_demo_multi_tenant_separate_db.base.RetStatus;
-import com.sky.demo.web_demo_multi_tenant_separate_db.context.AppContext;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.account.AccountQueryRequest;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.Account;
 import com.sky.demo.web_demo_multi_tenant_separate_db.service.AccountService;
@@ -15,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class AccountController {
 
     @RequestMapping("/query/{id}")
     @ResponseBody
-    public RetData<Account> query(@PathVariable int id) {   //, @RequestParam String userName
+    public RetData<Account> query(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {   //, @RequestParam String userName
         RetData<Account> result = null;
         try {
             //AppContext.initAppResourcesByUserName(userName);
@@ -49,11 +50,11 @@ public class AccountController {
 
     @RequestMapping("/queryList")
     @ResponseBody
-    public RetData<Pager<Account>> queryList(@RequestBody AccountQueryRequest request) {
+    public RetData<Pager<Account>> queryList(@RequestBody AccountQueryRequest queryRequest, HttpServletRequest request, HttpServletResponse response) {
 
         RetData<Pager<Account>> result = null;
         try {
-            Pager<Account> ret  = accountService.queryList(request);
+            Pager<Account> ret  = accountService.queryList(queryRequest);
             result = RetUtil.buildSuccessRet(ret);
         } catch (Exception e) {
             logger.error("query log error",e);
@@ -65,7 +66,7 @@ public class AccountController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public RetData<String> add(@RequestBody Account record) {
+    public RetData<String> add(@RequestBody Account record, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
         try {
             boolean isAdd = accountService.add(record);
@@ -82,7 +83,7 @@ public class AccountController {
 
     @RequestMapping("/addList")
     @ResponseBody
-    public RetData<String> addList(@RequestBody List<Account> records) {
+    public RetData<String> addList(@RequestBody List<Account> records, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
         try {
             boolean isAdd = accountService.addList(records);
@@ -99,7 +100,7 @@ public class AccountController {
 
     @RequestMapping("/update")
     @ResponseBody
-    public RetData<String> update(@RequestBody Account record) {
+    public RetData<String> update(@RequestBody Account record, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
         try {
             boolean isUpdate = accountService.update(record);
@@ -115,7 +116,7 @@ public class AccountController {
 
     @RequestMapping("/delete/{id}")
     @ResponseBody
-    public RetData<String> delete(@PathVariable int id) {
+    public RetData<String> delete(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
         try {
             boolean isDelete = accountService.delete(id);

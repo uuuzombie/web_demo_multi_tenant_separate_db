@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.pam.UnsupportedTokenException;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
@@ -52,7 +53,9 @@ public class HeaderAuthFilter extends AccessControlFilter {
             AuthenticationToken token = createToken(request, response);
             logger.info("client header token is {}", token);
 
-            getSubject(request, response).login(token);
+            Subject subject = getSubject(request, response);
+            subject.login(token);
+
             result = true;
         } catch (UnsupportedTokenException e) {
             logger.error("authentication token is not supported by web service. " + e);
@@ -88,17 +91,19 @@ public class HeaderAuthFilter extends AccessControlFilter {
 
 
     protected String[] getPrincipalsAndCredentials(String authorizationHeader, ServletRequest request) {
+        HttpServletRequest httpRequest = WebUtils.getHttpRequest(request);
         if (StringUtils.isBlank(authorizationHeader)) {
+            logger.error("authorization list is null ,request url is {}", httpRequest.getRequestURI());
             return null;
         }
 
         try {
             String authorization = CodecUtil.decode(authorizationHeader);
             String[] authorizationList = authorization.split(":");
-            if (authorizationList == null || authorizationList.length != 3) {
-                HttpServletRequest req = (HttpServletRequest) request;
-                logger.error("authorization list is null or length != 3,current header is {},request url is {}",
-                        authorizationHeader, req.getRequestURI());
+            if (authorizationList.length != 3) {
+
+                logger.error("authorization list length != 3,current header is {},request url is {}",
+                        authorizationHeader, httpRequest.getRequestURI());
                 return null;
             }
             return authorizationList;
