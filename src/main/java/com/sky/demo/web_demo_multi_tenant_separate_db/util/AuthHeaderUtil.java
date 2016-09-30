@@ -42,7 +42,10 @@ public class AuthHeaderUtil {
         String id = "83af3152-b58f-fd93-beb9-c38aca1d2b06";
         String token = "ebdb57afec464a979f946f1c6967a8cf";
 
-        Map<String, String> map = AuthHeaderUtil.generateAuthHeader(id, token);
-        System.out.println(map);
+//        Map<String, String> map = AuthHeaderUtil.generateAuthHeader(id, token);
+//        System.out.println(map);
+
+        String auth = generateAuthorization(id, token);
+        System.out.println(auth);
     }
 }
