@@ -40,7 +40,7 @@ public class TenantController {
 
             result = RetUtil.buildSuccessRet(TenantForm);
         } catch (Exception e) {
-            logger.error("query log error",e);
+            logger.error("query error",e);
             result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
         }
         return result;
@@ -55,22 +55,37 @@ public class TenantController {
 
             result = RetUtil.buildSuccessRet(TenantForm);
         } catch (Exception e) {
-            logger.error("query log error",e);
+            logger.error("query error",e);
             result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
         }
         return result;
     }
 
-    @RequestMapping("/queryByToken")
+    @RequestMapping("/queryByDeviceId")
     @ResponseBody
-    public RetData<TenantForm> queryByToken(@RequestParam String token, HttpServletRequest request, HttpServletResponse response) {
+    public RetData<TenantForm> queryByDeviceId(@RequestParam String deviceId, HttpServletRequest request, HttpServletResponse response) {
         RetData<TenantForm> result = null;
         try {
-            TenantForm TenantForm = tenantService.queryByToken(token);
+            TenantForm TenantForm = tenantService.queryByDeviceId(deviceId);
 
             result = RetUtil.buildSuccessRet(TenantForm);
         } catch (Exception e) {
-            logger.error("query log error",e);
+            logger.error("query error",e);
+            result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
+        }
+        return result;
+    }
+
+    @RequestMapping("/queryByDeviceToken")
+    @ResponseBody
+    public RetData<TenantForm> queryByDeviceToken(@RequestParam String deviceToken, HttpServletRequest request, HttpServletResponse response) {
+        RetData<TenantForm> result = null;
+        try {
+            TenantForm TenantForm = tenantService.queryByDeviceToken(deviceToken);
+
+            result = RetUtil.buildSuccessRet(TenantForm);
+        } catch (Exception e) {
+            logger.error("query tenant error",e);
             result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
         }
         return result;
@@ -85,7 +100,7 @@ public class TenantController {
             Pager<TenantForm> ret  = tenantService.queryList(queryRequest);
             result = RetUtil.buildSuccessRet(ret);
         } catch (Exception e) {
-            logger.error("query log error",e);
+            logger.error("query error",e);
             result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
         }
         return result;
@@ -103,7 +118,7 @@ public class TenantController {
             result = RetUtil.buildSuccessRet("success");
 
         } catch (Exception e) {
-            logger.error("insert log error",e);
+            logger.error("insert error",e);
             result = RetUtil.buildErrorRet(RetStatus.INSERT_ERROR);
         }
         return result;
@@ -120,7 +135,7 @@ public class TenantController {
             result = RetUtil.buildSuccessRet("success");
 
         } catch (Exception e) {
-            logger.error("add log error",e);
+            logger.error("add error",e);
             result = RetUtil.buildErrorRet(RetStatus.INSERT_ERROR);
         }
         return result;
@@ -136,7 +151,7 @@ public class TenantController {
 
             result = RetUtil.buildSuccessRet("success");
         } catch (Exception e) {
-            logger.error("update log error",e);
+            logger.error("update error",e);
             result = RetUtil.buildErrorRet(RetStatus.UPDATE_ERROR);
         }
         return result;
@@ -152,7 +167,7 @@ public class TenantController {
 
             result = RetUtil.buildSuccessRet("success");
         } catch (Exception e) {
-            logger.error("delete log error",e);
+            logger.error("delete error",e);
             result = RetUtil.buildErrorRet(RetStatus.DELETE_ERROR);
         }
         return result;

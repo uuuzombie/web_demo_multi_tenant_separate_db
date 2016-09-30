@@ -42,7 +42,7 @@ public class AccountController {
 
             result = RetUtil.buildSuccessRet(Account);
         } catch (Exception e) {
-            logger.error("query log error",e);
+            logger.error("query error",e);
             result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
         }
         return result;
@@ -57,7 +57,7 @@ public class AccountController {
             Pager<Account> ret  = accountService.queryList(queryRequest);
             result = RetUtil.buildSuccessRet(ret);
         } catch (Exception e) {
-            logger.error("query log error",e);
+            logger.error("query list error",e);
             result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
         }
         return result;
@@ -75,7 +75,7 @@ public class AccountController {
             result = RetUtil.buildSuccessRet("success");
 
         } catch (Exception e) {
-            logger.error("insert log error",e);
+            logger.error("insert error",e);
             result = RetUtil.buildErrorRet(RetStatus.INSERT_ERROR);
         }
         return result;
@@ -92,7 +92,7 @@ public class AccountController {
             result = RetUtil.buildSuccessRet("success");
 
         } catch (Exception e) {
-            logger.error("add log error",e);
+            logger.error("add list error",e);
             result = RetUtil.buildErrorRet(RetStatus.INSERT_ERROR);
         }
         return result;
@@ -108,7 +108,7 @@ public class AccountController {
 
             result = RetUtil.buildSuccessRet("success");
         } catch (Exception e) {
-            logger.error("update log error",e);
+            logger.error("update error",e);
             result = RetUtil.buildErrorRet(RetStatus.UPDATE_ERROR);
         }
         return result;
@@ -124,7 +124,7 @@ public class AccountController {
 
             result = RetUtil.buildSuccessRet("success");
         } catch (Exception e) {
-            logger.error("delete log error",e);
+            logger.error("delete error",e);
             result = RetUtil.buildErrorRet(RetStatus.DELETE_ERROR);
         }
         return result;

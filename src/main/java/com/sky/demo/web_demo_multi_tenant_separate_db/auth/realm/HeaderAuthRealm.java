@@ -1,6 +1,9 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.auth.realm;
 
+import com.google.common.base.Preconditions;
 import com.sky.demo.web_demo_multi_tenant_separate_db.auth.token.HeaderAuthToken;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantForm;
+import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantService;
 import com.sky.demo.web_demo_multi_tenant_separate_db.util.SHAUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -13,12 +16,17 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Resource;
+
 /**
  * Created by user on 16/9/27.
  */
 public class HeaderAuthRealm extends AuthorizingRealm {
 
     private static final Logger logger = LoggerFactory.getLogger(HeaderAuthRealm.class);
+
+    @Resource
+    private TenantService tenantService;
 
     @Override
     public boolean supports(AuthenticationToken token) {
@@ -46,7 +54,10 @@ public class HeaderAuthRealm extends AuthorizingRealm {
         }
 
         try {
-            String deviceToken = "ebdb57afec464a979f946f1c6967a8cf";      // query from db
+            TenantForm tenantForm = tenantService.queryByDeviceId(deviceId);
+            Preconditions.checkNotNull(tenantForm, "tenant is null");
+
+            String deviceToken = tenantForm.getDeviceToken();
             logger.debug("device token is {}", deviceToken);
 
             String tokenCheck = SHAUtil.encrypt(timestamp + deviceToken + deviceId);

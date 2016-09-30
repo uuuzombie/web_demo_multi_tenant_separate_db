@@ -31,7 +31,7 @@ public class HeaderController {
 
             result = RetUtil.buildSuccessRet(auth);
         } catch (Exception e) {
-            logger.error("registry error",e);
+            logger.error("query error",e);
             result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
         }
         return result;

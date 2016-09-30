@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by user on 16/9/29.
@@ -49,8 +50,8 @@ public class AuthHeaderUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        String id = "83af3152-b58f-fd93-beb9-c38aca1d2b06";
-        String token = "ebdb57afec464a979f946f1c6967a8cf";
+        String id = "4a3e7145-e757-4660-b3ea-8328e88d8f66";
+        String token = "1aaa57afec464a979f946f1c6967a8cf";
 
 //        Map<String, String> map = AuthHeaderUtil.generateAuthHeader(id, token);
 //        System.out.println(map);

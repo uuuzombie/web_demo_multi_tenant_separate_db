@@ -138,7 +138,7 @@ public class AppContext implements Serializable {
 
         try {
             TenantService tenantService = SpringUtil.getCtx().getBean(TenantService.class);
-            TenantForm tenant = tenantService.queryByToken(token);
+            TenantForm tenant = tenantService.queryByDeviceToken(token);
             Preconditions.checkNotNull(tenant, "tenant is null!");
 
             setTenant(tenant);

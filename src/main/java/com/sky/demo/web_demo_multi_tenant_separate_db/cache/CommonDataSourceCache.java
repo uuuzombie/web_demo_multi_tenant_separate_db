@@ -120,7 +120,7 @@ public class CommonDataSourceCache {
 
             addTenants(allTenants);
 
-            //print connetion
+            //print connection
             for (Map.Entry<String, JdbcTemplate> entry : tenantJdbcTemplates.entrySet()) {
                 DataSource dataSource = (DataSource) entry.getValue().getDataSource();
                 try {
