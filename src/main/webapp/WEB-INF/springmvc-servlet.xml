@@ -61,6 +61,17 @@
             <mvc:mapping path="/**"/>
             <bean id="loginInterceptor" class="com.sky.demo.web_demo_multi_tenant_separate_db.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
+
+        <!--WebContent拦截器 , 清除缓存-->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/**/*"/>-->
+            <!--<bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">-->
+                <!--<property name="cacheSeconds" value="0"/>-->
+                <!--<property name="useExpiresHeader" value="true"/>-->
+                <!--<property name="useCacheControlHeader" value="true"/>-->
+                <!--<property name="useCacheControlNoStore" value="true"/>-->
+            <!--</bean>-->
+        <!--</mvc:interceptor>-->
     </mvc:interceptors>
 
 
