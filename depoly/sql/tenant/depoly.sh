@@ -6,9 +6,9 @@ SQL_FILES=${CURRENT_HOME}/sql/*.sql
 
 DB_IP=127.0.0.1
 DB_PORT=5432
-DB_USERNAME=dbuser
-DB_PASSWD=dbuser
-DB_NAME=pgtest
+DB_USERNAME=sps
+DB_PASSWD=sps
+DB_NAME=$1
 
 #export PGPASSWORD=dbuser
 
