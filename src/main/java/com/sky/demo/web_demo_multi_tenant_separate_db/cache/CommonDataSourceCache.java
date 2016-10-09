@@ -16,6 +16,7 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import java.sql.SQLException;
 import java.util.List;
@@ -59,6 +60,11 @@ public class CommonDataSourceCache {
             }
         }, 5, 5, TimeUnit.MINUTES);
 
+    }
+
+    @PreDestroy
+    private void destroy() {
+        scheduledExecutorService.shutdownNow();
     }
 
     /**
