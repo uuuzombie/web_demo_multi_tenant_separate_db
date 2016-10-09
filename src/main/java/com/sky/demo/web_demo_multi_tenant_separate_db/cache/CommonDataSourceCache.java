@@ -177,7 +177,7 @@ public class CommonDataSourceCache {
         dataSource.setDriverClassName(AppConfig.getItem("postgre.jdbc.driver"));
 
         StringBuilder url = new StringBuilder();
-        url.append(AppConfig.getItem("postgre.jdbc.db_url")).append(tenantForm.getDbName());
+        url.append(AppConfig.getItem("postgre.jdbc.tenant_url")).append(tenantForm.getDbName());
 
         dataSource.setUrl(url.toString());
         dataSource.setUsername(AppConfig.getItem("postgre.jdbc.username"));
