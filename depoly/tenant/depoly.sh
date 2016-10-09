@@ -24,16 +24,18 @@ ImportSQL()
 
 
 #start
-echo "====> start import sql"
-if [ -n "$1" ]; then
+echo "====> start import sql..."
+if [ -n "${DB_NAME}" ]; then
+    echo -e "\n create tenat db : ${DB_NAME}"
     sudo -u postgres createdb -E utf8 ${DB_NAME} -O ${DB_USERNAME} | grep "ERROR" | tee -a /tmp/$DATE.log
 
 
+    echo -e "\n start import sqls to db : ${DB_NAME}"
     if [ -n "${SQL_FILES}" ]; then
         ImportSQL
     fi
 else
-    echo "input database name is error!"
+    echo -e "input database name is error! \n\n"
 fi
-
+echo -e "import sql completed...\n\n"
 
