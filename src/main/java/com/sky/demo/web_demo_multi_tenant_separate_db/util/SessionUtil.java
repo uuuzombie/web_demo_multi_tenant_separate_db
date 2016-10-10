@@ -33,7 +33,9 @@ public class SessionUtil {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.removeAttribute(SESSION_INFO);
-            session.invalidate();
+            //WARN:it will cause java.lang.IllegalStateException: getAttribute: Session already invalidated
+            //in shiro filter, postHandle will use session.
+//            session.invalidate();
         }
     }
 

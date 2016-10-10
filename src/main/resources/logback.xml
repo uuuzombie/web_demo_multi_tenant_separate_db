@@ -7,7 +7,7 @@
             <pattern>[%d{HH:mm:ss.SSS}][%p][%t][%X{tenant}][%logger{10}:%L] %m%n</pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
+            <level>TRACE</level>
         </filter>
     </appender>
 
@@ -91,7 +91,7 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
-    <root level="DEBUG">
+    <root level="TRACE">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE.INFO"/>
         <appender-ref ref="FILE.ERROR"/>
