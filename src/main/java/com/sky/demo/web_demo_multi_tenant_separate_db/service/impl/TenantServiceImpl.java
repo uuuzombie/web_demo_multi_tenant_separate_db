@@ -41,6 +41,7 @@ public class TenantServiceImpl implements TenantService {
             TenantForm tenantForm = new TenantForm();
             tenantForm.setId(input.getId());
             tenantForm.setName(input.getName());
+            tenantForm.setClientId(input.getClientId());
             tenantForm.setDeviceId(input.getDeviceId());
             tenantForm.setDeviceToken(input.getDeviceToken());
             tenantForm.setDbName(input.getDbName());
@@ -56,6 +57,7 @@ public class TenantServiceImpl implements TenantService {
         public Tenant apply(TenantForm input) {
             Tenant tenant = new Tenant();
             tenant.setName(input.getName());
+            tenant.setClientId(input.getClientId());
             tenant.setDeviceId(input.getDeviceId());
             tenant.setDeviceToken(input.getDeviceToken());
             tenant.setDbName(input.getDbName());
@@ -72,6 +74,7 @@ public class TenantServiceImpl implements TenantService {
             Tenant tenant = new Tenant();
             tenant.setId(input.getId());
             tenant.setName(input.getName());
+            tenant.setClientId(input.getClientId());
             tenant.setDeviceId(input.getDeviceId());
             tenant.setDeviceToken(input.getDeviceToken());
             tenant.setDbName(input.getDbName());
@@ -114,6 +117,26 @@ public class TenantServiceImpl implements TenantService {
             tenant = tenantDao.select(condition);
         } catch (Exception e) {
             logger.error("query by name error", e);
+        }
+
+        if (tenant != null) {
+            result = transfer2Form.apply(tenant);
+        }
+        return result;
+    }
+
+    @Override
+    public TenantForm queryByClientId(String clientId) {
+        Map<String, Object> condition = Maps.newHashMap();
+        condition.put("clientId", clientId);
+        condition.put("status", Tenant.Status.NORMAL.getCode());
+
+        TenantForm result = null;
+        Tenant tenant = null;
+        try {
+            tenant = tenantDao.select(condition);
+        } catch (Exception e) {
+            logger.error("query by client id error", e);
         }
 
         if (tenant != null) {

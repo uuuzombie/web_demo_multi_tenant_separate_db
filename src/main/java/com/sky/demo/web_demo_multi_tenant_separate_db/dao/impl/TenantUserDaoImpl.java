@@ -25,10 +25,9 @@ public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
     private static final Logger logger = LoggerFactory.getLogger(TenantUserDaoImpl.class);
 
     private static final String TABLE_NAME = "tenant_user";
-    private static final String TABLE_COLUMN = "id, tenant_id, user_name, create_time, status";
     private static final String INSERT_COLUMN = "tenant_id, user_name, create_time, status";
     private static final String QUERY_COLUMN = "tba.id as id, tba.tenant_id as tenantId, tba.user_name as userName, tba.create_time as createTime, tba.status as status, "
-            + "tbb.name as tenantName, tbb.device_id as tenantDeviceId, tbb.device_token as tenantDeviceToken, tbb.db_name as tenantDbName, tbb.create_time as tenantCreateTime, tbb.status as tenantStatus";
+            + "tbb.name as tenantName, tbb.client_id as tenantClientId, tbb.device_id as tenantDeviceId, tbb.device_token as tenantDeviceToken, tbb.db_name as tenantDbName, tbb.create_time as tenantCreateTime, tbb.status as tenantStatus";
 
     @Override
     public TenantUserDto select(Map<String, Object> condition) {

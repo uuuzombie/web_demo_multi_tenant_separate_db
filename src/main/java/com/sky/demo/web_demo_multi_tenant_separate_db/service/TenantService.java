@@ -15,6 +15,8 @@ public interface TenantService {
 
     TenantForm queryByName(String name);
 
+    TenantForm queryByClientId(String clientId);
+
     TenantForm queryByDeviceId(String deviceId);
 
     TenantForm queryByDeviceToken(String deviceToken);

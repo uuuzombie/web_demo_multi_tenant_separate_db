@@ -49,6 +49,7 @@ public class TenantUserServiceImpl implements TenantUserService {
             TenantForm tenantForm = new TenantForm();
             tenantForm.setId(input.getTenantId());
             tenantForm.setName(input.getTenantName());
+            tenantForm.setClientId(input.getTenantClientId());
             tenantForm.setDeviceId(input.getTenantDeviceId());
             tenantForm.setDeviceToken(input.getTenantDeviceToken());
             tenantForm.setDbName(input.getTenantDbName());

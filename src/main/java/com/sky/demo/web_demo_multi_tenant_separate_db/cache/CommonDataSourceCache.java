@@ -71,7 +71,7 @@ public class CommonDataSourceCache {
      * 加载租户信息
      * 根据tenant表，新增或者删除租户信息
      */
-    public void loadTenants() {
+    public synchronized void loadTenants() {
         logger.debug("   ====== load tenant ======   ");
 
         List<TenantForm> allTenants = null;
@@ -108,7 +108,7 @@ public class CommonDataSourceCache {
     /**
      * 重新加载租户信息
      */
-    public void reloadAllTenants() {
+    public synchronized void reloadAllTenants() {
         logger.debug("   ====== reload all tenant ======   ");
 
         tenantJdbcTemplates.clear();

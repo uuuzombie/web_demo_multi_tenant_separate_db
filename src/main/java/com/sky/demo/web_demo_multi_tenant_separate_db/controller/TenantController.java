@@ -61,6 +61,21 @@ public class TenantController {
         return result;
     }
 
+    @RequestMapping("/queryByClientId")
+    @ResponseBody
+    public RetData<TenantForm> queryByClientId(@RequestParam String clientId, HttpServletRequest request, HttpServletResponse response) {
+        RetData<TenantForm> result = null;
+        try {
+            TenantForm TenantForm = tenantService.queryByClientId(clientId);
+
+            result = RetUtil.buildSuccessRet(TenantForm);
+        } catch (Exception e) {
+            logger.error("query error",e);
+            result = RetUtil.buildErrorRet(RetStatus.QUERY_ERROR);
+        }
+        return result;
+    }
+
     @RequestMapping("/queryByDeviceId")
     @ResponseBody
     public RetData<TenantForm> queryByDeviceId(@RequestParam String deviceId, HttpServletRequest request, HttpServletResponse response) {
