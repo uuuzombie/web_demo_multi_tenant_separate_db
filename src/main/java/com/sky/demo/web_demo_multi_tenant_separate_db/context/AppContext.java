@@ -103,7 +103,7 @@ public class AppContext implements Serializable {
      */
     public static void initAppResourcesByUserName(String userName) {
         Preconditions.checkState(StringUtils.isNotBlank(userName), "userName is blank!!");
-        logger.debug("init App Resources user name = " + userName);
+        logger.debug("   ====> init App Resources user name = " + userName);
 
         try {
             TenantUserService tenantUserService = SpringUtil.getCtx().getBean(TenantUserService.class);
@@ -134,7 +134,7 @@ public class AppContext implements Serializable {
      */
     public static void initAppResourcesByToken(String token) {
         Preconditions.checkState(StringUtils.isNotBlank(token), "token is blank!!");
-        logger.debug("init App Resources token = " + token);
+        logger.debug("   ====> init App Resources token = " + token);
 
         try {
             TenantService tenantService = SpringUtil.getCtx().getBean(TenantService.class);
@@ -161,6 +161,8 @@ public class AppContext implements Serializable {
      * 释放AppContext中资源
      */
     public static void releaseAppResources() {
+        logger.debug("   ====> release App Resources ");
+
         releaseTenant();
         releaseTenantUser();
         releaseJdbcTemplate();
