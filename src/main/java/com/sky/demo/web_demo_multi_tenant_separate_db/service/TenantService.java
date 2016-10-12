@@ -11,29 +11,29 @@ import java.util.List;
  */
 public interface TenantService {
 
-    TenantForm query(int id);
+    public TenantForm query(int id);
 
-    TenantForm queryByName(String name);
+    public TenantForm queryByName(String name);
 
-    TenantForm queryByClientId(String clientId);
+    public TenantForm queryByClientId(String clientId);
 
-    TenantForm queryByDeviceId(String deviceId);
+    public TenantForm queryByDeviceId(String deviceId);
 
-    TenantForm queryByDeviceToken(String deviceToken);
+    public TenantForm queryByDeviceToken(String deviceToken);
 
-    List<TenantForm> queryList(List<Integer> ids);
+    public List<TenantForm> queryList(List<Integer> ids);
 
-    Pager<TenantForm> queryList(TenantQueryRequest queryRequest);
+    public Pager<TenantForm> queryList(TenantQueryRequest queryRequest);
 
-    boolean add(TenantForm record);
+    public boolean add(TenantForm record);
 
-    boolean addList(List<TenantForm> records);
+    public boolean addList(List<TenantForm> records);
 
-    boolean update(TenantForm record);
+    public boolean update(TenantForm record);
 
-    boolean updateList(List<TenantForm> records);
+    public boolean updateList(List<TenantForm> records);
 
-    boolean delete(int id);
+    public boolean delete(int id);
 
-    boolean deleteList(List<Integer> ids);
+    public boolean deleteList(List<Integer> ids);
 }

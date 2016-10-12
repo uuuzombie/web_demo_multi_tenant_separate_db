@@ -11,21 +11,21 @@ import java.util.Map;
  */
 public interface TenantUserDao {
 
-    TenantUserDto select(Map<String, Object> condition);
+    public TenantUserDto select(Map<String, Object> condition);
 
-    List<TenantUserDto> selectList(Map<String, Object> condition);
+    public List<TenantUserDto> selectList(Map<String, Object> condition);
 
-    int selectCount(Map<String, Object> condition);
+    public int selectCount(Map<String, Object> condition);
 
-    int insert(TenantUser record);
+    public int insert(TenantUser record);
 
-    int batchInsert(List<TenantUser> records);
+    public int batchInsert(List<TenantUser> records);
 
-    int update(TenantUser record);
+    public int update(TenantUser record);
 
-    int batchUpdate(List<TenantUser> records);
+    public int batchUpdate(List<TenantUser> records);
 
-    int delete(final int id);
+    public int delete(final int id);
 
-    int batchDelete(List<Integer> ids);
+    public int batchDelete(List<Integer> ids);
 }

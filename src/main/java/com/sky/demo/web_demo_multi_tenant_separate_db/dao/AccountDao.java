@@ -10,21 +10,21 @@ import java.util.Map;
  */
 public interface AccountDao {
 
-    Account select(Map<String, Object> condition);
+    public Account select(Map<String, Object> condition);
 
-    List<Account> selectList(Map<String, Object> condition);
+    public List<Account> selectList(Map<String, Object> condition);
 
-    int selectCount(Map<String, Object> condition);
+    public int selectCount(Map<String, Object> condition);
 
-    int insert(Account record);
+    public int insert(Account record);
 
-    int batchInsert(List<Account> records);
+    public int batchInsert(List<Account> records);
 
-    int update(Account record);
+    public int update(Account record);
 
-    int batchUpdate(List<Account> records);
+    public int batchUpdate(List<Account> records);
 
-    int delete(final int id);
+    public int delete(final int id);
 
-    int batchDelete(List<Integer> ids);
+    public int batchDelete(List<Integer> ids);
 }

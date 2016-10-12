@@ -11,23 +11,23 @@ import java.util.List;
  */
 public interface TenantUserService {
 
-    TenantUserForm query(int id);
+    public TenantUserForm query(int id);
 
-    TenantUserForm queryByUserName(String userName);
+    public TenantUserForm queryByUserName(String userName);
 
-    List<TenantUserForm> queryList(List<Integer> ids);
+    public List<TenantUserForm> queryList(List<Integer> ids);
 
-    Pager<TenantUserForm> queryList(TenantUserQueryRequest queryRequest);
+    public Pager<TenantUserForm> queryList(TenantUserQueryRequest queryRequest);
 
-    boolean add(TenantUserForm record);
+    public boolean add(TenantUserForm record);
 
-    boolean addList(List<TenantUserForm> records);
+    public boolean addList(List<TenantUserForm> records);
 
-    boolean update(TenantUserForm record);
+    public boolean update(TenantUserForm record);
 
-    boolean updateList(List<TenantUserForm> records);
+    public boolean updateList(List<TenantUserForm> records);
 
-    boolean delete(int id);
+    public boolean delete(int id);
 
-    boolean deleteList(List<Integer> ids);
+    public boolean deleteList(List<Integer> ids);
 }

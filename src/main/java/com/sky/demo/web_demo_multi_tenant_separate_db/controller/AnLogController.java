@@ -176,4 +176,20 @@ public class AnLogController {
         }
         return result;
     }
+
+    @RequestMapping("/asyncUpdate")
+    @ResponseBody
+    public RetData<String> asyncUpdate(@RequestBody AnLogUpdateRequest updateRequest, HttpServletRequest request, HttpServletResponse response) {
+        RetData<String> result = null;
+        try {
+            boolean isUpdate = anLogService.asyncUpdate(updateRequest);
+            Preconditions.checkArgument(isUpdate, "async update error");
+
+            result = RetUtil.buildSuccessRet("success");
+        } catch (Exception e) {
+            logger.error("update error",e);
+            result = RetUtil.buildErrorRet(RetStatus.UPDATE_ERROR);
+        }
+        return result;
+    }
 }

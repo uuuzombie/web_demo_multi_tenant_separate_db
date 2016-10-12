@@ -13,22 +13,22 @@ import java.util.Map;
  */
 public interface JdbcAnLogDao {
 
-    AnLogDto select(Map<String, Object> condition);
+    public AnLogDto select(Map<String, Object> condition);
 
-    List<AnLogDto> selectList(Map<String, Object> condition);
+    public List<AnLogDto> selectList(Map<String, Object> condition);
 
-    long selectCount(Map<String, Object> condition);
+    public long selectCount(Map<String, Object> condition);
 
-    int insert(AnLog record);
+    public int insert(AnLog record);
 
-    int batchInsert(List<AnLog> records);
+    public int batchInsert(List<AnLog> records);
 
-    int update(AnLog record);
+    public int update(AnLog record);
 
-    int batchUpdate(List<AnLog> records);
+    public int batchUpdate(List<AnLog> records);
 
-    int delete(final Long id);
+    public int delete(final Long id);
 
-    int batchDelete(List<Long> ids);
+    public int batchDelete(List<Long> ids);
 
 }

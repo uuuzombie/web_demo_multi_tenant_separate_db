@@ -15,21 +15,23 @@ import java.util.List;
  */
 public interface AnLogService {
 
-    AnLogForm query(long id);
+    public AnLogForm query(long id);
 
-    List<AnLogForm> queryList(List<Long> ids);
+    public List<AnLogForm> queryList(List<Long> ids);
 
-    Pager<AnLogForm> queryList(AnLogQueryRequest queryRequest);
+    public Pager<AnLogForm> queryList(AnLogQueryRequest queryRequest);
 
-    boolean add(AnLogInsertRequest insertRequest);
+    public boolean add(AnLogInsertRequest insertRequest);
 
-    boolean addList(List<AnLogInsertRequest> insertRequests);
+    public boolean addList(List<AnLogInsertRequest> insertRequests);
 
-    boolean update(AnLogUpdateRequest updateRequest);
+    public boolean update(AnLogUpdateRequest updateRequest);
 
-    boolean updateList(List<AnLogUpdateRequest> updateRequests);
+    public boolean asyncUpdate(AnLogUpdateRequest updateRequest);
 
-    boolean delete(long id);
+    public boolean updateList(List<AnLogUpdateRequest> updateRequests);
 
-    boolean deleteList(List<Long> ids);
+    public boolean delete(long id);
+
+    public boolean deleteList(List<Long> ids);
 }

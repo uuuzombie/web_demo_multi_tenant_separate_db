@@ -18,25 +18,24 @@ import com.sky.demo.web_demo_multi_tenant_separate_db.model.AnLog;
 //@Repository   //for MyBatis
 public interface AnLogDao {
 
-    AnLogForm selectById(@Param("id") final Long id);
+    public AnLogForm selectById(@Param("id") final Long id);
 
-    List<AnLogForm> selectList(Map<String, Object> condition);  //for MyBatis
+    public List<AnLogForm> selectList(Map<String, Object> condition);  //for MyBatis
 
-    List<AnLogForm> selectList(Map<String, Object> condition, RowBounds rowBounds);  //for MyBatis
+    public List<AnLogForm> selectList(Map<String, Object> condition, RowBounds rowBounds);  //for MyBatis
 
-    int selectCount(Map<String, Object> condition);
+    public int selectCount(Map<String, Object> condition);
 
-    int deleteById(@Param("id") final Long id);
+    public int deleteById(@Param("id") final Long id);
 
-    int batchDelete(List<Long> ids);
+    public int batchDelete(List<Long> ids);
 
-    int insert(AnLog record);
+    public int insert(AnLog record);
 
-    int batchInsert(List<AnLog> recordList);
+    public int batchInsert(List<AnLog> recordList);
 
-    int update(AnLog record);
+    public int update(AnLog record);
 
-    int batchUpdate(List<Long> ids, AnLog record);
-
+    public int batchUpdate(List<Long> ids, AnLog record);
 
 }

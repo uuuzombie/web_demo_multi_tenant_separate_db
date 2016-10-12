@@ -12,23 +12,23 @@ import java.util.List;
  */
 public interface AccountService {
 
-    Account query(int id);
+    public Account query(int id);
 
-    Account query(String userName, String password);
+    public Account query(String userName, String password);
 
-    List<Account> queryList(List<Integer> ids);
+    public List<Account> queryList(List<Integer> ids);
 
-    Pager<Account> queryList(AccountQueryRequest queryRequest);
+    public Pager<Account> queryList(AccountQueryRequest queryRequest);
 
-    boolean add(Account record);
+    public boolean add(Account record);
 
-    boolean addList(List<Account> records);
+    public boolean addList(List<Account> records);
 
-    boolean update(Account record);
+    public boolean update(Account record);
 
-    boolean updateList(List<Account> records);
+    public boolean updateList(List<Account> records);
 
-    boolean delete(int id);
+    public boolean delete(int id);
 
-    boolean deleteList(List<Integer> ids);
+    public boolean deleteList(List<Integer> ids);
 }
