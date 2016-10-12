@@ -22,13 +22,14 @@ import java.util.Map;
 /**
  * Created by user on 16/9/20.
  */
-@RequestMapping("/dataSource")
-@Controller
+@Deprecated
+//@RequestMapping("/dataSource")
+//@Controller
 public class CommonDataSourceCacheController {
 
     private static final Logger logger = LoggerFactory.getLogger(CommonDataSourceCacheController.class);
 
-    @Resource
+    //@Resource
     private CommonDataSourceCache commonDataSourceCache;
 
 

@@ -21,6 +21,7 @@ import java.sql.SQLException;
 /**
  * Created by user on 16/9/20.
  */
+@Deprecated
 public class AppContext implements Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(AppContext.class);

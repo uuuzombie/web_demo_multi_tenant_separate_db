@@ -28,8 +28,11 @@ import java.util.stream.Collectors;
 
 /**
  * Created by rg on 9/19/16.
+ *
+ *  WARN 此方式会导致数据库连接池耗尽，废弃！！
  */
-@Service
+@Deprecated
+//@Service
 public class CommonDataSourceCache {
 
     private static final Logger logger = LoggerFactory.getLogger(CommonDataSourceCache.class);
@@ -90,7 +93,7 @@ public class CommonDataSourceCache {
 
             deleteTenants(needDeleteTenants);
 
-            //print connetion
+            //print connection url
             for (Map.Entry<String, JdbcTemplate> entry : tenantJdbcTemplates.entrySet()) {
                 DataSource dataSource = (DataSource) entry.getValue().getDataSource();
                 try {
@@ -126,7 +129,7 @@ public class CommonDataSourceCache {
 
             addTenants(allTenants);
 
-            //print connection
+            //print connection url
             for (Map.Entry<String, JdbcTemplate> entry : tenantJdbcTemplates.entrySet()) {
                 DataSource dataSource = (DataSource) entry.getValue().getDataSource();
                 try {
@@ -182,8 +185,8 @@ public class CommonDataSourceCache {
         dataSource.setUrl(url.toString());
         dataSource.setUsername(AppConfig.getItem("postgre.jdbc.username"));
         dataSource.setPassword(AppConfig.getItem("postgre.jdbc.password"));
-        dataSource.setInitialSize(3);       //连接池启动时初始化连接数，默认0
-        dataSource.setMaxActive(30);        //连接池最大连接数
+        dataSource.setInitialSize(50);       //连接池启动时初始化连接数，默认0
+        dataSource.setMaxActive(300);        //连接池最大连接数
         dataSource.setMinIdle(0);           //连接池最小空闲的连接数，低于此数会创建新连接
         dataSource.setMaxIdle(3);           //连接池最大空闲的连接数，超过的空闲链接将被释放，-1表示不限
         dataSource.setMaxWait(50000);       //最大等待时间，当没有可用链接时，等待释放的最大时间，超时则抛异常，-1表示不限

@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 /**
  * Created by user on 16/9/18.
  */
+@Deprecated
 public abstract class BaseDao {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseDao.class);
