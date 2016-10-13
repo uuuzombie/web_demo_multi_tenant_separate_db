@@ -1,6 +1,7 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.aop;
 
 import com.sky.demo.web_demo_multi_tenant_separate_db.context.DBContext;
+import com.sky.demo.web_demo_multi_tenant_separate_db.util.AppConfig;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class DaoAop {
     //default db
     @Before("target(com.sky.demo.web_demo_multi_tenant_separate_db.basedb.MarkDefaultDao)")
     public void defaultDaoBefore() {
-        String dbKey = "default_db";
+        String dbKey = AppConfig.getItem("jdbc.default.key", "default_db");
         logger.debug("aop before default db ==>  set DBContext dbKey={}", dbKey);
         DBContext.setDbKey(dbKey);
     }

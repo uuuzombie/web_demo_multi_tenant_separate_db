@@ -50,8 +50,14 @@
         <property name="password" value="${postgre.jdbc.password}" />
     </bean>
 
-    <!--tenant datasources 需要动态加载-->
-    <bean id="tenantDataSource" class="com.sky.demo.web_demo_multi_tenant_separate_db.basedb.TenantRoutingDataSource">
+    <bean id="tenantDataSource" parent="parentDataSource">
+        <property name="url" value="${postgre.jdbc.url}" />
+        <property name="username" value="${postgre.jdbc.username}" />
+        <property name="password" value="${postgre.jdbc.password}" />
+    </bean>
+
+    <!--tenant data source 需要动态加载-->
+    <bean id="dataSource" class="com.sky.demo.web_demo_multi_tenant_separate_db.basedb.TenantRoutingDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <entry key="${jdbc.default.key}" value-ref="defaultDataSource" />
@@ -80,7 +86,7 @@
     <!--</bean>-->
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="tenantDataSource" />
+        <property name="dataSource" ref="dataSource" />
     </bean>
     <tx:annotation-driven />
 
@@ -98,10 +104,10 @@
     <!--</bean>-->
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="tenantDataSource" />
+        <property name="dataSource" ref="dataSource" />
     </bean>
     <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" >
-        <constructor-arg ref="tenantDataSource"/>
+        <constructor-arg ref="dataSource"/>
     </bean>
 
     <!--<bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>-->
