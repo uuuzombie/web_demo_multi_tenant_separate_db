@@ -3,6 +3,7 @@ package com.sky.demo.web_demo_multi_tenant_separate_db.controller;
 import com.sky.demo.web_demo_multi_tenant_separate_db.base.RetData;
 import com.sky.demo.web_demo_multi_tenant_separate_db.base.RetStatus;
 import com.sky.demo.web_demo_multi_tenant_separate_db.context.AppContext;
+import com.sky.demo.web_demo_multi_tenant_separate_db.context.DBContext;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserForm;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.Account;
 import com.sky.demo.web_demo_multi_tenant_separate_db.service.AccountService;
@@ -43,7 +44,8 @@ public class LoginController {
         ModelAndView modelAndView = new ModelAndView();
         try {
             logger.info("login user:" + userName);
-            AppContext.initAppResourcesByUserName(userName);
+//            AppContext.initAppResourcesByUserName(userName);
+            DBContext.initResourcesByUserName(userName);
             TenantUserForm tenantUserForm = tenantUserService.queryByUserName(userName);
 
             if (tenantUserForm != null) {
@@ -68,7 +70,8 @@ public class LoginController {
             logger.error("login error", e);
             modelAndView.setViewName("error");
         } finally {
-            AppContext.releaseAppResources();
+//            AppContext.releaseAppResources();
+            DBContext.removeTenant();
         }
         return modelAndView;
     }
@@ -85,7 +88,8 @@ public class LoginController {
             logger.error("logout error", e);
             modelAndView.setViewName("error");
         } finally {
-            AppContext.releaseAppResources();
+//            AppContext.releaseAppResources();
+            DBContext.releaseContext();
         }
         return modelAndView;
     }

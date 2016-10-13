@@ -1,7 +1,7 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.dao.impl;
 
 import com.google.common.collect.Lists;
-import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseTenantDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dao.AccountDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.Account;
 import org.apache.commons.lang.StringUtils;
@@ -18,7 +18,7 @@ import java.util.Map;
  * Created by user on 16/9/19.
  */
 @Repository
-public class AccountDaoImpl extends BaseDao implements AccountDao {
+public class AccountDaoImpl extends BaseTenantDao implements AccountDao {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountDaoImpl.class);
 

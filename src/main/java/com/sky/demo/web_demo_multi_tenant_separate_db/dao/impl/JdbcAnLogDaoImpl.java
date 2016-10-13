@@ -3,6 +3,7 @@ package com.sky.demo.web_demo_multi_tenant_separate_db.dao.impl;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseTenantDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dao.JdbcAnLogDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.anlog.AnLogDto;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.AnLog;
@@ -25,7 +26,7 @@ import java.util.Map;
  * Created by rg on 15/6/30.
  */
 @Repository
-public class JdbcAnLogDaoImpl extends BaseDao implements JdbcAnLogDao {
+public class JdbcAnLogDaoImpl extends BaseTenantDao implements JdbcAnLogDao {
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcAnLogDaoImpl.class);
 

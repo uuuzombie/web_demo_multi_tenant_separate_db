@@ -31,9 +31,9 @@
     <!--</bean>-->
 
 
-    <!-- 每隔1分钟检查一次数据库中空闲超过10分钟的链接，发现就回收，直到空闲连接数达到 minIdle 个 -->
-    <bean id="parentDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close" abstract="true">
-        <property name="driverClassName" value="${postgre.jdbc.driver}" />
+    <!-- 每隔1分钟检查一次数据库中空闲超过10分钟的链接，发现就回收，直到空闲连接数达到 minIdle 个 , 注：dbcp 支持parent，tomcat jdbc 不支持-->
+    <bean id="parentDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" autowire="no" abstract="true">
+        <!--<property name="driverClassName" value="${postgre.jdbc.driver}" />-->
         <property name="timeBetweenEvictionRunsMillis" value="60000"/>  <!-- 每隔毫秒秒检查一次连接池中空闲的连接 -->
         <property name="minEvictableIdleTimeMillis" value="600000" />   <!-- 连接池中连接可空闲的时间,毫秒 -->
 
@@ -45,13 +45,15 @@
     </bean>
     <!--default-->
     <bean id="defaultDataSource" parent="parentDataSource">
+        <property name="driverClassName" value="${postgre.jdbc.driver}"/>
         <property name="url" value="${postgre.jdbc.url}" />
         <property name="username" value="${postgre.jdbc.username}" />
         <property name="password" value="${postgre.jdbc.password}" />
     </bean>
 
     <bean id="tenantDataSource" parent="parentDataSource">
-        <property name="url" value="${postgre.jdbc.url}" />
+        <property name="driverClassName" value="${postgre.jdbc.driver}"/>
+        <property name="url" value="${postgre.jdbc.tenant_url}" />
         <property name="username" value="${postgre.jdbc.username}" />
         <property name="password" value="${postgre.jdbc.password}" />
     </bean>
@@ -96,12 +98,12 @@
     </context:component-scan>
 
     <!-- 1.Spring JdbcTemplate方式 -->
-    <!--<bean id="defaultJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
-        <!--<property name="dataSource" ref="dataSource" />-->
-    <!--</bean>-->
-    <!--<bean id="defaultNamedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" >-->
-        <!--<constructor-arg ref="dataSource"/>-->
-    <!--</bean>-->
+    <bean id="defaultJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="defaultDataSource" />
+    </bean>
+    <bean id="defaultNamedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate" >
+        <constructor-arg ref="defaultDataSource"/>
+    </bean>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource" />

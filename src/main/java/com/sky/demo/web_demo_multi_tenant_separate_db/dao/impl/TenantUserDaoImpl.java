@@ -1,7 +1,7 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.dao.impl;
 
 import com.google.common.collect.Lists;
-import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDefaultDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dao.TenantUserDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserDto;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.TenantUser;
@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by user on 16/9/18.
  */
 @Repository
-public class TenantUserDaoImpl extends BaseDao implements TenantUserDao {
+public class TenantUserDaoImpl extends BaseDefaultDao implements TenantUserDao {
 
     private static final Logger logger = LoggerFactory.getLogger(TenantUserDaoImpl.class);
 

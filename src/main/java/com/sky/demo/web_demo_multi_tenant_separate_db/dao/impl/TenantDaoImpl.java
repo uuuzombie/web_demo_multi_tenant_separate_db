@@ -1,7 +1,7 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.dao.impl;
 
 import com.google.common.collect.Lists;
-import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDao;
+import com.sky.demo.web_demo_multi_tenant_separate_db.basedb.BaseDefaultDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dao.TenantDao;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.Tenant;
 import org.apache.commons.lang.StringUtils;
@@ -14,13 +14,12 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.Condition;
 
 /**
  * Created by user on 16/9/18.
  */
 @Repository
-public class TenantDaoImpl extends BaseDao implements TenantDao {
+public class TenantDaoImpl extends BaseDefaultDao implements TenantDao {
 
     private static final Logger logger = LoggerFactory.getLogger(TenantDaoImpl.class);
 

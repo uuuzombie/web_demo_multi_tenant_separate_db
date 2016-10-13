@@ -3,6 +3,7 @@ package com.sky.demo.web_demo_multi_tenant_separate_db.interceptor;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.sky.demo.web_demo_multi_tenant_separate_db.context.AppContext;
+import com.sky.demo.web_demo_multi_tenant_separate_db.context.DBContext;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserForm;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.SessionInfo;
 import com.sky.demo.web_demo_multi_tenant_separate_db.util.SessionUtil;
@@ -50,7 +51,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        AppContext.releaseAppResources();
+//        AppContext.releaseAppResources();
+        DBContext.releaseContext();
 
         boolean flag = true;
         try {
@@ -66,7 +68,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                     //validate some url
 
                     TenantUserForm tenantUser = sessionInfo.getTenantUser();
-                    AppContext.initAppResourcesByUserName(tenantUser.getUserName());
+//                    AppContext.initAppResourcesByUserName(tenantUser.getUserName());
+                    DBContext.initResourcesByUserName(tenantUser.getUserName());
 
                 }
             }

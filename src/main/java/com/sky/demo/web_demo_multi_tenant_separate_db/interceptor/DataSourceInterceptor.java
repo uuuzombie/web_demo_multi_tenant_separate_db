@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
+import com.sky.demo.web_demo_multi_tenant_separate_db.context.DBContext;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,8 @@ public class DataSourceInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        AppContext.releaseAppResources();
+//        AppContext.releaseAppResources();
+        DBContext.releaseContext();
 
         String url = request.getRequestURL().toString();
 
@@ -45,9 +47,11 @@ public class DataSourceInterceptor extends HandlerInterceptorAdapter {
         String token = authorization;
 
         if (StringUtils.isNotBlank(userName)) {
-            AppContext.initAppResourcesByUserName(userName.trim());
+//            AppContext.initAppResourcesByUserName(userName.trim());
+            DBContext.initResourcesByUserName(userName.trim());
         } else if (StringUtils.isNotBlank(token)) {
-            AppContext.initAppResourcesByToken(token.trim());
+//            AppContext.initAppResourcesByToken(token.trim());
+            DBContext.initResourcesByToken(token.trim());
         }
 
         return true;
