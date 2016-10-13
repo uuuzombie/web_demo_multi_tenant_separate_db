@@ -1,18 +1,17 @@
 package com.sky.demo.web_demo_multi_tenant_separate_db.context;
 
-import com.google.common.base.Preconditions;
-import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantForm;
-import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserForm;
-import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantService;
-import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantUserService;
-import com.sky.demo.web_demo_multi_tenant_separate_db.util.SpringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.BeansException;
 
-import java.sql.SQLException;
+import com.google.common.base.Preconditions;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantForm;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserForm;
+import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantService;
+import com.sky.demo.web_demo_multi_tenant_separate_db.service.TenantUserService;
+import com.sky.demo.web_demo_multi_tenant_separate_db.util.SpringUtil;
 
 /**
  * Created by user on 16/10/12.

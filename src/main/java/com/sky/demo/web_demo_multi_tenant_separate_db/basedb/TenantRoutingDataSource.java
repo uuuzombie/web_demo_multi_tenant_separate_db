@@ -61,7 +61,6 @@ public class TenantRoutingDataSource extends AbstractRoutingDataSource{
 
     @Override
     public Connection getConnection() throws SQLException {
-        logger.debug("************ get Connection()");
         Connection connection = super.getConnection();
         changeTenant(connection);
         return connection;
@@ -69,7 +68,6 @@ public class TenantRoutingDataSource extends AbstractRoutingDataSource{
 
     @Override
     public Connection getConnection(String username, String password) throws SQLException {
-        logger.debug("************ get Connection()");
         Connection connection = super.getConnection(username, password);
         changeTenant(connection);
         return connection;
@@ -103,8 +101,8 @@ public class TenantRoutingDataSource extends AbstractRoutingDataSource{
         if (DBContext.getDbKey() != null && !StringUtils.equals(AppConfig.getItem("jdbc.default.key", "default_db"),
                 DBContext.getDbKey())) {
             try {
-                connection.setCatalog(DBContext.getDbKey());
-//                connection.createStatement().execute("\\c " + DBContext.getDbKey());
+//                connection.setCatalog(DBContext.getDbKey());
+                connection.createStatement().execute("connect " + DBContext.getDbKey());
             } catch (SQLException e) {
                 logger.error("change tenant db error : {}", DBContext.getDbKey(), e);
 
