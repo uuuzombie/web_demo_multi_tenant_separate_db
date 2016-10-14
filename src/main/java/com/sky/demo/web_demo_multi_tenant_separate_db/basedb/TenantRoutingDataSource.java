@@ -11,6 +11,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.annotation.Resource;
@@ -18,6 +19,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -94,7 +96,9 @@ public class TenantRoutingDataSource extends AbstractRoutingDataSource{
     }
 
     /**
-     * 切换租户数据库  使用 \c tenant_db
+     * 切换租户数据库
+     * 注:PostgreSQL的同一个会话Connection无法切换DB
+     * MySQL 可以使用 use xxx 切换
      * @param connection
      */
     private void changeTenant(Connection connection) {
@@ -102,7 +106,10 @@ public class TenantRoutingDataSource extends AbstractRoutingDataSource{
                 DBContext.getDbKey())) {
             try {
 //                connection.setCatalog(DBContext.getDbKey());
-                connection.createStatement().execute("connect " + DBContext.getDbKey());
+                connection.createStatement().execute("use `" + DBContext.getDbKey() + "`");
+//                connection.createStatement().execute("\\c " + DBContext.getDbKey());
+
+
             } catch (SQLException e) {
                 logger.error("change tenant db error : {}", DBContext.getDbKey(), e);
 
