@@ -112,17 +112,14 @@ public class TenantRoutingDataSource extends AbstractRoutingDataSource{
 
             } catch (SQLException e) {
                 logger.error("change tenant db error : {}", DBContext.getDbKey(), e);
-
-            } finally {
                 if (connection != null) {
                     try {
                         connection.close();
-                    } catch (SQLException e) {
-                        logger.error("close connection error", e);
+                    } catch (SQLException ex) {
+                        logger.error("close connection error", ex);
                     }
                 }
             }
-
         }
     }
 
