@@ -44,7 +44,7 @@ public class LoginController {
         ModelAndView modelAndView = new ModelAndView();
         try {
             logger.info("login user:" + userName);
-//            AppContext.initAppResourcesByUserName(userName);
+//            AppContext.initResourcesByUserName(userName);
             DBContext.initResourcesByUserName(userName);
             TenantUserForm tenantUserForm = tenantUserService.queryByUserName(userName);
 
@@ -70,7 +70,7 @@ public class LoginController {
             logger.error("login error", e);
             modelAndView.setViewName("error");
         } finally {
-//            AppContext.releaseAppResources();
+//            AppContext.releaseResources();
             DBContext.removeTenant();
         }
         return modelAndView;
@@ -88,7 +88,7 @@ public class LoginController {
             logger.error("logout error", e);
             modelAndView.setViewName("error");
         } finally {
-//            AppContext.releaseAppResources();
+//            AppContext.releaseResources();
             DBContext.releaseContext();
         }
         return modelAndView;

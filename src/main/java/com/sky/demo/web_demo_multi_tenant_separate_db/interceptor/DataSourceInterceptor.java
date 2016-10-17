@@ -36,7 +36,7 @@ public class DataSourceInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        AppContext.releaseAppResources();
+//        AppContext.releaseResources();
         DBContext.releaseContext();
 
         String url = request.getRequestURL().toString();
@@ -47,10 +47,10 @@ public class DataSourceInterceptor extends HandlerInterceptorAdapter {
         String token = authorization;
 
         if (StringUtils.isNotBlank(userName)) {
-//            AppContext.initAppResourcesByUserName(userName.trim());
+//            AppContext.initResourcesByUserName(userName.trim());
             DBContext.initResourcesByUserName(userName.trim());
         } else if (StringUtils.isNotBlank(token)) {
-//            AppContext.initAppResourcesByToken(token.trim());
+//            AppContext.initResourcesByToken(token.trim());
             DBContext.initResourcesByToken(token.trim());
         }
 

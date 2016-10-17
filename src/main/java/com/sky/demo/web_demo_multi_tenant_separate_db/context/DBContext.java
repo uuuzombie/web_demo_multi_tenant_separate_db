@@ -60,7 +60,7 @@ public class DBContext {
      */
     public static void initResourcesByUserName(String userName) {
         Preconditions.checkState(StringUtils.isNotBlank(userName), "userName is blank!!");
-        logger.debug("   ====> init App Resources user name = " + userName);
+        logger.debug("   ====> init Resources user name = " + userName);
 
         try {
             TenantUserService tenantUserService = SpringUtil.getCtx().getBean(TenantUserService.class);
@@ -70,10 +70,33 @@ public class DBContext {
             setDbKey(tenantUser.getTenant().getDbName());
             setTenant(tenantUser.getTenant());
         } catch (BeansException e) {
-            logger.error("init app resources by userName error", e);
+            logger.error("init resources by userName error", e);
         }
 
-        logger.debug("   ====> init AppResources by userName: " + userName + ", tenant = " + getTenant().getDbName());
+        logger.debug("   ====> init Resources by userName: " + userName + ", tenant = " + getTenant().getDbName());
+
+    }
+
+    /**
+     * 初始化tenant信息
+     * @param dbKey
+     */
+    public static void initResourcesByDbKey(String dbKey) {
+        Preconditions.checkState(StringUtils.isNotBlank(dbKey), "dbKey is blank!!");
+        logger.debug("   ====> init Resources user name = " + dbKey);
+
+        try {
+            TenantService tenantService = SpringUtil.getCtx().getBean(TenantService.class);
+            TenantForm tenant = tenantService.queryByDbName(dbKey);
+            Preconditions.checkNotNull(tenant, "tenant user is null!");
+
+            setDbKey(dbKey);
+            setTenant(tenant);
+        } catch (BeansException e) {
+            logger.error("init app resources by dbKey error", e);
+        }
+
+        logger.debug("   ====> init AppResources by dbKey: " + dbKey + ", tenant = " + getTenant().getDbName());
 
     }
 

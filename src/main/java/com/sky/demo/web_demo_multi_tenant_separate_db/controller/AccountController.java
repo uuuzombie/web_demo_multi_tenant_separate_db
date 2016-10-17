@@ -36,7 +36,7 @@ public class AccountController {
     public RetData<Account> query(@PathVariable int id, HttpServletRequest request, HttpServletResponse response) {   //, @RequestParam String userName
         RetData<Account> result = null;
         try {
-            //AppContext.initAppResourcesByUserName(userName);
+            //AppContext.initResourcesByUserName(userName);
 
             Account Account = accountService.query(id);
 

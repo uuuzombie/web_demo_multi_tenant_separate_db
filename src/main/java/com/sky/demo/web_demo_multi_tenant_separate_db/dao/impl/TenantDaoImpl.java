@@ -65,6 +65,12 @@ public class TenantDaoImpl extends BaseDefaultDao implements TenantDao {
             params.add(deviceToken);
         }
 
+        String dbName = (String) condition.get("dbName");
+        if (StringUtils.isNotBlank(dbName)) {
+            sql.append("and db_name = ? ");
+            params.add(dbName);
+        }
+
         String beginTime = (String) condition.get("beginTime");
         if (StringUtils.isNotEmpty(beginTime)) {
             sql.append("and create_time >= ? ");
@@ -119,6 +125,12 @@ public class TenantDaoImpl extends BaseDefaultDao implements TenantDao {
         if (StringUtils.isNotBlank(deviceToken)) {
             sql.append("and device_token = ? ");
             params.add(deviceToken);
+        }
+
+        String dbName = (String) condition.get("dbName");
+        if (StringUtils.isNotBlank(dbName)) {
+            sql.append("and db_name = ? ");
+            params.add(dbName);
         }
 
         String beginTime = (String) condition.get("beginTime");
@@ -194,6 +206,12 @@ public class TenantDaoImpl extends BaseDefaultDao implements TenantDao {
         if (StringUtils.isNotBlank(deviceToken)) {
             sql.append("and device_token = ? ");
             params.add(deviceToken);
+        }
+
+        String dbName = (String) condition.get("dbName");
+        if (StringUtils.isNotBlank(dbName)) {
+            sql.append("and db_name = ? ");
+            params.add(dbName);
         }
 
         String beginTime = (String) condition.get("beginTime");

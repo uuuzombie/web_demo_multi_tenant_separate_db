@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sky.demo.web_demo_multi_tenant_separate_db.context.AppContext;
 import com.sky.demo.web_demo_multi_tenant_separate_db.context.DBContext;
+import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantForm;
 import com.sky.demo.web_demo_multi_tenant_separate_db.dto.tenant.TenantUserForm;
 import com.sky.demo.web_demo_multi_tenant_separate_db.model.SessionInfo;
 import com.sky.demo.web_demo_multi_tenant_separate_db.util.AsyncWorker;
@@ -148,21 +149,22 @@ public class AnLogController {
     public RetData<String> asyncAdd(@RequestBody AnLogInsertRequest insertRequest, HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
         try {
-            TenantUserForm tenantUser = AppContext.getTenantUser();
+//            TenantUserForm tenantUser = AppContext.getTenantUser();
+            TenantForm tenant = DBContext.getTenant();
 
             Future<Boolean> futrueResult = AsyncWorker.submit(new Callable<Boolean>() {
                 @Override
                 public Boolean call() throws Exception {
                     boolean isAdd = false;
                     try {
-//                        AppContext.initAppResourcesByUserName(tenantUser.getUserName());    //need init App Resource
-                        DBContext.initResourcesByUserName(tenantUser.getUserName());    //need init App Resource
+//                        AppContext.initResourcesByUserName(tenantUser.getUserName());    //need init App Resource
+                        DBContext.initResourcesByDbKey(tenant.getDbName());    //need init App Resource
 
                         isAdd = anLogService.add(insertRequest);
                     } catch (Exception e) {
                         logger.error("async add error", e);
                     } finally {
-//                        AppContext.releaseAppResources();
+//                        AppContext.releaseResources();
                         DBContext.releaseContext();
                     }
                     return isAdd;

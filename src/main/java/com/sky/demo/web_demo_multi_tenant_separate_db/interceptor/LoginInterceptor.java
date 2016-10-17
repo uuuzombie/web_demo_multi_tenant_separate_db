@@ -51,7 +51,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        AppContext.releaseAppResources();
+//        AppContext.releaseResources();
         DBContext.releaseContext();
 
         boolean flag = true;
@@ -68,7 +68,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                     //validate some url
 
                     TenantUserForm tenantUser = sessionInfo.getTenantUser();
-//                    AppContext.initAppResourcesByUserName(tenantUser.getUserName());
+//                    AppContext.initResourcesByUserName(tenantUser.getUserName());
                     DBContext.initResourcesByUserName(tenantUser.getUserName());
 
                 }

@@ -186,6 +186,26 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
+    public TenantForm queryByDbName(String dbName) {
+        Map<String, Object> condition = Maps.newHashMap();
+        condition.put("dbName", dbName);
+        condition.put("status", Tenant.Status.NORMAL.getCode());
+
+        TenantForm result = null;
+        Tenant tenant = null;
+        try {
+            tenant = tenantDao.select(condition);
+        } catch (Exception e) {
+            logger.error("query by db name error", e);
+        }
+
+        if (tenant != null) {
+            result = transfer2Form.apply(tenant);
+        }
+        return result;
+    }
+
+    @Override
     public List<TenantForm> queryList(List<Integer> ids) {
         Map<String, Object> condition = Maps.newHashMap();
         condition.put("status", Tenant.Status.NORMAL.getCode());
