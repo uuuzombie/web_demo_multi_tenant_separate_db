@@ -8,7 +8,7 @@ create table tenant(
 	`db_name` varchar(255) NOT NULL UNIQUE COMMENT '数据库名',
 	`create_time` timestamp NOT NULL COMMENT '创建时间',
 	`status` smallint NOT NULL DEFAULT 1 COMMENT '状态 1-正常 2-删除'
-)ENGINE=INNODB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT '租戶信息表';
+)ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT '租戶信息表';
 
 
 

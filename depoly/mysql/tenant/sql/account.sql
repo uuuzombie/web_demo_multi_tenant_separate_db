@@ -3,7 +3,7 @@ create table account (
 	`id` serial NOT NULL AUTO_INCREMENT COMMENT '主键自增',
 	`user_name` varchar(255) NOT NULL COMMENT '用户名',
 	`password` varchar(255) NOT NULL COMMENT '密码'
-)ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT '用户表';
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '用户表';
 
 
 

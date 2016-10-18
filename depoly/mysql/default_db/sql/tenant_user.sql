@@ -5,7 +5,7 @@ create table tenant_user(
 	`user_name` varchar(255) not null COMMENT '用戶名称',
 	`create_time` timestamp not null COMMENT '创建时间',
 	`status` smallint not null default 1 COMMENT '状态 1-正常 2-删除'
-)ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT '租戶用户表';
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '租戶用户表';
 
 
 ALTER TABLE tenant_user ADD INDEX idx_tenant_user_tenant_id(tenant_id);
