@@ -5,7 +5,7 @@ INIT_SQL=${CURRENT_HOME}/init.sql
 SQL_FILES=${CURRENT_HOME}/sql/*.sql
 
 DB_IP=127.0.0.1
-DB_PORT=5432
+DB_PORT=3306
 DB_USERNAME=sps
 DB_PASSWD=sps
 DB_NAME=default_db
@@ -26,10 +26,11 @@ ImportSQL()
 
 #start
 echo "====> start import sql..."
-if [ -n "${INIT_SQL}" ]; then
-    echo -e "\n ==> import init sql..."
-    #psql -h ${DB_IP} -p ${DB_PORT} -U ${DB_USERNAME} -d ${DB_NAME} < ${FILE}
-    sudo -u postgres psql -f ${INIT_SQL}  | grep "ERROR" | tee -a /tmp/${DATE}.log
+if [ -n "${DB_USERNAME}" ]; then
+    echo -e "\n ==> create user..."
+    mysql -uroot -e "CREATE USER '${DB_USERNAME}'@'%' IDENTIFIED BY '$DB_PASSWD'"
+	mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO '${DB_USERNAME}'@'%' WITH GRANT OPTION"
+
 
     echo -e "\n ==> import business sql..."
     if [ -n "${SQL_FILES}" ]; then

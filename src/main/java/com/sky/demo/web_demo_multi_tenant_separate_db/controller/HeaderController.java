@@ -24,7 +24,7 @@ public class HeaderController {
 
     @RequestMapping("/query")
     @ResponseBody
-    public RetData<String> registry(HttpServletRequest request, HttpServletResponse response) {
+    public RetData<String> query(HttpServletRequest request, HttpServletResponse response) {
         RetData<String> result = null;
         try {
             String auth = request.getHeader("Authorization");
