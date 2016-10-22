@@ -61,7 +61,7 @@ public class HeaderAuthRealm extends AuthorizingRealm {
             logger.debug("device token is {}", deviceToken);
 
             String tokenCheck = SHAUtil.encrypt(timestamp + deviceToken + deviceId);
-            logger.debug("begin to validate, token is {}", tokenCheck);
+            logger.debug("begin to validate, encrypt token is {}, auth token is {}", tokenCheck, tokenStr);
             if (!tokenCheck.equals(tokenStr)) {
                 throw new AuthenticationException("Invalid token");
             }

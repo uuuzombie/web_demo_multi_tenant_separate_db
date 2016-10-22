@@ -14,9 +14,9 @@
 		</property>
 		<property name="filterChainDefinitionMap">
 			<map>
-				<entry key="/v1/device/registry" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>
-				<entry key="/v1/thirdparty/**" value="noSessionCreation,deviceRegisterHeaderAuthFilter"/>
-				<entry key="/v1/**" value="noSessionCreation,headerAuthFilter"/>
+				<entry key="/v1/device/registry" value="noSessionCreation, deviceRegisterHeaderAuthFilter"/>
+				<entry key="/v1/thirdparty/**" value="noSessionCreation, deviceRegisterHeaderAuthFilter"/>
+				<entry key="/v1/**" value="noSessionCreation, headerAuthFilter"/>
 				<entry key="/**" value="anon"/>
 			</map>
 		</property>
@@ -25,12 +25,11 @@
     <!--filters-->
     <bean id="headerAuthFilter"
           class="com.sky.demo.web_demo_multi_tenant_separate_db.filter.HeaderAuthFilter"/>
-
     <bean id="deviceRegisterHeaderAuthFilter"
           class="com.sky.demo.web_demo_multi_tenant_separate_db.filter.DeviceRegisterHeaderAuthFilter" />
 
     <!--SecurityManager, Shiro 认证和授权 都是委托给SecurityManager-->
-	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realms">
 			<list>
 				<ref bean="headerAuthRealm" />
@@ -48,9 +47,7 @@
 
     <!--Realms-->
 	<bean id="headerAuthRealm" class="com.sky.demo.web_demo_multi_tenant_separate_db.auth.realm.HeaderAuthRealm"/>
-
 	<bean id="deviceRegisterHeaderAuthRealm" class="com.sky.demo.web_demo_multi_tenant_separate_db.auth.realm.DeviceRegisterHeaderAuthRealm"/>
-
 
     <!-- Shiro生命周期处理器-->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
