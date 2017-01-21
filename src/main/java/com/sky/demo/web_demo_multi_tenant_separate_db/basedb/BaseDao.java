@@ -27,6 +27,8 @@ public abstract class BaseDao {
 
     //default_db
     public JdbcTemplate getDefaultJdbcTemplate() {
+//        jdbcTemplate.getDataSource().getConnection().setCatalog(catalogName);
+
         return defaultJdbcTemplate;
     }
 
@@ -35,6 +37,7 @@ public abstract class BaseDao {
     }
 
     public NamedParameterJdbcTemplate getDefaultNamedParameterJdbcTemplate() {
+        // NamedParameterJdbcTemplate
         return defaultNamedParameterJdbcTemplate;
     }
 
@@ -45,6 +48,8 @@ public abstract class BaseDao {
 
     //tenant dbs
     public JdbcTemplate getTenantJdbcTemplate() {
+//        jdbcTemplate.getDataSource().getConnection().setCatalog(catalogName);
+
         return AppContext.getJdbcTemplate();
     }
 
